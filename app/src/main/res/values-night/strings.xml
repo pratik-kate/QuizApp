@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="quizz">Quizz</string>
+    <string name="super_tridents">Super Tridents</string>
+    <string name="image">image</string>
+    <string name="coins">Coins</string>
+    <string name="quizz_master">Quizz Master</string>
+    <string name="start_game">Start Game</string>
+    <string name="settings">Settings</string>
+</resources>
