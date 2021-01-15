@@ -1,8 +1,7 @@
 package com.supertridents.quizz.questions;
 
-import android.app.AlertDialog;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -17,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.supertridents.quizz.GameActivity;
 import com.supertridents.quizz.MainActivity;
 import com.supertridents.quizz.R;
 
@@ -25,6 +23,7 @@ import java.util.ArrayList;
 
 public class QuestionFragment extends Fragment implements View.OnClickListener {
     TextView question,op1,op2,op3,op4;
+    TextView current,total;
     ImageView next;
     ArrayList<String> set1,sop1,sop2,sop3,sop4;
     int i=1;
@@ -71,7 +70,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         sop4.add("Kashmir");
         sop4.add("Narendra Modi");
 
-    next = view.findViewById(R.id.next);
+    next = view.findViewById(R.id.fifty);
     question.setText(set1.get(0));
     op1.setText(sop1.get(0));
     op2.setText(sop2.get(0));
@@ -83,7 +82,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
 //      op3.setOnClickListener(v -> checkAnswer(op3));
 //      op4.setOnClickListener(v -> checkAnswer(op4));
 
-//      next.setOnClickListener(v ->{
+//      fifty.setOnClickListener(v ->{
 //          reset();
 //
 //          clickable(true);
@@ -94,10 +93,16 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
 //          op4.setText("Vikas Bajpai");
 //      });
 
-        op1.setOnClickListener(this::onClick);
-        op2.setOnClickListener(this::onClick);
-        op3.setOnClickListener(this::onClick);
-        op4.setOnClickListener(this::onClick);
+        total = view.findViewById(R.id.total);
+        current = view.findViewById(R.id.current);
+        total.setText(String.valueOf(set1.size()));
+        current.setText(i+"/");
+
+
+        op1.setOnClickListener(this);
+        op2.setOnClickListener(this);
+        op3.setOnClickListener(this);
+        op4.setOnClickListener(this);
         return view;
     }
 
@@ -108,14 +113,16 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         op4.setClickable(a);
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private void reset() {
-        op4.setBackground(getResources().getDrawable(R.drawable.option_unselected));
-        op3.setBackground(getResources().getDrawable(R.drawable.option_unselected));
-        op2.setBackground(getResources().getDrawable(R.drawable.option_unselected));
-        op1.setBackground(getResources().getDrawable(R.drawable.option_unselected));
+        op4.setBackground(getResources().getDrawable(R.drawable.option_background));
+        op3.setBackground(getResources().getDrawable(R.drawable.option_background));
+        op2.setBackground(getResources().getDrawable(R.drawable.option_background));
+        op1.setBackground(getResources().getDrawable(R.drawable.option_background));
     }
 
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private boolean checkAnswer(TextView selected) {
         String selectedAnswer = selected.getText().toString();
         if(selectedAnswer.equals("Mumbai")||selectedAnswer.equals("Delhi")||selectedAnswer.equals("Narendra Modi")) {
@@ -133,24 +140,39 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
             lp.width = WindowManager.LayoutParams.MATCH_PARENT;
             lp.height = WindowManager.LayoutParams.MATCH_PARENT;
 
-            (dialog.findViewById(R.id.closeright)).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    reset();
-                    clickable(true);
-                    if(i<set1.size()){
-                        question.setText(set1.get(i));
-                        op1.setText(sop1.get(i));
-                        op2.setText(sop2.get(i));
-                        op3.setText(sop3.get(i));
-                        op4.setText(sop4.get(i));
-                        i++;
-                    }
-                    else{
-                        Toast.makeText(getContext(), "Finish", Toast.LENGTH_SHORT).show();
-                    }
-                    dialog.dismiss();
+            (dialog.findViewById(R.id.closeright)).setOnClickListener(v -> {
+                reset();
+                clickable(true);
+                if(i<set1.size()){
+                    question.setText(set1.get(i));
+                    op1.setText(sop1.get(i));
+                    op2.setText(sop2.get(i));
+                    op3.setText(sop3.get(i));
+                    op4.setText(sop4.get(i));
+                    i++;
+                    current.setText(i+"/");
                 }
+                else{
+                    Toast.makeText(getContext(), "Finish", Toast.LENGTH_SHORT).show();
+                    final Dialog dialog1 = new Dialog(getContext());
+                    dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                    dialog1.setContentView(R.layout.finish);
+                    dialog1.setCancelable(true);
+
+                    WindowManager.LayoutParams lp1 = new WindowManager.LayoutParams();
+                    lp1.copyFrom(dialog1.getWindow().getAttributes());
+                    lp1.width = WindowManager.LayoutParams.MATCH_PARENT;
+                    lp1.height = WindowManager.LayoutParams.MATCH_PARENT;
+
+                    (dialog1.findViewById(R.id.closefinish)).setOnClickListener(v1 -> {
+                        startActivity(new Intent(getContext(), MainActivity.class));
+                        dialog1.dismiss();
+                    });
+
+                    dialog1.show();
+                    dialog1.getWindow().setAttributes(lp1);
+                }
+                dialog.dismiss();
             });
 
             dialog.show();
@@ -160,7 +182,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
             selected.setBackground(getResources().getDrawable(R.drawable.option_wrong));
             final Dialog dialog = new Dialog(getContext());
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-            dialog.setContentView(R.layout.right);
+            dialog.setContentView(R.layout.wrong);
             dialog.setCancelable(true);
 
             WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
@@ -168,13 +190,10 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
             lp.width = WindowManager.LayoutParams.MATCH_PARENT;
             lp.height = WindowManager.LayoutParams.MATCH_PARENT;
 
-            (dialog.findViewById(R.id.closeright)).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    reset();
-//                    clickable(true);
-                    dialog.dismiss();
-                }
+            (dialog.findViewById(R.id.closewrong)).setOnClickListener(v -> {
+                reset();
+//              clickable(true);
+                dialog.dismiss();
             });
 
             dialog.show();
