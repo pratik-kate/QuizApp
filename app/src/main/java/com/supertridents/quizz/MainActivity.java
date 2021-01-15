@@ -18,17 +18,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
-        setting = findViewById(R.id.settings);
-        gifts = findViewById(R.id.gifts);
+        //setting = findViewById(R.id.settings);
+        //gifts = findViewById(R.id.gifts);
         game = findViewById(R.id.startGame);
 
         game.setOnClickListener(v -> {
             Intent game = new Intent(MainActivity.this,GameActivity.class);
             startActivity(game);
         });
-        setting.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivity(intent);
-        });
+//        setting.setOnClickListener(v -> {
+//            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+//            startActivity(intent);
+//        });
     }
 }
