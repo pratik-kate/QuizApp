@@ -14,6 +14,8 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="108dp"
         android:fontFamily="@font/aladin"
+        android:padding="5dp"
+        android:shadowColor="#635C5C"
         android:text="@string/quizz_master"
         android:textColor="@color/white"
         android:textSize="40sp"
@@ -21,16 +23,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView7"
+    <ImageView
+        android:id="@+id/imageView11"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/aladin"
-        android:text="Choose a category to start playing"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="@+id/Title"
-        app:layout_constraintTop_toBottomOf="@+id/Title" />
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/PlayerView"
+        app:srcCompat="@drawable/light" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/PlayerView"
@@ -109,333 +110,102 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-    <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7"
-        app:layout_constraintVertical_bias="0.0">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="10dp">
-
-            <ImageView
-                android:id="@+id/gkImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:layout_marginEnd="50dp"
-                android:adjustViewBounds="false"
-                android:contentDescription="@string/image"
-                android:elevation="50dp"
-                app:layout_constraintEnd_toEndOf="@+id/startGame"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_brain_process" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/startGame"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="60dp"
-                android:clickable="true"
-                android:elevation="30dp"
-                android:focusable="true"
-                android:foreground="@drawable/ripple"
-                app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="15dp"
-                app:cardMaxElevation="50dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="140dp"
-                    android:layout_height="140dp"
-                    android:background="#f8f7ff"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:id="@+id/textView5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/aladin"
-                        android:text="General knowledge"
-                        android:textColor="@color/purple_500"
-                        android:textSize="18sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/sports"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="100dp"
-                android:clickable="true"
-                android:elevation="30dp"
-                android:focusable="true"
-                android:foreground="@drawable/ripple"
-                app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="15dp"
-                app:cardMaxElevation="50dp"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="140dp"
-                    android:layout_height="140dp"
-                    android:background="#f8f7ff"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:id="@+id/textView8"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/aladin"
-                        android:text="Sports"
-                        android:textColor="@color/purple_500"
-                        android:textSize="18sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
-
-            <ImageView
-                android:id="@+id/imageView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="70dp"
-                android:elevation="50dp"
-                app:layout_constraintStart_toStartOf="@+id/sports"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_sports" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="200dp" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/history"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="50dp"
-                android:clickable="true"
-                android:elevation="30dp"
-                android:focusable="true"
-                android:foreground="@drawable/ripple"
-                app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="15dp"
-                app:cardMaxElevation="50dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/startGame">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="140dp"
-                    android:layout_height="140dp"
-                    android:background="#f8f7ff"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:id="@+id/historytext"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/aladin"
-                        android:text="History"
-                        android:textColor="@color/purple_500"
-                        android:textSize="18sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
-
-            <ImageView
-                android:id="@+id/historyImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:layout_marginEnd="50dp"
-                android:elevation="50dp"
-                app:layout_constraintEnd_toEndOf="@+id/history"
-                app:layout_constraintTop_toBottomOf="@+id/startGame"
-                app:srcCompat="@drawable/ic_history" />
-
-            <ImageView
-                android:id="@+id/imageView9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="60dp"
-                android:layout_marginTop="25dp"
-                android:elevation="50dp"
-                app:layout_constraintStart_toStartOf="@+id/Environment"
-                app:layout_constraintTop_toBottomOf="@+id/sports"
-                app:srcCompat="@drawable/ic_tree" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/Environment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="50dp"
-                android:clickable="true"
-                android:elevation="30dp"
-                android:focusable="true"
-                android:foreground="@drawable/ripple"
-                app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="15dp"
-                app:cardMaxElevation="50dp"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/sports">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="140dp"
-                    android:layout_height="140dp"
-                    android:background="#f8f7ff"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:id="@+id/Environmenttext"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/aladin"
-                        android:text="Environment"
-                        android:textColor="@color/purple_500"
-                        android:textSize="18sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/science"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="50dp"
-                android:clickable="true"
-                android:elevation="30dp"
-                android:focusable="true"
-                android:foreground="@drawable/ripple"
-                app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="15dp"
-                app:cardMaxElevation="50dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/history">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="140dp"
-                    android:layout_height="140dp"
-                    android:background="#f8f7ff"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:id="@+id/textScience"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/aladin"
-                        android:text="Science"
-                        android:textColor="@color/purple_500"
-                        android:textSize="18sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
-
-            <ImageView
-                android:id="@+id/imageView10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:layout_marginEnd="50dp"
-                android:elevation="50dp"
-                app:layout_constraintEnd_toEndOf="@+id/science"
-                app:layout_constraintTop_toBottomOf="@+id/history"
-                app:srcCompat="@drawable/ic_science" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/Film"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="50dp"
-                android:clickable="true"
-                android:elevation="30dp"
-                android:focusable="true"
-                android:foreground="@drawable/ripple"
-                app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="15dp"
-                app:cardMaxElevation="50dp"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/Environment">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="140dp"
-                    android:layout_height="140dp"
-                    android:background="#f8f7ff"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:id="@+id/Filmstxt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/aladin"
-                        android:text="Films"
-                        android:textColor="@color/purple_500"
-                        android:textSize="18sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
-
-            <ImageView
-                android:id="@+id/imageView11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="60dp"
-                android:layout_marginTop="25dp"
-                android:elevation="50dp"
-                app:layout_constraintStart_toStartOf="@+id/Film"
-                app:layout_constraintTop_toBottomOf="@+id/Environment"
-                app:srcCompat="@drawable/ic_film" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
 
     <ImageView
         android:id="@+id/imageView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/PlayerView"
         app:srcCompat="@drawable/ic_shining" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/Title">
+
+        <TextView
+            android:id="@+id/startgame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:fontFamily="@font/aladin"
+            android:gravity="center"
+            android:shadowColor="#4F5DB3"
+            android:shadowDx="10"
+            android:shadowDy="15"
+            android:shadowRadius="7"
+            android:text="PLAY"
+            android:textColor="#FFFFFF"
+            android:textSize="50dp" />
+
+        <TextView
+            android:id="@+id/options"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/aladin"
+            android:gravity="center"
+            android:shadowColor="#4F5DB3"
+            android:shadowDx="10"
+            android:shadowDy="15"
+            android:shadowRadius="7"
+            android:text="OPTIONS"
+            android:textColor="#FFFFFF"
+            android:textSize="50dp" />
+
+        <TextView
+            android:id="@+id/exit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/aladin"
+            android:gravity="center"
+            android:shadowColor="#4F5DB3"
+            android:shadowDx="10"
+            android:shadowDy="15"
+            android:shadowRadius="7"
+            android:text="EXIT"
+            android:textColor="#FFFFFF"
+            android:textSize="50dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/profile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="20dp"
+            android:foreground="@drawable/ic_profile"
+            app:srcCompat="@drawable/background_lifeline" />
+
+        <ImageView
+            android:id="@+id/shop"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="20dp"
+            android:foreground="@drawable/ic_shop"
+            app:srcCompat="@drawable/background_lifeline" />
+
+        <ImageView
+            android:id="@+id/settings"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="20dp"
+            android:foreground="@drawable/ic_settings"
+            app:srcCompat="@drawable/background_lifeline" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

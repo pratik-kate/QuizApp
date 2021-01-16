@@ -6,12 +6,13 @@ import androidx.cardview.widget.CardView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
-    CardView setting,gifts,game;
+    TextView setting,gifts,game;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
         //setting = findViewById(R.id.settings);
         //gifts = findViewById(R.id.gifts);
-        game = findViewById(R.id.startGame);
+        game = findViewById(R.id.startgame);
 
         game.setOnClickListener(v -> {
             Intent game = new Intent(MainActivity.this,GameActivity.class);
