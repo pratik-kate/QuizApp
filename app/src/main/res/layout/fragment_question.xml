@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/purple_500"
     tools:context=".questions.QuestionFragment">
 
@@ -11,6 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp">
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/gifstars"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="10dp"
+            android:src="@drawable/stars"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/imageView14"

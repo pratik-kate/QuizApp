@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +22,14 @@ import com.supertridents.quizz.R;
 
 import java.util.ArrayList;
 
+import pl.droidsonroids.gif.GifImageView;
+
 public class QuestionFragment extends Fragment implements View.OnClickListener {
     TextView question,op1,op2,op3,op4;
     TextView current,total;
     ImageView next;
     ArrayList<String> set1,sop1,sop2,sop3,sop4;
+    GifImageView gif;
     int i=1;
     public QuestionFragment() {
         // Required empty public constructor
@@ -37,6 +41,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_question, container, false);
 
+        gif = view.findViewById(R.id.gifstars);
     question = view.findViewById(R.id.question);
     op1 = view.findViewById(R.id.option_1);
     op2 = view.findViewById(R.id.option_2);
@@ -127,21 +132,63 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         String selectedAnswer = selected.getText().toString();
         if(selectedAnswer.equals("Mumbai")||selectedAnswer.equals("Delhi")||selectedAnswer.equals("Narendra Modi")) {
             selected.setBackground(getResources().getDrawable(R.drawable.option_right));
+            gif.setVisibility(View.VISIBLE);
             clickable(false);
 
-            //dialog
-            final Dialog dialog = new Dialog(getContext());
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-            dialog.setContentView(R.layout.right);
-            dialog.setCancelable(true);
-
-            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-            lp.copyFrom(dialog.getWindow().getAttributes());
-            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-            lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-
-            (dialog.findViewById(R.id.closeright)).setOnClickListener(v -> {
-                reset();
+//            //dialog
+//            final Dialog dialog = new Dialog(getContext());
+//            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+//            dialog.setContentView(R.layout.right);
+//            dialog.setCancelable(true);
+//
+//            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+//            lp.copyFrom(dialog.getWindow().getAttributes());
+//            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+//            lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+//
+//            (dialog.findViewById(R.id.closeright)).setOnClickListener(v -> {
+//                reset();
+//                clickable(true);
+//                if(i<set1.size()){
+//                    question.setText(set1.get(i));
+//                    op1.setText(sop1.get(i));
+//                    op2.setText(sop2.get(i));
+//                    op3.setText(sop3.get(i));
+//                    op4.setText(sop4.get(i));
+//                    i++;
+//                    current.setText(i+"/");
+//                }
+//                else{
+//                    Toast.makeText(getContext(), "Finish", Toast.LENGTH_SHORT).show();
+//                    final Dialog dialog1 = new Dialog(getContext());
+//                    dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+//                    dialog1.setContentView(R.layout.finish);
+//                    dialog1.setCancelable(true);
+//
+//                    WindowManager.LayoutParams lp1 = new WindowManager.LayoutParams();
+//                    lp1.copyFrom(dialog1.getWindow().getAttributes());
+//                    lp1.width = WindowManager.LayoutParams.MATCH_PARENT;
+//                    lp1.height = WindowManager.LayoutParams.MATCH_PARENT;
+//
+//                    (dialog1.findViewById(R.id.closefinish)).setOnClickListener(v1 -> {
+//                        startActivity(new Intent(getContext(), MainActivity.class));
+//                        dialog1.dismiss();
+//                    });
+//
+//                    dialog1.show();
+//                    dialog1.getWindow().setAttributes(lp1);
+//                }
+//                dialog.dismiss();
+//            });
+//
+//            dialog.show();
+//            dialog.getWindow().setAttributes(lp);
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    gif.setVisibility(View.INVISIBLE);
+                    reset();
                 clickable(true);
                 if(i<set1.size()){
                     question.setText(set1.get(i));
@@ -151,6 +198,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
                     op4.setText(sop4.get(i));
                     i++;
                     current.setText(i+"/");
+
                 }
                 else{
                     Toast.makeText(getContext(), "Finish", Toast.LENGTH_SHORT).show();
@@ -172,11 +220,8 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
                     dialog1.show();
                     dialog1.getWindow().setAttributes(lp1);
                 }
-                dialog.dismiss();
-            });
-
-            dialog.show();
-            dialog.getWindow().setAttributes(lp);
+                }
+            },800);
             return true;
         } else {
             selected.setBackground(getResources().getDrawable(R.drawable.option_wrong));
