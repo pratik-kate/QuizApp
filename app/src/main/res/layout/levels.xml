@@ -17,7 +17,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="100dp"
-            android:layout_height="100dp">
+            android:layout_height="100dp"
+            android:background="#000000">
 
             <TextView
                 android:id="@+id/leveltext"
@@ -27,7 +28,8 @@
                 android:gravity="center"
                 android:text="0"
                 android:textColor="@color/purple_500"
-                android:textSize="36sp"
+                android:textSize="50sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -48,6 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_weight="1"
                     app:srcCompat="@android:drawable/btn_star" />
 
@@ -56,6 +59,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_weight="1"
                     app:srcCompat="@android:drawable/btn_star" />
 
@@ -64,6 +68,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_weight="1"
                     app:srcCompat="@android:drawable/btn_star" />
             </LinearLayout>
