@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         game = findViewById(R.id.startgame);
 
         game.setOnClickListener(v -> {
-            Intent game = new Intent(MainActivity.this,GameActivity.class);
+            Intent game = new Intent(MainActivity.this,QuestionActivity.class);
             startActivity(game);
         });
 //        setting.setOnClickListener(v -> {
