@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "893847107780",
+    "project_id": "quizgame-168c4",
+    "storage_bucket": "quizgame-168c4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:893847107780:android:7a1a8d126bb7b860b7f191",
+        "android_client_info": {
+          "package_name": "com.supertridents.learn.digital.marketing.quiz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "893847107780-js6tpn7v4mle8av2k0lr2nfpeftlskdp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAu9qVqZvkY-YFp2q-Isqy6cosFAs4rwhQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "893847107780-js6tpn7v4mle8av2k0lr2nfpeftlskdp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

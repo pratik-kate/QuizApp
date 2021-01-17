@@ -1,4 +1,4 @@
-package com.supertridents.quizz.questions;
+package com.supertridents.learn.digital.marketing.quiz.questions;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -17,8 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.supertridents.quizz.MainActivity;
-import com.supertridents.quizz.R;
+import com.supertridents.learn.digital.marketing.quiz.MainActivity;
+import com.supertridents.learn.digital.marketing.quiz.R;
 
 import java.util.ArrayList;
 
@@ -75,7 +75,6 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         sop4.add("Kashmir");
         sop4.add("Narendra Modi");
 
-    next = view.findViewById(R.id.fifty);
     question.setText(set1.get(0));
     op1.setText(sop1.get(0));
     op2.setText(sop2.get(0));
@@ -135,54 +134,6 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
             gif.setVisibility(View.VISIBLE);
             clickable(false);
 
-//            //dialog
-//            final Dialog dialog = new Dialog(getContext());
-//            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-//            dialog.setContentView(R.layout.right);
-//            dialog.setCancelable(true);
-//
-//            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-//            lp.copyFrom(dialog.getWindow().getAttributes());
-//            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-//            lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-//
-//            (dialog.findViewById(R.id.closeright)).setOnClickListener(v -> {
-//                reset();
-//                clickable(true);
-//                if(i<set1.size()){
-//                    question.setText(set1.get(i));
-//                    op1.setText(sop1.get(i));
-//                    op2.setText(sop2.get(i));
-//                    op3.setText(sop3.get(i));
-//                    op4.setText(sop4.get(i));
-//                    i++;
-//                    current.setText(i+"/");
-//                }
-//                else{
-//                    Toast.makeText(getContext(), "Finish", Toast.LENGTH_SHORT).show();
-//                    final Dialog dialog1 = new Dialog(getContext());
-//                    dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-//                    dialog1.setContentView(R.layout.finish);
-//                    dialog1.setCancelable(true);
-//
-//                    WindowManager.LayoutParams lp1 = new WindowManager.LayoutParams();
-//                    lp1.copyFrom(dialog1.getWindow().getAttributes());
-//                    lp1.width = WindowManager.LayoutParams.MATCH_PARENT;
-//                    lp1.height = WindowManager.LayoutParams.MATCH_PARENT;
-//
-//                    (dialog1.findViewById(R.id.closefinish)).setOnClickListener(v1 -> {
-//                        startActivity(new Intent(getContext(), MainActivity.class));
-//                        dialog1.dismiss();
-//                    });
-//
-//                    dialog1.show();
-//                    dialog1.getWindow().setAttributes(lp1);
-//                }
-//                dialog.dismiss();
-//            });
-//
-//            dialog.show();
-//            dialog.getWindow().setAttributes(lp);
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -237,7 +188,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
 
             (dialog.findViewById(R.id.closewrong)).setOnClickListener(v -> {
                 reset();
-//              clickable(true);
+              //clickable(true);
                 dialog.dismiss();
             });
 

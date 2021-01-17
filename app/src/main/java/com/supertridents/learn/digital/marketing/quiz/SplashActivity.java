@@ -1,4 +1,4 @@
-package com.supertridents.quizz;
+package com.supertridents.learn.digital.marketing.quiz;
 
 import androidx.appcompat.app.AppCompatActivity;
 

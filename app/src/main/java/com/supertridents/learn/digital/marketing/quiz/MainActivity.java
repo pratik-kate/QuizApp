@@ -1,14 +1,10 @@
-package com.supertridents.quizz;
+package com.supertridents.learn.digital.marketing.quiz;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
-
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 

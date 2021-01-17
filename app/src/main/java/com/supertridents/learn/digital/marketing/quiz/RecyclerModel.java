@@ -1,4 +1,4 @@
-package com.supertridents.quizz;
+package com.supertridents.learn.digital.marketing.quiz;
 
 public class RecyclerModel {
     int level,s1,s2,s3;

@@ -7,6 +7,18 @@
     android:background="@color/purple_500"
     tools:context=".GameActivity">
 
+    <TextView
+        android:id="@+id/lvltxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:text="TextView"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="@+id/PlayerViewgame"
+        app:layout_constraintStart_toStartOf="@+id/PlayerViewgame"
+        app:layout_constraintTop_toBottomOf="@+id/PlayerViewgame" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/PlayerViewgame"
         android:layout_width="0dp"
@@ -88,13 +100,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:elevation="10dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/PlayerViewgame" />
+        app:layout_constraintTop_toBottomOf="@+id/lvltxt" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
