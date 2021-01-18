@@ -219,14 +219,6 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
             default:
                 ans=false;
         }
-//        if(ans){
-//            reset();
-//            clickable(true);
-//            question.setText("Q.Who is the Prime Minister of India");
-//            op1.setText("Arvind Kejrival");
-//            op2.setText("Rahul Gandhi");
-//            op3.setText("Narendra Modi");
-//            op4.setText("Vikas Bajpai");
-//        }
+
     }
 }

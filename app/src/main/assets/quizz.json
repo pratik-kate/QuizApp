@@ -1,0 +1,36 @@
+{
+  "questions":[
+  {
+    "q":"Which is first planet in our Solar system?",
+    "op1":"Mercury",
+    "op2":"Venus",
+    "op3":"Mars",
+    "op4":"Earth",
+    "ans":"Mercury"
+  },
+  {
+    "q":"What is the capital of Maharashtra?",
+    "op1":"Mumbai",
+    "op2":"Pune",
+    "op3":"Nagpur",
+    "op4":"aurangabad",
+    "ans":"Mumbai"
+  },
+    {
+      "q":"What is the capital of India?",
+      "op1":"Goa",
+      "op2":"Mumbai",
+      "op3":"Kochi",
+      "op4":"Delhi",
+      "ans":"Delhi"
+    },
+    {
+      "q":"Who is prime minister of India?",
+      "op1":"Rahul Gandhi",
+      "op2":"Arvind Kejrival",
+      "op3":"Narendra Modi",
+      "op4":"Vikas Bajpai",
+      "ans":"Narendra Modi"
+    }
+]
+}
