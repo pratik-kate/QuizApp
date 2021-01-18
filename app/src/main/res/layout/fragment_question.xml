@@ -13,7 +13,7 @@
         android:layout_margin="10dp">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/gamesettings"
+            android:id="@+id/gamepause"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -82,7 +82,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/gamesettings" />
+            app:layout_constraintTop_toBottomOf="@+id/gamepause" />
 
         <TextView
             android:id="@+id/option_1"

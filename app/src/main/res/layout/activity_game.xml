@@ -114,13 +114,13 @@
             android:layout_margin="10dp">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/gamesettings"
+                android:id="@+id/gamepause"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
                 app:cardCornerRadius="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -132,8 +132,8 @@
                         android:id="@+id/imageView13"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:src="@drawable/ic_settings"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_pause"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -176,6 +176,7 @@
                 android:id="@+id/question"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:text="question"
                 android:textColor="#FFFFFF"
@@ -183,7 +184,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/gamesettings" />
+                app:layout_constraintTop_toBottomOf="@+id/gamepause" />
 
             <TextView
                 android:id="@+id/option_1"

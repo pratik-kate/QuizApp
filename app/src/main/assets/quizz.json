@@ -25,6 +25,87 @@
       "ans":"Delhi"
     },
     {
+      "q":"Which one of the following river flows between Vindhyan and Satpura ranges?",
+      "op1":"Mahanadi",
+      "op2":"Narmada",
+      "op3":"Son",
+      "op4":"Netravati",
+      "ans":"Narmada"
+    },
+    {
+      "q":"The Central Rice Research Station is situated in?",
+      "op1":"Chennai",
+      "op2":"Cuttack",
+      "op3":"Bangalore",
+      "op4":"Quilon",
+      "ans":"Cuttack"
+    },
+    {
+      "q":"Who among the following wrote Sanskrit grammar?",
+      "op1":"Kalidasa",
+      "op2":"Charak",
+      "op3":"Panini",
+      "op4":"Aryabhatt",
+      "ans":"Aryabhatt"
+    },
+    {
+      "q":"Which among the following headstreams meets the Ganges in last?",
+      "op1":"Alaknanda",
+      "op2":"Pindar",
+      "op3":"Mandakini",
+      "op4":"Bhagirathi",
+      "ans":"Bhagirathi"
+    },
+    {
+      "q":"The metal whose salts are sensitive to light is?",
+      "op1":"Zinc",
+      "op2":"Silver",
+      "op3":"Copper",
+      "op4":"Aluminum",
+      "ans":"Silver"
+    },
+    {
+      "q":"Patanjali is well known for the compilation of –",
+      "op1":"Yoga Sutra",
+      "op2":"Panchatantra",
+      "op3":"Brahma Sutra",
+      "op4":"Ayurveda",
+      "ans":"Yoga Sutra"
+    },
+    {
+      "q":"River Luni originates near Pushkar and drains into which one of the following?",
+      "op1":"Rann of Kachchh",
+      "op2":"Arabian Sea",
+      "op3":"Gulf of Cambay",
+      "op4":"Lake Sambhar",
+      "ans":"Rann of Kachchh"
+    },
+    {
+      "q":"Which one of the following rivers originates in Brahmagiri range of Western Ghats?",
+      "op1":"Pennar",
+      "op2":"Cauvery",
+      "op3":"Krishna",
+      "op4":"Tapti",
+      "ans":"Cauvery"
+    },
+    {
+      "q":"The country that has the highest in Barley Production?",
+      "op1":"China",
+      "op2":"India",
+      "op3":"Russia",
+      "op4":"France",
+      "ans":"Russia"
+    },
+    {
+      "q":"Tsunamis are not caused by",
+      "op1":"Hurricanes",
+      "op2":"Earthquakes",
+      "op3":"Undersea landslides",
+      "op4":"Volcanic eruptions",
+      "ans":"Hurricanes"
+    },
+
+    {
       "q":"Who is prime minister of India?",
       "op1":"Rahul Gandhi",
       "op2":"Arvind Kejrival",

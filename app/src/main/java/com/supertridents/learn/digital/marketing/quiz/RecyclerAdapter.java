@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.viewHolder> {
     ArrayList<RecyclerModel> list;
     Context context;
+    int level;
     public RecyclerAdapter(ArrayList<RecyclerModel> list, Context context) {
         this.list = list;
         this.context = context;
@@ -57,5 +58,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.viewHo
             s2 =itemView.findViewById(R.id.star2);
             s3 =itemView.findViewById(R.id.star3);
         }
+    }
+    public boolean isCompleted(int level){
+
+        return true;
     }
 }

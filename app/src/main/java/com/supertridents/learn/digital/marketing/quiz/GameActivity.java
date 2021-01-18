@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -33,8 +34,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     TextView question,op1,op2,op3,op4;
     List<QuestionItem> questionItems;
     int currentQuestion = 0;
-    int correct = 0,wrong = 0;
+    int correct = 0,wrong = 0,i = 1;
     GifImageView gif;
+    TextView current,total;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +46,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 //        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 //        transaction.replace(R.id.screen,fragment);
 //        transaction.commit();
-
         question = findViewById(R.id.question);
         op1 = findViewById(R.id.option_1);
         op2 = findViewById(R.id.option_2);
@@ -54,7 +55,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         loadQuestions();
         Collections.shuffle(questionItems);
         setQuestionScreen(currentQuestion);
-
+        total = findViewById(R.id.total);
+        current =findViewById(R.id.current);
+        total.setText("3");
+        current.setText(i+"/");
 //        op1.setOnClickListener(v->{
 //            if(questionItems.get(currentQuestion).getOp1().equals(questionItems.get(currentQuestion).getCorrect())){
 //                op1.setBackground(getResources().getDrawable(R.drawable.option_right));
@@ -155,10 +159,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         op3.setOnClickListener(this);
         op4.setOnClickListener(this);
         Intent intent = getIntent();
-
+        int level = intent.getIntExtra("level",0);
         TextView lvl = findViewById(R.id.lvltxt);
-        lvl.setText("Level "+String.valueOf(intent.getIntExtra("level",0)));
-
+        lvl.setText("Level "+String.valueOf(level));
 
     }
 
@@ -178,8 +181,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     reset();
                     clickable(true);
 
-                    if(currentQuestion< questionItems.size()-1){
+                    if(currentQuestion<2){
                         currentQuestion++;
+                        i++;
+                        current.setText(i+"/");
                          setQuestionScreen(currentQuestion);
                          clickable(true);
                           reset();
@@ -191,6 +196,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             return true;
         } else {
             selected.setBackground(getResources().getDrawable(R.drawable.option_wrong));
+
             final Dialog dialog = new Dialog(GameActivity.this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
             dialog.setContentView(R.layout.wrong);
@@ -200,10 +206,24 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             lp.copyFrom(dialog.getWindow().getAttributes());
             lp.width = WindowManager.LayoutParams.MATCH_PARENT;
             lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+            (dialog.findViewById(R.id.lifeline)).setOnClickListener(v ->{
+                reset();
+                clickable(true);
+                        dialog.dismiss();
+            });
 
             (dialog.findViewById(R.id.closewrong)).setOnClickListener(v -> {
                 reset();
-                //clickable(true);
+                if(currentQuestion<2){
+                    currentQuestion++;
+                    i++;
+                    current.setText(i+"/");
+                    setQuestionScreen(currentQuestion);
+                    clickable(true);
+                    reset();
+                }else {
+                    Toast.makeText(GameActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
+                }
                 dialog.dismiss();
             });
 
@@ -216,11 +236,16 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     //set question
     private void  setQuestionScreen(int n){
-        question.setText(questionItems.get(n).getQuestion());
-        op1.setText(questionItems.get(n).getOp1());
-        op2.setText(questionItems.get(n).getOp2());
-        op3.setText(questionItems.get(n).getOp3());
-        op4.setText(questionItems.get(n).getOp4());
+        if(n<3) {
+            question.setText(questionItems.get(n).getQuestion());
+            op1.setText(questionItems.get(n).getOp1());
+            op2.setText(questionItems.get(n).getOp2());
+            op3.setText(questionItems.get(n).getOp3());
+            op4.setText(questionItems.get(n).getOp4());
+        }
+        else{
+            Toast.makeText(this, "Game Over", Toast.LENGTH_SHORT).show();
+        }
     }
 
     //load questions

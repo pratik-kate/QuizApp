@@ -2,13 +2,23 @@ package com.supertridents.learn.digital.marketing.quiz;
 
 public class RecyclerModel {
     int level,s1,s2,s3;
+    int lock;
 
     public RecyclerModel(){}
-    public RecyclerModel(int level, int s1, int s2, int s3) {
+    public RecyclerModel(int level, int s1, int s2, int s3,int lock) {
         this.level = level;
         this.s1 = s1;
         this.s2 = s2;
         this.s3 = s3;
+        this.lock = lock;
+    }
+
+    public int getLock() {
+        return lock;
+    }
+
+    public void setLock(int lock) {
+        this.lock = lock;
     }
 
     public int getLevel() {
