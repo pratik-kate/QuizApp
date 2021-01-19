@@ -33,7 +33,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     final String ANS="ANS";
     TextView question,op1,op2,op3,op4;
     List<QuestionItem> questionItems;
-    int currentQuestion = 0;
+    int currentQuestion = 0,level;
     int correct = 0,wrong = 0,i = 1;
     GifImageView gif;
     TextView current,total;
@@ -68,50 +68,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         op4.setOnClickListener(this);
         pause.setOnClickListener(this);
         Intent intent = getIntent();
-        int level = intent.getIntExtra("level",0);
+        level = intent.getIntExtra("level",0);
         TextView lvl = findViewById(R.id.lvltxt);
         lvl.setText("Level "+String.valueOf(level));
 
-//        pause.setOnClickListener(new View.OnClickListener() {
-//            @SuppressLint("UseCompatLoadingForDrawables")
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(GameActivity.this, "pause", Toast.LENGTH_SHORT).show();
-//                final Dialog dialog = new Dialog(GameActivity.this);
-//                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-//                dialog.setContentView(R.layout.pause);
-//                dialog.setCancelable(true);
-//
-//                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-//                lp.copyFrom(dialog.getWindow().getAttributes());
-//                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-//                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-//
-//                (dialog.findViewById(R.id.resume)).setOnClickListener(v1 -> {
-//                    dialog.dismiss();
-//                });
-//                (dialog.findViewById(R.id.restart)).setOnClickListener(v2->{
-//                    startActivity(getIntent());
-//                    //this.recreate();
-//                });
-//                (dialog.findViewById(R.id.pexit)).setOnClickListener(v3->{
-//                    startActivity(new Intent(GameActivity.this, MainActivity.class));
-//                });
-//
-//                if(correct==1){
-//                    (dialog.findViewById(R.id.pstar1)).setBackgroundDrawable(getResources().getDrawable(R.drawable.star_on));
-//                }else if(correct==2){
-//                    (dialog.findViewById(R.id.pstar1)).setBackgroundDrawable(getDrawable(R.drawable.star_on));
-//                    (dialog.findViewById(R.id.pstar2)).setBackgroundDrawable(getDrawable(R.drawable.star_on));
-//                }else if(correct==3){
-//                    (dialog.findViewById(R.id.pstar1)).setBackgroundDrawable(getDrawable(R.drawable.star_on));
-//                    (dialog.findViewById(R.id.pstar2)).setBackgroundDrawable(getDrawable(R.drawable.star_on));
-//                    (dialog.findViewById(R.id.pstar3)).setBackgroundDrawable(getDrawable(R.drawable.star_on));
-//                }
-//                dialog.show();
-//                dialog.getWindow().setAttributes(lp);
-//            }
-//        });
 
     }
 
@@ -142,17 +102,23 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                           reset();
                      }else {
                         //Toast.makeText(GameActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
-                        final Dialog dialog = new Dialog(GameActivity.this);
-                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-                        dialog.setContentView(R.layout.finish);
-                        dialog.setCancelable(true);
+                        final Dialog dialog2 = new Dialog(GameActivity.this);
+                        dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                        dialog2.setContentView(R.layout.finish);
+                        dialog2.setCancelable(true);
 
-                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                        lp.copyFrom(dialog.getWindow().getAttributes());
-                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                        WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+                        lp2.copyFrom(dialog2.getWindow().getAttributes());
+                        lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+                        lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
 
-                        (dialog.findViewById(R.id.closefinish)).setOnClickListener(v -> {
+                        TextView lvl = dialog2.findViewById(R.id.flevel);
+                        lvl.setText("Level "+String.valueOf(level));
+                        (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
+                        (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
+                        (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
+
+                        (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
                             SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                             editor.clear();
                             editor.apply();
@@ -160,9 +126,35 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             startActivity(new Intent(GameActivity.this,QuestionActivity.class));
                         });
 
-                        dialog.show();
-                        dialog.getWindow().setAttributes(lp);
+                        (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
+                            SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                            editor.clear();
+                            editor.apply();
+                            editor.commit();
+                            startActivity(new Intent(GameActivity.this,MainActivity.class));
+                        });
+                        (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
+                            SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                            editor.clear();
+                            editor.apply();
+                            editor.commit();
+                            startActivity(getIntent());
+                        });
+                        SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
+                        int c = preferences.getInt(ANS,0);
 
+                        if(c==1){
+                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                        }else if(c==2){
+                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                        }else if(c==3){
+                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                            (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                        }
+                        dialog2.show();
+                        dialog2.getWindow().setAttributes(lp2);
                      }
                     }
             },800);
@@ -195,12 +187,61 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     clickable(true);
                     reset();
                 }else {
-                    Toast.makeText(GameActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
-                    SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                    editor.clear();
-                    editor.apply();
-                    editor.commit();
-                    startActivity(new Intent(GameActivity.this,QuestionActivity.class));
+                    final Dialog dialog2 = new Dialog(GameActivity.this);
+                    dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                    dialog2.setContentView(R.layout.finish);
+                    dialog2.setCancelable(true);
+
+                    WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+                    lp2.copyFrom(dialog2.getWindow().getAttributes());
+                    lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+                    lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
+
+                    TextView lvl = dialog2.findViewById(R.id.flevel);
+                    lvl.setText("Level "+String.valueOf(level));
+                    (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
+                    (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
+                    (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
+
+                    (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
+                        SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                        editor.clear();
+                        editor.apply();
+                        editor.commit();
+                        startActivity(new Intent(GameActivity.this,QuestionActivity.class));
+                    });
+
+                    (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
+                        SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                        editor.clear();
+                        editor.apply();
+                        editor.commit();
+                        startActivity(new Intent(GameActivity.this,MainActivity.class));
+                    });
+                    (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
+                        SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                        editor.clear();
+                        editor.apply();
+                        editor.commit();
+                        startActivity(getIntent());
+                    });
+                    SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
+                    int c = preferences.getInt(ANS,0);
+
+                    Toast.makeText(this, "Correct "+c, Toast.LENGTH_SHORT).show();
+                    if(c==1){
+                        (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                    }else if(c==2){
+                        (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                        (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                    }else if(c==3){
+                        (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                        (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                        (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                    }
+                    dialog2.show();
+                    dialog2.getWindow().setAttributes(lp2);
+
                 }
                 dialog.dismiss();
             });
@@ -314,6 +355,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()){
             case R.id.gamepause:
             {
+                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                editor.clear();
+                editor.apply();
+                editor.commit();
                 //Toast.makeText(GameActivity.this, "pause", Toast.LENGTH_SHORT).show();
                 final Dialog dialog = new Dialog(GameActivity.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
@@ -333,7 +378,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     dialog.dismiss();
                 });
                 (dialog.findViewById(R.id.restart)).setOnClickListener(v2->{
-                    SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                    //SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                     editor.clear();
                     editor.apply();
                     editor.commit();
@@ -343,7 +388,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
                 int c = preferences.getInt(ANS,0);
                 (dialog.findViewById(R.id.pexit)).setOnClickListener(v3->{
-                    SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                    //SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                     editor.clear();
                     editor.apply();
                     editor.commit();

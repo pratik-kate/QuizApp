@@ -163,10 +163,10 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
                     lp1.width = WindowManager.LayoutParams.MATCH_PARENT;
                     lp1.height = WindowManager.LayoutParams.MATCH_PARENT;
 
-                    (dialog1.findViewById(R.id.closefinish)).setOnClickListener(v1 -> {
-                        startActivity(new Intent(getContext(), MainActivity.class));
-                        dialog1.dismiss();
-                    });
+//                    (dialog1.findViewById(R.id.)).setOnClickListener(v1 -> {
+//                        startActivity(new Intent(getContext(), MainActivity.class));
+//                        dialog1.dismiss();
+//                    });
 
                     dialog1.show();
                     dialog1.getWindow().setAttributes(lp1);
