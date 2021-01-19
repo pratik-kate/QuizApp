@@ -41,19 +41,22 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.viewHo
         holder.s1.setImageResource(model.getS1());
         holder.s2.setImageResource(model.getS2());
         holder.s3.setImageResource(model.getS3());
-        SharedPreferences pref = context.getSharedPreferences("pref",MODE_PRIVATE);
-        SharedPreferences.Editor editor = context.getSharedPreferences("level", MODE_PRIVATE).edit();
-        level = pref.getInt("current",1);
 
+
+        SharedPreferences preferences = context.getSharedPreferences(String.valueOf(MainActivity.level),MODE_PRIVATE);
+        level = preferences.getInt(String.valueOf(MainActivity.current),1);
         if(model.getLevel()>level){holder.lock.setVisibility(View.VISIBLE);}
-
+        else{holder.lock.setVisibility(View.INVISIBLE);}
         holder.itemView.setOnClickListener(v -> {
             if(model.getLevel() <= level) {
                 Intent intent = new Intent(context, GameActivity.class);
                 intent.putExtra("level", model.getLevel());
                 context.startActivity(intent);
                 level++;
-                editor.putInt("current",level);
+                SharedPreferences.Editor editor = context.getSharedPreferences(String.valueOf(MainActivity.level),MODE_PRIVATE).edit();
+                editor.putInt(String.valueOf(MainActivity.current),level);
+                editor.apply();
+                editor.commit();
             }
             else {
                 Toast.makeText(context, "Level Locked", Toast.LENGTH_SHORT).show();

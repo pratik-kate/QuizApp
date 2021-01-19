@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -29,12 +30,11 @@ public class SplashActivity extends AppCompatActivity {
                     edit.commit();
                     edit.apply();
 
-                    SharedPreferences pref = getSharedPreferences("pref",MODE_PRIVATE);
-                    SharedPreferences.Editor editor =getSharedPreferences("level", MODE_PRIVATE).edit();
-                    editor.putInt("level",1);
+                    SharedPreferences.Editor editor = getSharedPreferences(String.valueOf(MainActivity.level), MODE_PRIVATE).edit();
+                    editor.putInt(String.valueOf(MainActivity.current), 1);
                     editor.apply();
                     editor.commit();
-
+                    Toast.makeText(SplashActivity.this, "First Start", Toast.LENGTH_SHORT).show();
                 }
                 startActivity(new Intent(SplashActivity.this,MainActivity.class));
                 finish();

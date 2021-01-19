@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 
@@ -50,7 +51,13 @@ public class QuestionActivity extends AppCompatActivity {
 
         ImageView back = findViewById(R.id.back2);
         back.setOnClickListener(v -> {
-            super.onBackPressed();
+            startActivity(new Intent(this,MainActivity.class));
         });
+        onBackPressed();
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }

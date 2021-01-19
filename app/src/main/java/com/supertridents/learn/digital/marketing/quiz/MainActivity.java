@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static int level;
+    public static int current;
     TextView setting,exit,game;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

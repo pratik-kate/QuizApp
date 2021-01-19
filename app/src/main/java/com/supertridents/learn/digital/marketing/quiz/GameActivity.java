@@ -1,6 +1,7 @@
 package com.supertridents.learn.digital.marketing.quiz;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
@@ -37,6 +38,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     int correct = 0,wrong = 0,i = 1;
     GifImageView gif;
     TextView current,total;
+    CardView pause;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +53,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         op2 = findViewById(R.id.option_2);
         op3 = findViewById(R.id.option_3);
         op4 = findViewById(R.id.option_4);
+        pause = findViewById(R.id.gamepause);
 
         loadQuestions();
         Collections.shuffle(questionItems);
@@ -59,101 +62,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         current =findViewById(R.id.current);
         total.setText("3");
         current.setText(i+"/");
-//        op1.setOnClickListener(v->{
-//            if(questionItems.get(currentQuestion).getOp1().equals(questionItems.get(currentQuestion).getCorrect())){
-//                op1.setBackground(getResources().getDrawable(R.drawable.option_right));
-//                clickable(false);
-//                correct++;
-//                delay();
-//
-//            }else{
-//                op1.setBackground(getResources().getDrawable(R.drawable.option_wrong));
-//                wrong++;
-//                delay();
-//            }
-//
-//            //loading next questions
-//            if(currentQuestion< questionItems.size()-1){
-//                currentQuestion++;
-//                setQuestionScreen(currentQuestion);
-//                clickable(true);
-//                reset();
-//            }else {
-//                Toast.makeText(this, "Game Over", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        op2.setOnClickListener(v->{
-//            if(questionItems.get(currentQuestion).getOp2().equals(questionItems.get(currentQuestion).getCorrect())){
-//                op2.setBackground(getResources().getDrawable(R.drawable.option_right));
-//                clickable(false);
-//                correct++;
-//                delay();
-//            }else{
-//                op2.setBackground(getResources().getDrawable(R.drawable.option_wrong));
-//                wrong++;
-//                delay();
-//            }
-//
-//            //loading next questions
-//            if(currentQuestion< questionItems.size()-1){
-//                currentQuestion++;
-//                setQuestionScreen(currentQuestion);
-//                clickable(true);
-//                reset();
-//            }else {
-//                Toast.makeText(this, "Game Over", Toast.LENGTH_SHORT).show();
-//
-//            }
-//        });
-//
-//        op3.setOnClickListener(v->{
-//            if(questionItems.get(currentQuestion).getOp3().equals(questionItems.get(currentQuestion).getCorrect())){
-//                op3.setBackground(getResources().getDrawable(R.drawable.option_right));
-//                clickable(false);
-//                correct++;
-//              delay();
-//            }else{
-//                op3.setBackground(getResources().getDrawable(R.drawable.option_wrong));
-//                wrong++;
-//                delay();
-//            }
-//
-//            //loading next questions
-//            if(currentQuestion< questionItems.size()-1){
-//                currentQuestion++;
-//                setQuestionScreen(currentQuestion);
-//                clickable(true);
-//                reset();
-//            }else {
-//                Toast.makeText(this, "Game Over", Toast.LENGTH_SHORT).show();
-//
-//            }
-//        });
-//
-//        op4.setOnClickListener(v->{
-//            if(questionItems.get(currentQuestion).getOp4().equals(questionItems.get(currentQuestion).getCorrect())){
-//                op4.setBackground(getResources().getDrawable(R.drawable.option_right));
-//                clickable(false);
-//                correct++;
-//                delay();
-//            }else{
-//                op4.setBackground(getResources().getDrawable(R.drawable.option_wrong));
-//                wrong++;
-//                delay();
-//            }
-//
-//            //loading next questions
-//            if(currentQuestion< questionItems.size()-1){
-//                currentQuestion++;
-//                setQuestionScreen(currentQuestion);
-//                clickable(true);
-//                reset();
-//            }else {
-//                Toast.makeText(this, "Game Over", Toast.LENGTH_SHORT).show();
-//
-//            }
-//        });
+
         op1.setOnClickListener(this);
         op2.setOnClickListener(this);
         op3.setOnClickListener(this);
@@ -162,6 +71,35 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         int level = intent.getIntExtra("level",0);
         TextView lvl = findViewById(R.id.lvltxt);
         lvl.setText("Level "+String.valueOf(level));
+
+        pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(GameActivity.this, "pause", Toast.LENGTH_SHORT).show();
+                final Dialog dialog = new Dialog(GameActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                dialog.setContentView(R.layout.pause);
+                dialog.setCancelable(true);
+
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                lp.copyFrom(dialog.getWindow().getAttributes());
+                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+
+                (dialog.findViewById(R.id.resume)).setOnClickListener(v1 -> {
+                    dialog.dismiss();
+                });
+                (dialog.findViewById(R.id.restart)).setOnClickListener(v2->{
+                    startActivity(getIntent());
+                    //this.recreate();
+                });
+                (dialog.findViewById(R.id.pexit)).setOnClickListener(v3->{
+                    startActivity(new Intent(GameActivity.this, MainActivity.class));
+                });
+                dialog.show();
+                dialog.getWindow().setAttributes(lp);
+            }
+        });
 
     }
 
@@ -190,6 +128,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                           reset();
                      }else {
                         Toast.makeText(GameActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(GameActivity.this,QuestionActivity.class));
                      }
                     }
             },800);
@@ -223,6 +162,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     reset();
                 }else {
                     Toast.makeText(GameActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(GameActivity.this,QuestionActivity.class));
                 }
                 dialog.dismiss();
             });
