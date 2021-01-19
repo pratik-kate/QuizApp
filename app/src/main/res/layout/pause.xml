@@ -27,10 +27,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:shadowColor="#020202"
-                android:shadowDx="10"
-                android:shadowDy="10"
-                android:shadowRadius="20"
                 android:text="PAUSED"
                 android:textColor="#FFFDFD"
                 android:textSize="50sp"
@@ -43,9 +39,9 @@
                 android:id="@+id/constraintLayout"
                 android:layout_width="0dp"
                 android:layout_height="150dp"
-                android:layout_marginStart="50dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="40dp"
-                android:layout_marginEnd="50dp"
+                android:layout_marginEnd="10dp"
                 android:padding="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -57,7 +53,7 @@
                     android:layout_height="100dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:srcCompat="@drawable/star_off" />
+                     />
 
                 <ImageView
                     android:id="@+id/pstar2"
@@ -66,7 +62,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/pstar3"
                     app:layout_constraintStart_toEndOf="@+id/pstar1"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/star_off" />
+                     />
 
                 <ImageView
                     android:id="@+id/pstar3"
@@ -74,15 +70,17 @@
                     android:layout_height="100dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:srcCompat="@drawable/star_off" />
+                   />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/resume"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="50dp"
+                android:layout_marginEnd="20dp"
                 android:background="@drawable/box_unselected"
                 android:gravity="center"
                 android:text="RESUME"
@@ -95,8 +93,10 @@
             <TextView
                 android:id="@+id/restart"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
                 android:background="@drawable/box_unselected"
                 android:gravity="center"
                 android:text="RESTART"
@@ -109,8 +109,10 @@
             <TextView
                 android:id="@+id/pexit"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
                 android:background="@drawable/box_unselected"
                 android:gravity="center"
                 android:text="EXIT"

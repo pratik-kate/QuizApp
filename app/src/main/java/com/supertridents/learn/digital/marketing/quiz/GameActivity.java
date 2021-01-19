@@ -2,11 +2,11 @@ package com.supertridents.learn.digital.marketing.quiz;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -14,8 +14,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.supertridents.learn.digital.marketing.quiz.questions.QuestionFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,12 +24,13 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import pl.droidsonroids.gif.GifImageView;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
 
+    final String CORRECT="CORRECT";
+    final String ANS="ANS";
     TextView question,op1,op2,op3,op4;
     List<QuestionItem> questionItems;
     int currentQuestion = 0;
@@ -67,47 +66,62 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         op2.setOnClickListener(this);
         op3.setOnClickListener(this);
         op4.setOnClickListener(this);
+        pause.setOnClickListener(this);
         Intent intent = getIntent();
         int level = intent.getIntExtra("level",0);
         TextView lvl = findViewById(R.id.lvltxt);
         lvl.setText("Level "+String.valueOf(level));
 
-        pause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(GameActivity.this, "pause", Toast.LENGTH_SHORT).show();
-                final Dialog dialog = new Dialog(GameActivity.this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-                dialog.setContentView(R.layout.pause);
-                dialog.setCancelable(true);
-
-                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                lp.copyFrom(dialog.getWindow().getAttributes());
-                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-
-                (dialog.findViewById(R.id.resume)).setOnClickListener(v1 -> {
-                    dialog.dismiss();
-                });
-                (dialog.findViewById(R.id.restart)).setOnClickListener(v2->{
-                    startActivity(getIntent());
-                    //this.recreate();
-                });
-                (dialog.findViewById(R.id.pexit)).setOnClickListener(v3->{
-                    startActivity(new Intent(GameActivity.this, MainActivity.class));
-                });
-                dialog.show();
-                dialog.getWindow().setAttributes(lp);
-            }
-        });
+//        pause.setOnClickListener(new View.OnClickListener() {
+//            @SuppressLint("UseCompatLoadingForDrawables")
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(GameActivity.this, "pause", Toast.LENGTH_SHORT).show();
+//                final Dialog dialog = new Dialog(GameActivity.this);
+//                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+//                dialog.setContentView(R.layout.pause);
+//                dialog.setCancelable(true);
+//
+//                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+//                lp.copyFrom(dialog.getWindow().getAttributes());
+//                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+//                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+//
+//                (dialog.findViewById(R.id.resume)).setOnClickListener(v1 -> {
+//                    dialog.dismiss();
+//                });
+//                (dialog.findViewById(R.id.restart)).setOnClickListener(v2->{
+//                    startActivity(getIntent());
+//                    //this.recreate();
+//                });
+//                (dialog.findViewById(R.id.pexit)).setOnClickListener(v3->{
+//                    startActivity(new Intent(GameActivity.this, MainActivity.class));
+//                });
+//
+//                if(correct==1){
+//                    (dialog.findViewById(R.id.pstar1)).setBackgroundDrawable(getResources().getDrawable(R.drawable.star_on));
+//                }else if(correct==2){
+//                    (dialog.findViewById(R.id.pstar1)).setBackgroundDrawable(getDrawable(R.drawable.star_on));
+//                    (dialog.findViewById(R.id.pstar2)).setBackgroundDrawable(getDrawable(R.drawable.star_on));
+//                }else if(correct==3){
+//                    (dialog.findViewById(R.id.pstar1)).setBackgroundDrawable(getDrawable(R.drawable.star_on));
+//                    (dialog.findViewById(R.id.pstar2)).setBackgroundDrawable(getDrawable(R.drawable.star_on));
+//                    (dialog.findViewById(R.id.pstar3)).setBackgroundDrawable(getDrawable(R.drawable.star_on));
+//                }
+//                dialog.show();
+//                dialog.getWindow().setAttributes(lp);
+//            }
+//        });
 
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private boolean checkAnswer(TextView selected) {
+    private void checkAnswer(TextView selected) {
         String selectedAnswer = selected.getText().toString();
         if(selectedAnswer.equals(questionItems.get(currentQuestion).getCorrect())){
             selected.setBackground(getResources().getDrawable(R.drawable.option_right));
+            correct++;
+
             //gif.setVisibility(View.VISIBLE);
             clickable(false);
 
@@ -127,15 +141,35 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                          clickable(true);
                           reset();
                      }else {
-                        Toast.makeText(GameActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(GameActivity.this,QuestionActivity.class));
+                        //Toast.makeText(GameActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
+                        final Dialog dialog = new Dialog(GameActivity.this);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                        dialog.setContentView(R.layout.finish);
+                        dialog.setCancelable(true);
+
+                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                        lp.copyFrom(dialog.getWindow().getAttributes());
+                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+
+                        (dialog.findViewById(R.id.closefinish)).setOnClickListener(v -> {
+                            SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                            editor.clear();
+                            editor.apply();
+                            editor.commit();
+                            startActivity(new Intent(GameActivity.this,QuestionActivity.class));
+                        });
+
+                        dialog.show();
+                        dialog.getWindow().setAttributes(lp);
+
                      }
                     }
             },800);
-            return true;
+
         } else {
             selected.setBackground(getResources().getDrawable(R.drawable.option_wrong));
-
+            wrong++;
             final Dialog dialog = new Dialog(GameActivity.this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
             dialog.setContentView(R.layout.wrong);
@@ -162,6 +196,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     reset();
                 }else {
                     Toast.makeText(GameActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
+                    SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                    editor.clear();
+                    editor.apply();
+                    editor.commit();
                     startActivity(new Intent(GameActivity.this,QuestionActivity.class));
                 }
                 dialog.dismiss();
@@ -169,8 +207,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
             dialog.show();
             dialog.getWindow().setAttributes(lp);
-            return false;
         }
+        SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+        editor.putInt(ANS, correct);
+        editor.apply();
+        editor.commit();
 
     }
 
@@ -252,23 +293,79 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        boolean ans;
+
         switch (v.getId()){
             case R.id.option_1:
-                ans=checkAnswer(op1);
+                checkAnswer(op1);
                 break;
             case R.id.option_2:
-                ans=checkAnswer(op2);
+                checkAnswer(op2);
                 break;
             case R.id.option_3:
-                ans=checkAnswer(op3);
+                checkAnswer(op3);
                 break;
             case R.id.option_4:
-                ans=checkAnswer(op4);
+                checkAnswer(op4);
                 break;
-
             default:
-                ans=false;
+                
+        }
+
+        switch (v.getId()){
+            case R.id.gamepause:
+            {
+                //Toast.makeText(GameActivity.this, "pause", Toast.LENGTH_SHORT).show();
+                final Dialog dialog = new Dialog(GameActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                dialog.setContentView(R.layout.pause);
+                dialog.setCancelable(true);
+
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                lp.copyFrom(dialog.getWindow().getAttributes());
+                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+
+                (dialog.findViewById(R.id.pstar1)).setBackgroundResource(R.drawable.star_off);
+                (dialog.findViewById(R.id.pstar2)).setBackgroundResource(R.drawable.star_off);
+                (dialog.findViewById(R.id.pstar3)).setBackgroundResource(R.drawable.star_off);
+
+                (dialog.findViewById(R.id.resume)).setOnClickListener(v1 -> {
+                    dialog.dismiss();
+                });
+                (dialog.findViewById(R.id.restart)).setOnClickListener(v2->{
+                    SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                    editor.clear();
+                    editor.apply();
+                    editor.commit();
+                    startActivity(getIntent());
+                    //this.recreate();
+                });
+                SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
+                int c = preferences.getInt(ANS,0);
+                (dialog.findViewById(R.id.pexit)).setOnClickListener(v3->{
+                    SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                    editor.clear();
+                    editor.apply();
+                    editor.commit();
+                    startActivity(new Intent(GameActivity.this, MainActivity.class));
+
+                });
+
+
+                if(c==1){
+                    (dialog.findViewById(R.id.pstar1)).setBackgroundResource(R.drawable.star_on);
+                }else if(c==2){
+                    (dialog.findViewById(R.id.pstar1)).setBackgroundResource(R.drawable.star_on);
+                    (dialog.findViewById(R.id.pstar2)).setBackgroundResource(R.drawable.star_on);
+                }else if(c==3){
+                    (dialog.findViewById(R.id.pstar1)).setBackgroundResource(R.drawable.star_on);
+                    (dialog.findViewById(R.id.pstar2)).setBackgroundResource(R.drawable.star_on);
+                    (dialog.findViewById(R.id.pstar3)).setBackgroundResource(R.drawable.star_on);
+                }
+
+                dialog.show();
+                dialog.getWindow().setAttributes(lp);
+            }
         }
     }
 }
