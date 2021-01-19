@@ -43,6 +43,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         getSupportActionBar().hide();
+        SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+        editor.clear();
+        editor.apply();
+        editor.commit();
 //        QuestionFragment fragment = new QuestionFragment();
 //        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 //        transaction.replace(R.id.screen,fragment);
@@ -71,7 +75,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         level = intent.getIntExtra("level",0);
         TextView lvl = findViewById(R.id.lvltxt);
         lvl.setText("Level "+String.valueOf(level));
-
 
     }
 
@@ -356,9 +359,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.gamepause:
             {
                 SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                editor.clear();
-                editor.apply();
-                editor.commit();
                 //Toast.makeText(GameActivity.this, "pause", Toast.LENGTH_SHORT).show();
                 final Dialog dialog = new Dialog(GameActivity.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
