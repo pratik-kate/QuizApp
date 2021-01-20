@@ -8,12 +8,15 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.ankushgrover.hourglass.Hourglass;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,9 +42,9 @@ GameActivity extends AppCompatActivity implements View.OnClickListener {
     List<QuestionItem> questionItems;
     int currentQuestion = 0,level;
     int correct = 0,wrong = 0,i = 1;
-    GifImageView gif;
-    TextView current,total;
+    TextView current,total,time;
     CardView pause,fifty,swap,fifty2;
+    CountDownTimer cTimer = null;
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,7 @@ GameActivity extends AppCompatActivity implements View.OnClickListener {
         fifty = findViewById(R.id.fifty);
         fifty2 = findViewById(R.id.fifty2);
         swap  = findViewById(R.id.swap);
+        time = findViewById(R.id.timer);
 
         loadQuestions();
         Collections.shuffle(questionItems);
@@ -240,6 +244,105 @@ GameActivity extends AppCompatActivity implements View.OnClickListener {
 
     }
 
+//    void startTimer() {
+//        cTimer = new CountDownTimer(30000, 1000) {
+//            public void onTick(long millisUntilFinished) {
+//                time.setText(String.valueOf(millisUntilFinished / 1000));
+//            }
+//            public void onFinish() {
+//                Handler handler = new Handler();
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        // gif.setVisibility(View.INVISIBLE);
+//                        reset();
+//                        clickable(true);
+//
+//                        if(currentQuestion<2){
+//                            currentQuestion++;
+//                            i++;
+//                            current.setText(i+"/");
+//                            setQuestionScreen(currentQuestion);
+//                            clickable(true);
+//                            reset();
+//                        }else {
+//                            //Toast.makeText(GameActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
+//                            final Dialog dialog2 = new Dialog(GameActivity.this);
+//                            dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+//                            dialog2.setContentView(R.layout.finish);
+//                            dialog2.setCancelable(true);
+//
+//                            WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+//                            lp2.copyFrom(dialog2.getWindow().getAttributes());
+//                            lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+//                            lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
+//
+//                            TextView lvl = dialog2.findViewById(R.id.flevel);
+//                            lvl.setText("Level "+String.valueOf(level));
+//                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
+//                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
+//                            (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
+//
+//                            (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
+//                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+//                                editor.clear();
+//                                editor.apply();
+//                                editor.commit();
+//                                startActivity(new Intent(GameActivity.this,QuestionActivity.class));
+//                            });
+//
+//                            (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
+//                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+//                                editor.clear();
+//                                editor.apply();
+//                                editor.commit();
+//                                startActivity(new Intent(GameActivity.this,MainActivity.class));
+//                            });
+//                            (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
+//                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+//                                editor.clear();
+//                                editor.apply();
+//                                editor.commit();
+//                                startActivity(getIntent());
+//                            });
+//                            SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
+//                            int c = preferences.getInt(ANS,0);
+//
+//                            if(c==1){
+//                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+//                            }else if(c==2){
+//                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+//                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+//                            }else if(c==3){
+//                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+//                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+//                                (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+//                            }
+//                            dialog2.show();
+//                            dialog2.getWindow().setAttributes(lp2);
+//                        }
+//                    }
+//                },800);
+//                Toast.makeText(GameActivity.this, "Time Over", Toast.LENGTH_SHORT).show();
+//            }
+//        };
+//        cTimer.start();
+//    }
+
+    Hourglass hourglass = new Hourglass(25000, 1000) {
+        @Override
+        public void onTimerTick(long timeRemaining) {
+            // Update UI
+            time.setText(String.valueOf(timeRemaining / 1000));
+        }
+
+        @Override
+        public void onTimerFinish() {
+            // Timer finished
+            Toast.makeText(GameActivity.this, "Time Over", Toast.LENGTH_SHORT).show();
+
+        }
+    };
     @SuppressLint("UseCompatLoadingForDrawables")
     private void checkAnswer(TextView selected) {
         String selectedAnswer = selected.getText().toString();
@@ -599,10 +702,10 @@ GameActivity extends AppCompatActivity implements View.OnClickListener {
         editor.commit();
 
     }
-
     //set question
     private void  setQuestionScreen(int n){
         if(n<3) {
+            hourglass.startTimer();
             question.setText(questionItems.get(n).getQuestion());
             op1.setText(questionItems.get(n).getOp1());
             op2.setText(questionItems.get(n).getOp2());
@@ -613,7 +716,6 @@ GameActivity extends AppCompatActivity implements View.OnClickListener {
             Toast.makeText(this, "Game Over", Toast.LENGTH_SHORT).show();
         }
     }
-
         private void  setRandomQuestionScreen(int n){
 
             question.setText(questionItems.get(n).getQuestion());
@@ -709,6 +811,7 @@ GameActivity extends AppCompatActivity implements View.OnClickListener {
         switch (v.getId()){
             case R.id.gamepause:
             {
+                hourglass.pauseTimer();
                 SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                 //Toast.makeText(GameActivity.this, "pause", Toast.LENGTH_SHORT).show();
                 final Dialog dialog = new Dialog(GameActivity.this);
@@ -726,6 +829,7 @@ GameActivity extends AppCompatActivity implements View.OnClickListener {
                 (dialog.findViewById(R.id.pstar3)).setBackgroundResource(R.drawable.star_off);
 
                 (dialog.findViewById(R.id.resume)).setOnClickListener(v1 -> {
+                    hourglass.resumeTimer();
                     dialog.dismiss();
                 });
                 (dialog.findViewById(R.id.restart)).setOnClickListener(v2->{
