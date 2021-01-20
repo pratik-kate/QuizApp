@@ -43,18 +43,20 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.viewHo
         holder.s3.setImageResource(model.getS3());
 
 
-        SharedPreferences preferences = context.getSharedPreferences(String.valueOf(MainActivity.level),MODE_PRIVATE);
-        level = preferences.getInt(String.valueOf(MainActivity.current),1);
+        SharedPreferences preferences = context.getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE);
+        level = preferences.getInt(MainActivity.CURRENT,1);
         if(model.getLevel()>level){holder.lock.setVisibility(View.VISIBLE);}
         else{holder.lock.setVisibility(View.INVISIBLE);}
+        //Toast.makeText(context,"level"+level, Toast.LENGTH_SHORT).show();
         holder.itemView.setOnClickListener(v -> {
             if(model.getLevel() <= level) {
+                //Toast.makeText(context,"level"+level, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(context, GameActivity.class);
                 intent.putExtra("level", model.getLevel());
                 context.startActivity(intent);
-                level++;
-                SharedPreferences.Editor editor = context.getSharedPreferences(String.valueOf(MainActivity.level),MODE_PRIVATE).edit();
-                editor.putInt(String.valueOf(MainActivity.current),level);
+                if(level<=model.getLevel()){level++;}
+                SharedPreferences.Editor editor = context.getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
+                editor.putInt(MainActivity.CURRENT,level);
                 editor.apply();
                 editor.commit();
             }

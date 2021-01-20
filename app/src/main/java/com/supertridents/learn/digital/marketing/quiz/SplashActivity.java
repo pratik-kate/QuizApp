@@ -30,10 +30,18 @@ public class SplashActivity extends AppCompatActivity {
                     edit.commit();
                     edit.apply();
 
-                    SharedPreferences.Editor editor = getSharedPreferences(String.valueOf(MainActivity.level), MODE_PRIVATE).edit();
-                    editor.putInt(String.valueOf(MainActivity.current), 1);
+                    SharedPreferences.Editor editor = getSharedPreferences(MainActivity.LEVEL, MODE_PRIVATE).edit();
+                    editor.putInt(MainActivity.CURRENT, 1);
+                    editor.putInt(String.valueOf(MainActivity.coins), 50000);
                     editor.apply();
                     editor.commit();
+
+//                    SharedPreferences.Editor coinseditor = getSharedPreferences(String.valueOf(MainActivity.currency), MODE_PRIVATE).edit();
+//                    coinseditor.putInt(String.valueOf(MainActivity.coins), 100);
+//                    coinseditor.apply();
+//                    coinseditor.commit();
+
+
                     Toast.makeText(SplashActivity.this, "First Start", Toast.LENGTH_SHORT).show();
                 }
                 startActivity(new Intent(SplashActivity.this,MainActivity.class));

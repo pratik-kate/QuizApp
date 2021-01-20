@@ -27,7 +27,11 @@ import java.util.List;
 
 import pl.droidsonroids.gif.GifImageView;
 
-public class GameActivity extends AppCompatActivity implements View.OnClickListener {
+import static com.supertridents.learn.digital.marketing.quiz.MainActivity.LEVEL;
+import static com.supertridents.learn.digital.marketing.quiz.MainActivity.coins;
+
+public class
+GameActivity extends AppCompatActivity implements View.OnClickListener {
 
     final String CORRECT="CORRECT";
     final String ANS="ANS";
@@ -37,7 +41,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     int correct = 0,wrong = 0,i = 1;
     GifImageView gif;
     TextView current,total;
-    CardView pause;
+    CardView pause,fifty,swap,fifty2;
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +62,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         op3 = findViewById(R.id.option_3);
         op4 = findViewById(R.id.option_4);
         pause = findViewById(R.id.gamepause);
+        fifty = findViewById(R.id.fifty);
+        fifty2 = findViewById(R.id.fifty2);
+        swap  = findViewById(R.id.swap);
 
         loadQuestions();
         Collections.shuffle(questionItems);
@@ -76,12 +84,345 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         TextView lvl = findViewById(R.id.lvltxt);
         lvl.setText("Level "+String.valueOf(level));
 
+        SharedPreferences preferences = getSharedPreferences(LEVEL,MODE_PRIVATE);
+        final int[] coin = {preferences.getInt(String.valueOf(coins), 1)};
+        TextView cointext = findViewById(R.id.coins);
+        cointext.setText(String.valueOf(coin[0]));
+
+        //Lifelines
+        fifty.setOnClickListener(v -> {
+
+            final Dialog dialog2 = new Dialog(GameActivity.this);
+            dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+            dialog2.setContentView(R.layout.fifty);
+            dialog2.setCancelable(true);
+
+            WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+            lp2.copyFrom(dialog2.getWindow().getAttributes());
+            lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+            lp2.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+            (dialog2.findViewById(R.id.fyes)).setOnClickListener(v1 -> {
+                String ans = questionItems.get(currentQuestion).getCorrect();
+                if(coin[0] >=100) {
+                    if (ans.equals(op1.getText())) {
+                        op1.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                        op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                    } else if (ans.equals(op2.getText())) {
+                        op2.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                        op4.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                    } else if (ans.equals(op3.getText())) {
+                        op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                        op2.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                    } else if (ans.equals(op4.getText())) {
+                        op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                        op4.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                    }
+                    coin[0] = coin[0] -100;
+                    SharedPreferences.Editor coinseditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
+                    coinseditor.putInt(String.valueOf(coins), coin[0]);
+                    coinseditor.apply();
+                    coinseditor.commit();
+                    cointext.setText(String.valueOf(coin[0]));
+                    fifty.setClickable(false);
+                    fifty.setForeground(getResources().getDrawable(R.drawable.ic_close));
+                }else {
+                    Toast.makeText(this, "No Coins", Toast.LENGTH_SHORT).show();
+                }
+
+                dialog2.dismiss();
+            });
+            (dialog2.findViewById(R.id.fno)).setOnClickListener(v1 -> {
+                dialog2.dismiss();
+            });
+
+            dialog2.show();
+            dialog2.getWindow().setAttributes(lp2);
+        });
+
+        swap.setOnClickListener(v -> {
+
+            final Dialog dialog2 = new Dialog(GameActivity.this);
+            dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+            dialog2.setContentView(R.layout.swap);
+            dialog2.setCancelable(true);
+
+            WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+            lp2.copyFrom(dialog2.getWindow().getAttributes());
+            lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+            lp2.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+            (dialog2.findViewById(R.id.syes)).setOnClickListener(v1 -> {
+
+                if(coin[0] >=100) {
+
+
+                    setRandomQuestionScreen(7);
+
+                    coin[0] = coin[0] -100;
+                    SharedPreferences.Editor coinseditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
+                    coinseditor.putInt(String.valueOf(coins), coin[0]);
+                    coinseditor.apply();
+                    coinseditor.commit();
+                    cointext.setText(String.valueOf(coin[0]));
+                    swap.setClickable(false);
+                    swap.setForeground(getResources().getDrawable(R.drawable.ic_close));
+
+                    fifty.setVisibility(View.INVISIBLE);
+                    fifty2.setVisibility(View.VISIBLE);
+                    fifty2.setOnClickListener(v2 -> {
+
+                        final Dialog dialogf = new Dialog(GameActivity.this);
+                        dialogf.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                        dialogf.setContentView(R.layout.fifty);
+                        dialogf.setCancelable(true);
+
+                        WindowManager.LayoutParams lpf = new WindowManager.LayoutParams();
+                        lpf.copyFrom(dialogf.getWindow().getAttributes());
+                        lpf.width = WindowManager.LayoutParams.MATCH_PARENT;
+                        lpf.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+                        (dialogf.findViewById(R.id.fyes)).setOnClickListener(v3 -> {
+                            String ans = questionItems.get(7).getCorrect();
+                            if(coin[0] >=100) {
+                                if (ans.equals(op1.getText())) {
+                                    op1.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                                    op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                                } else if (ans.equals(op2.getText())) {
+                                    op2.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                                    op4.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                                } else if (ans.equals(op3.getText())) {
+                                    op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                                    op2.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                                } else if (ans.equals(op4.getText())) {
+                                    op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                                    op4.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                                }
+                                op1.setOnClickListener(v4 -> checkRandomAnswer(op1));
+                                op2.setOnClickListener(v4 -> checkRandomAnswer(op2));
+                                op3.setOnClickListener(v4 -> checkRandomAnswer(op3));
+                                op4.setOnClickListener(v4 -> checkRandomAnswer(op4));
+                                coin[0] = coin[0] -100;
+                                SharedPreferences.Editor coinsseditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
+                                coinsseditor.putInt(String.valueOf(coins), coin[0]);
+                                coinsseditor.apply();
+                                coinsseditor.commit();
+                                cointext.setText(String.valueOf(coin[0]));
+                                fifty2.setClickable(false);
+                                fifty2.setForeground(getResources().getDrawable(R.drawable.ic_close));
+                            }else {
+                                Toast.makeText(this, "No Coins", Toast.LENGTH_SHORT).show();
+                            }
+
+                            dialogf.dismiss();
+                        });
+                        (dialogf.findViewById(R.id.fno)).setOnClickListener(v3 -> {
+                            dialogf.dismiss();
+                        });
+
+                        dialogf.show();
+                        dialogf.getWindow().setAttributes(lp2);
+                    });
+
+                }else {
+                    Toast.makeText(this, "No Coins", Toast.LENGTH_SHORT).show();
+                }
+
+                dialog2.dismiss();
+            });
+            (dialog2.findViewById(R.id.sno)).setOnClickListener(v1 -> {
+                dialog2.dismiss();
+            });
+
+            dialog2.show();
+            dialog2.getWindow().setAttributes(lp2);
+        });
+
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private void checkAnswer(TextView selected) {
         String selectedAnswer = selected.getText().toString();
         if(selectedAnswer.equals(questionItems.get(currentQuestion).getCorrect())){
+            selected.setBackground(getResources().getDrawable(R.drawable.option_right));
+            correct++;
+
+            //gif.setVisibility(View.VISIBLE);
+            clickable(false);
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                   // gif.setVisibility(View.INVISIBLE);
+                    reset();
+                    clickable(true);
+
+                    if(currentQuestion<2){
+                        currentQuestion++;
+                        i++;
+                        current.setText(i+"/");
+                         setQuestionScreen(currentQuestion);
+                         clickable(true);
+                          reset();
+                     }else {
+                        //Toast.makeText(GameActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
+                        final Dialog dialog2 = new Dialog(GameActivity.this);
+                        dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                        dialog2.setContentView(R.layout.finish);
+                        dialog2.setCancelable(true);
+
+                        WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+                        lp2.copyFrom(dialog2.getWindow().getAttributes());
+                        lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+                        lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
+
+                        TextView lvl = dialog2.findViewById(R.id.flevel);
+                        lvl.setText("Level "+String.valueOf(level));
+                        (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
+                        (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
+                        (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
+
+                        (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
+                            SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                            editor.clear();
+                            editor.apply();
+                            editor.commit();
+                            startActivity(new Intent(GameActivity.this,QuestionActivity.class));
+                        });
+
+                        (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
+                            SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                            editor.clear();
+                            editor.apply();
+                            editor.commit();
+                            startActivity(new Intent(GameActivity.this,MainActivity.class));
+                        });
+                        (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
+                            SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                            editor.clear();
+                            editor.apply();
+                            editor.commit();
+                            startActivity(getIntent());
+                        });
+                        SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
+                        int c = preferences.getInt(ANS,0);
+
+                        if(c==1){
+                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                        }else if(c==2){
+                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                        }else if(c==3){
+                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                            (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                        }
+                        dialog2.show();
+                        dialog2.getWindow().setAttributes(lp2);
+                     }
+                    }
+            },800);
+
+        } else {
+            selected.setBackground(getResources().getDrawable(R.drawable.option_wrong));
+            wrong++;
+            final Dialog dialog = new Dialog(GameActivity.this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+            dialog.setContentView(R.layout.wrong);
+            dialog.setCancelable(true);
+
+            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+            lp.copyFrom(dialog.getWindow().getAttributes());
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+            lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+            (dialog.findViewById(R.id.lifeline)).setOnClickListener(v ->{
+                reset();
+                clickable(true);
+                        dialog.dismiss();
+            });
+
+            (dialog.findViewById(R.id.closewrong)).setOnClickListener(v -> {
+                reset();
+                if(currentQuestion<2){
+                    currentQuestion++;
+                    i++;
+                    current.setText(i+"/");
+                    setQuestionScreen(currentQuestion);
+                    clickable(true);
+                    reset();
+                }else {
+                    final Dialog dialog2 = new Dialog(GameActivity.this);
+                    dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                    dialog2.setContentView(R.layout.finish);
+                    dialog2.setCancelable(true);
+
+                    WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+                    lp2.copyFrom(dialog2.getWindow().getAttributes());
+                    lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+                    lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
+
+                    TextView lvl = dialog2.findViewById(R.id.flevel);
+                    lvl.setText("Level "+String.valueOf(level));
+                    (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
+                    (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
+                    (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
+
+                    (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
+                        SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                        editor.clear();
+                        editor.apply();
+                        editor.commit();
+                        startActivity(new Intent(GameActivity.this,QuestionActivity.class));
+                    });
+
+                    (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
+                        SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                        editor.clear();
+                        editor.apply();
+                        editor.commit();
+                        startActivity(new Intent(GameActivity.this,MainActivity.class));
+                    });
+                    (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
+                        SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                        editor.clear();
+                        editor.apply();
+                        editor.commit();
+                        startActivity(getIntent());
+                    });
+                    SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
+                    int c = preferences.getInt(ANS,0);
+
+                    Toast.makeText(this, "Correct "+c, Toast.LENGTH_SHORT).show();
+                    if(c==1){
+                        (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                    }else if(c==2){
+                        (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                        (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                    }else if(c==3){
+                        (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                        (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                        (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                    }
+                    dialog2.show();
+                    dialog2.getWindow().setAttributes(lp2);
+
+                }
+                dialog.dismiss();
+            });
+
+            dialog.show();
+            dialog.getWindow().setAttributes(lp);
+        }
+        SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+        editor.putInt(ANS, correct);
+        editor.apply();
+        editor.commit();
+
+    }
+    private void checkRandomAnswer(TextView selected) {
+        String selectedAnswer = selected.getText().toString();
+        if(selectedAnswer.equals(questionItems.get(7).getCorrect())){
             selected.setBackground(getResources().getDrawable(R.drawable.option_right));
             correct++;
 
@@ -273,6 +614,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+        private void  setRandomQuestionScreen(int n){
+
+            question.setText(questionItems.get(n).getQuestion());
+            op1.setText(questionItems.get(n).getOp1());
+            op2.setText(questionItems.get(n).getOp2());
+            op3.setText(questionItems.get(n).getOp3());
+            op4.setText(questionItems.get(n).getOp4());
+        }
+
     //load questions
     private  void loadQuestions(){
         questionItems = new ArrayList<>();
@@ -351,6 +701,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.option_4:
                 checkAnswer(op4);
                 break;
+
             default:
                 
         }
