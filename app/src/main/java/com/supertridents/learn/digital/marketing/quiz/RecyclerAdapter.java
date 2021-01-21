@@ -45,8 +45,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.viewHo
 
         SharedPreferences preferences = context.getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE);
         level = preferences.getInt(MainActivity.CURRENT,1);
-        if(model.getLevel()>level){holder.lock.setVisibility(View.VISIBLE);}
-        else{holder.lock.setVisibility(View.INVISIBLE);}
+        if(model.getLevel()>level){
+            holder.lock.setVisibility(View.VISIBLE);
+            holder.text.setVisibility(View.INVISIBLE);
+        }
+        else{
+            holder.lock.setVisibility(View.INVISIBLE);
+            holder.text.setVisibility(View.VISIBLE);
+        }
+        holder.s1.setVisibility(View.INVISIBLE);
+        //.s2.setVisibility(View.INVISIBLE);
+        holder.s3.setVisibility(View.INVISIBLE);
         //Toast.makeText(context,"level"+level, Toast.LENGTH_SHORT).show();
         holder.itemView.setOnClickListener(v -> {
             if(model.getLevel() <= level) {
@@ -64,7 +73,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.viewHo
                 Toast.makeText(context, "Level Locked", Toast.LENGTH_SHORT).show();
             }
         });
-        if(model.getLevel()<level){holder.lock.setVisibility(View.INVISIBLE);}
+        if(model.getLevel()<level){
+            holder.lock.setVisibility(View.INVISIBLE);
+            holder.text.setVisibility(View.VISIBLE);
+        }
     }
     @Override
     public int getItemCount() {
