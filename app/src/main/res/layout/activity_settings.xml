@@ -5,8 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/purple_500"
-    android:foreground="@drawable/bgshape"
     tools:context=".SettingsActivity">
+
+    <ImageView
+        android:id="@+id/imageView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/bgshape" />
 
     <TextView
         android:id="@+id/title2"
@@ -47,5 +56,57 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/title2"
         app:srcCompat="@drawable/ic_next" />
+
+    <TextView
+        android:id="@+id/help"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/box_unselected"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:text="How To Play?"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+    <TextView
+        android:id="@+id/appSettings"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/box_unselected"
+        android:elevation="10dp"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:text="@string/settings"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/help" />
+
+    <TextView
+        android:id="@+id/share"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/box_unselected"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:text="Share"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appSettings" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
