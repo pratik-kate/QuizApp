@@ -194,6 +194,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/background_lifeline"
+            android:clickable="true"
+            android:contextClickable="true"
+            android:focusable="true"
+            android:foreground="@drawable/ripple"
             app:cardCornerRadius="10dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -220,6 +224,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:background="@drawable/background_lifeline"
+            android:clickable="true"
+            android:contextClickable="true"
+            android:focusable="true"
+            android:foreground="@drawable/ripple"
             app:cardCornerRadius="10dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -246,6 +254,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:background="@drawable/background_lifeline"
+            android:clickable="true"
+            android:contextClickable="true"
+            android:focusable="true"
+            android:foreground="@drawable/ripple"
             app:cardCornerRadius="10dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout

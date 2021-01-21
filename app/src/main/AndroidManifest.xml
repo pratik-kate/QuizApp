@@ -9,17 +9,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.QuizzApp">
-        <activity android:name="com.supertridents.learn.digital.marketing.quiz.QuestionActivity"></activity>
-        <activity android:name="com.supertridents.learn.digital.marketing.quiz.GameActivity" />
-        <activity android:name="com.supertridents.learn.digital.marketing.quiz.SettingsActivity" />
-        <activity android:name="com.supertridents.learn.digital.marketing.quiz.SplashActivity">
+        <activity android:name=".ShopActivity"></activity>
+        <activity android:name=".QuestionActivity" />
+        <activity android:name=".GameActivity" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.supertridents.learn.digital.marketing.quiz.MainActivity" />
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

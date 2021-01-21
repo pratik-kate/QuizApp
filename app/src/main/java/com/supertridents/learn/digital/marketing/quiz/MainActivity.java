@@ -47,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
         settings.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this,SettingsActivity.class));
         });
+        shop.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this,ShopActivity.class));
+        });
 
         SharedPreferences preferences = getSharedPreferences(LEVEL,MODE_PRIVATE);
         int coin = preferences.getInt(String.valueOf(coins),1);
