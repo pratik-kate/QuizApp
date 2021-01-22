@@ -226,6 +226,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     swap.setForeground(getResources().getDrawable(R.drawable.ic_close));
 
 
+                    if(!(isfifty==1)) {
                         fifty.setVisibility(View.INVISIBLE);
                         fifty2.setVisibility(View.VISIBLE);
                         fifty2.setOnClickListener(v2 -> {
@@ -281,7 +282,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             dialogf.show();
                             dialogf.getWindow().setAttributes(lp2);
                         });
-
+                    }
 //                        doubleDip.setVisibility(View.INVISIBLE);
 //                        doubleDip2.setVisibility(View.VISIBLE);
 //                        doubleDip2.setOnClickListener(v2 -> {
