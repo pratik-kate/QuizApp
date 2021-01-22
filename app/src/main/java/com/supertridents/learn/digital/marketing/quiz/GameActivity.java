@@ -11,6 +11,9 @@ import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -1268,6 +1271,29 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 //            TranslateAnimation anim = new TranslateAnimation(0,0,2,0);
 //            anim.setDuration(1000);
 //            question.startAnimation(anim);
+
+            AlphaAnimation alphaAnimation = new AlphaAnimation(0.0f, 1.0f);
+            alphaAnimation.setDuration(1000);
+            //alphaAnimation.setRepeatCount(1);
+            alphaAnimation.setRepeatMode(Animation.REVERSE);
+            question.startAnimation(alphaAnimation);
+
+            TranslateAnimation animop1 = new TranslateAnimation(-op1.getWidth()*2,0,0,0);
+            animop1.setDuration(1000);
+            op1.startAnimation(animop1);
+
+            TranslateAnimation animop2 = new TranslateAnimation(op1.getWidth()*2,0,0,0);
+            animop2.setDuration(1000);
+            op2.startAnimation(animop2);
+
+            TranslateAnimation animop3 = new TranslateAnimation(-op1.getWidth()*2,0,0,0);
+            animop3.setDuration(1000);
+            op3.startAnimation(animop3);
+
+            TranslateAnimation animop4 = new TranslateAnimation(op1.getWidth()*2,0,0,0);
+            animop4.setDuration(1000);
+            op4.startAnimation(animop4);
+
             question.setText(questionItems.get(n).getQuestion());
             op1.setText(questionItems.get(n).getOp1());
             op2.setText(questionItems.get(n).getOp2());
