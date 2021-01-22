@@ -32,6 +32,7 @@ public class SplashActivity extends AppCompatActivity {
 
                     SharedPreferences.Editor editor = getSharedPreferences(MainActivity.LEVEL, MODE_PRIVATE).edit();
                     editor.putInt(MainActivity.CURRENT, 1);
+                    editor.putInt(MainActivity.SCORE,0);
                     editor.putInt(String.valueOf(MainActivity.coins), 50000);
                     editor.apply();
                     editor.commit();

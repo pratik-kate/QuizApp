@@ -1,3 +1,4 @@
+
 package com.supertridents.learn.digital.marketing.quiz;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,14 +28,15 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
 
 import pl.droidsonroids.gif.GifImageView;
 
 import static com.supertridents.learn.digital.marketing.quiz.MainActivity.LEVEL;
+import static com.supertridents.learn.digital.marketing.quiz.MainActivity.SCORE;
 import static com.supertridents.learn.digital.marketing.quiz.MainActivity.coins;
 
-public class
-GameActivity extends AppCompatActivity implements View.OnClickListener {
+public class GameActivity extends AppCompatActivity implements View.OnClickListener {
 
     final String CORRECT="CORRECT";
     final String ANS="ANS";
@@ -224,62 +226,62 @@ GameActivity extends AppCompatActivity implements View.OnClickListener {
                     swap.setForeground(getResources().getDrawable(R.drawable.ic_close));
 
 
-//                        fifty.setVisibility(View.INVISIBLE);
-//                        fifty2.setVisibility(View.VISIBLE);
-//                        fifty2.setOnClickListener(v2 -> {
-//
-//                            final Dialog dialogf = new Dialog(GameActivity.this);
-//                            dialogf.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-//                            dialogf.setContentView(R.layout.fifty);
-//                            dialogf.setCancelable(true);
-//
-//                            WindowManager.LayoutParams lpf = new WindowManager.LayoutParams();
-//                            lpf.copyFrom(dialogf.getWindow().getAttributes());
-//                            lpf.width = WindowManager.LayoutParams.MATCH_PARENT;
-//                            lpf.height = WindowManager.LayoutParams.WRAP_CONTENT;
-//
-//                            (dialogf.findViewById(R.id.fyes)).setOnClickListener(v3 -> {
-//                                String ans = questionItems.get(7).getCorrect();
-//                                if (coin[0] >= 100) {
-//                                    if (ans.equals(op1.getText())) {
-//                                        op1.setBackground(getResources().getDrawable(R.drawable.box_unselected));
-//                                        op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
-//                                    } else if (ans.equals(op2.getText())) {
-//                                        op2.setBackground(getResources().getDrawable(R.drawable.box_unselected));
-//                                        op4.setBackground(getResources().getDrawable(R.drawable.box_unselected));
-//                                    } else if (ans.equals(op3.getText())) {
-//                                        op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
-//                                        op2.setBackground(getResources().getDrawable(R.drawable.box_unselected));
-//                                    } else if (ans.equals(op4.getText())) {
-//                                        op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
-//                                        op4.setBackground(getResources().getDrawable(R.drawable.box_unselected));
-//                                    }
-//                                    op1.setOnClickListener(v4 -> checkRandomAnswer(op1));
-//                                    op2.setOnClickListener(v4 -> checkRandomAnswer(op2));
-//                                    op3.setOnClickListener(v4 -> checkRandomAnswer(op3));
-//                                    op4.setOnClickListener(v4 -> checkRandomAnswer(op4));
-//                                    coin[0] = coin[0] - 100;
-//                                    SharedPreferences.Editor coinsseditor = getSharedPreferences(MainActivity.LEVEL, MODE_PRIVATE).edit();
-//                                    coinsseditor.putInt(String.valueOf(coins), coin[0]);
-//                                    coinsseditor.apply();
-//                                    coinsseditor.commit();
-//                                    cointext.setText(String.valueOf(coin[0]));
-//                                    fifty2.setClickable(false);
-//                                    fifty2.setForeground(getResources().getDrawable(R.drawable.ic_close));
-//                                } else {
-//                                    Toast.makeText(this, "No Coins", Toast.LENGTH_SHORT).show();
-//                                }
-//
-//                                dialogf.dismiss();
-//                            });
-//                            (dialogf.findViewById(R.id.fno)).setOnClickListener(v3 -> {
-//                                dialogf.dismiss();
-//                            });
-//
-//                            dialogf.show();
-//                            dialogf.getWindow().setAttributes(lp2);
-//                        });
-//
+                        fifty.setVisibility(View.INVISIBLE);
+                        fifty2.setVisibility(View.VISIBLE);
+                        fifty2.setOnClickListener(v2 -> {
+
+                            final Dialog dialogf = new Dialog(GameActivity.this);
+                            dialogf.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                            dialogf.setContentView(R.layout.fifty);
+                            dialogf.setCancelable(true);
+
+                            WindowManager.LayoutParams lpf = new WindowManager.LayoutParams();
+                            lpf.copyFrom(dialogf.getWindow().getAttributes());
+                            lpf.width = WindowManager.LayoutParams.MATCH_PARENT;
+                            lpf.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+                            (dialogf.findViewById(R.id.fyes)).setOnClickListener(v3 -> {
+                                String ans = questionItems.get(7).getCorrect();
+                                if (coin[0] >= 100) {
+                                    if (ans.equals(op1.getText())) {
+                                        op1.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                                        op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                                    } else if (ans.equals(op2.getText())) {
+                                        op2.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                                        op4.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                                    } else if (ans.equals(op3.getText())) {
+                                        op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                                        op2.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                                    } else if (ans.equals(op4.getText())) {
+                                        op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                                        op4.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                                    }
+                                    op1.setOnClickListener(v4 -> checkRandomAnswer(op1));
+                                    op2.setOnClickListener(v4 -> checkRandomAnswer(op2));
+                                    op3.setOnClickListener(v4 -> checkRandomAnswer(op3));
+                                    op4.setOnClickListener(v4 -> checkRandomAnswer(op4));
+                                    coin[0] = coin[0] - 100;
+                                    SharedPreferences.Editor coinsseditor = getSharedPreferences(MainActivity.LEVEL, MODE_PRIVATE).edit();
+                                    coinsseditor.putInt(String.valueOf(coins), coin[0]);
+                                    coinsseditor.apply();
+                                    coinsseditor.commit();
+                                    cointext.setText(String.valueOf(coin[0]));
+                                    fifty2.setClickable(false);
+                                    fifty2.setForeground(getResources().getDrawable(R.drawable.ic_close));
+                                } else {
+                                    Toast.makeText(this, "No Coins", Toast.LENGTH_SHORT).show();
+                                }
+
+                                dialogf.dismiss();
+                            });
+                            (dialogf.findViewById(R.id.fno)).setOnClickListener(v3 -> {
+                                dialogf.dismiss();
+                            });
+
+                            dialogf.show();
+                            dialogf.getWindow().setAttributes(lp2);
+                        });
+
 //                        doubleDip.setVisibility(View.INVISIBLE);
 //                        doubleDip2.setVisibility(View.VISIBLE);
 //                        doubleDip2.setOnClickListener(v2 -> {
@@ -489,16 +491,31 @@ GameActivity extends AppCompatActivity implements View.OnClickListener {
                         SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
                         int c = preferences.getInt(ANS,0);
 
+                        SharedPreferences.Editor edit = getSharedPreferences(LEVEL,MODE_PRIVATE).edit();
+                        int score = getSharedPreferences(LEVEL,MODE_PRIVATE).getInt(SCORE,0);
+
+                        TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
                         if(c==1){
                             (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                            score = score+100;
+                            edit.putInt(MainActivity.SCORE,score);
+                            scoretxt.setText("100");
                         }else if(c==2){
                             (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
                             (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                            score = score+200;
+                            edit.putInt(MainActivity.SCORE,score);
+                            scoretxt.setText("200");
                         }else if(c==3){
                             (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
                             (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
                             (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                            score = score+300;
+                            edit.putInt(MainActivity.SCORE,score);
+                            scoretxt.setText("300");
                         }
+                        edit.apply();
+                        edit.commit();
                         dialog2.show();
                         dialog2.getWindow().setAttributes(lp2);
                      }
@@ -574,17 +591,31 @@ GameActivity extends AppCompatActivity implements View.OnClickListener {
                     SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
                     int c = preferences.getInt(ANS,0);
 
-                    Toast.makeText(this, "Correct "+c, Toast.LENGTH_SHORT).show();
+                    SharedPreferences.Editor edit = getSharedPreferences(LEVEL,MODE_PRIVATE).edit();
+                    int score = getSharedPreferences(LEVEL,MODE_PRIVATE).getInt(SCORE,0);
+
+                    TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
                     if(c==1){
                         (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                        score = score+100;
+                        edit.putInt(MainActivity.SCORE,score);
+                        scoretxt.setText("100");
                     }else if(c==2){
                         (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
                         (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                        score = score+200;
+                        edit.putInt(MainActivity.SCORE,score);
+                        scoretxt.setText("200");
                     }else if(c==3){
                         (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
                         (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
                         (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                        score = score+300;
+                        edit.putInt(MainActivity.SCORE,score);
+                        scoretxt.setText("300");
                     }
+                    edit.apply();
+                    edit.commit();
                     dialog2.show();
                     dialog2.getWindow().setAttributes(lp2);
 
@@ -669,16 +700,31 @@ GameActivity extends AppCompatActivity implements View.OnClickListener {
                         SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
                         int c = preferences.getInt(ANS,0);
 
+                        SharedPreferences.Editor edit = getSharedPreferences(LEVEL,MODE_PRIVATE).edit();
+                        int score = getSharedPreferences(LEVEL,MODE_PRIVATE).getInt(SCORE,0);
+
+                        TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
                         if(c==1){
                             (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                            score = score+100;
+                            edit.putInt(MainActivity.SCORE,score);
+                            scoretxt.setText("100");
                         }else if(c==2){
                             (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
                             (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                            score = score+200;
+                            edit.putInt(MainActivity.SCORE,score);
+                            scoretxt.setText("200");
                         }else if(c==3){
                             (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
                             (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
                             (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                            score = score+300;
+                            edit.putInt(MainActivity.SCORE,score);
+                            scoretxt.setText("300");
                         }
+                        edit.apply();
+                        edit.commit();
                         dialog2.show();
                         dialog2.getWindow().setAttributes(lp2);
                      }
@@ -755,16 +801,31 @@ GameActivity extends AppCompatActivity implements View.OnClickListener {
                             SharedPreferences preferences = getSharedPreferences(CORRECT, MODE_PRIVATE);
                             int c = preferences.getInt(ANS, 0);
 
-                            if (c == 1) {
+                            SharedPreferences.Editor edit = getSharedPreferences(LEVEL,MODE_PRIVATE).edit();
+                            int score = getSharedPreferences(LEVEL,MODE_PRIVATE).getInt(SCORE,0);
+
+                            TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
+                            if(c==1){
                                 (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                            } else if (c == 2) {
+                                score = score+100;
+                                edit.putInt(MainActivity.SCORE,score);
+                                scoretxt.setText("100");
+                            }else if(c==2){
                                 (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
                                 (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                            } else if (c == 3) {
+                                score = score+200;
+                                edit.putInt(MainActivity.SCORE,score);
+                                scoretxt.setText("200");
+                            }else if(c==3){
                                 (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
                                 (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
                                 (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                                score = score+300;
+                                edit.putInt(MainActivity.SCORE,score);
+                                scoretxt.setText("300");
                             }
+                            edit.apply();
+                            edit.commit();
                             dialog2.show();
                             dialog2.getWindow().setAttributes(lp2);
                         }
@@ -846,16 +907,31 @@ GameActivity extends AppCompatActivity implements View.OnClickListener {
                         SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
                         int c = preferences.getInt(ANS,0);
 
+                        SharedPreferences.Editor edit = getSharedPreferences(LEVEL,MODE_PRIVATE).edit();
+                        int score = getSharedPreferences(LEVEL,MODE_PRIVATE).getInt(SCORE,0);
+
+                        TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
                         if(c==1){
                             (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                            score = score+100;
+                            edit.putInt(MainActivity.SCORE,score);
+                            scoretxt.setText("100");
                         }else if(c==2){
                             (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
                             (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                            score = score+200;
+                            edit.putInt(MainActivity.SCORE,score);
+                            scoretxt.setText("200");
                         }else if(c==3){
                             (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
                             (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
                             (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                            score = score+300;
+                            edit.putInt(MainActivity.SCORE,score);
+                            scoretxt.setText("300");
                         }
+                        edit.apply();
+                        edit.commit();
                         dialog2.show();
                         dialog2.getWindow().setAttributes(lp2);
                      }
@@ -932,16 +1008,31 @@ GameActivity extends AppCompatActivity implements View.OnClickListener {
                             SharedPreferences preferences = getSharedPreferences(CORRECT, MODE_PRIVATE);
                             int c = preferences.getInt(ANS, 0);
 
-                            if (c == 1) {
+                            SharedPreferences.Editor edit = getSharedPreferences(LEVEL,MODE_PRIVATE).edit();
+                            int score = getSharedPreferences(LEVEL,MODE_PRIVATE).getInt(SCORE,0);
+
+                            TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
+                            if(c==1){
                                 (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                            } else if (c == 2) {
+                                score = score+100;
+                                edit.putInt(MainActivity.SCORE,score);
+                                scoretxt.setText("100");
+                            }else if(c==2){
                                 (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
                                 (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                            } else if (c == 3) {
+                                score = score+200;
+                                edit.putInt(MainActivity.SCORE,score);
+                                scoretxt.setText("200");
+                            }else if(c==3){
                                 (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
                                 (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
                                 (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                                score = score+300;
+                                edit.putInt(MainActivity.SCORE,score);
+                                scoretxt.setText("300");
                             }
+                            edit.apply();
+                            edit.commit();
                             dialog2.show();
                             dialog2.getWindow().setAttributes(lp2);
                         }
@@ -1029,16 +1120,31 @@ GameActivity extends AppCompatActivity implements View.OnClickListener {
                         SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
                         int c = preferences.getInt(ANS,0);
 
+                        SharedPreferences.Editor edit = getSharedPreferences(LEVEL,MODE_PRIVATE).edit();
+                        int score = getSharedPreferences(LEVEL,MODE_PRIVATE).getInt(SCORE,0);
+
+                        TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
                         if(c==1){
                             (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                            score = score+100;
+                            edit.putInt(MainActivity.SCORE,score);
+                            scoretxt.setText("100");
                         }else if(c==2){
                             (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
                             (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                            score = score+200;
+                            edit.putInt(MainActivity.SCORE,score);
+                            scoretxt.setText("200");
                         }else if(c==3){
                             (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
                             (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
                             (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                            score = score+300;
+                            edit.putInt(MainActivity.SCORE,score);
+                            scoretxt.setText("300");
                         }
+                        edit.apply();
+                        edit.commit();
                         dialog2.show();
                         dialog2.getWindow().setAttributes(lp2);
                      }
@@ -1114,17 +1220,31 @@ GameActivity extends AppCompatActivity implements View.OnClickListener {
                     SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
                     int c = preferences.getInt(ANS,0);
 
-                    Toast.makeText(this, "Correct "+c, Toast.LENGTH_SHORT).show();
+                    SharedPreferences.Editor edit = getSharedPreferences(LEVEL,MODE_PRIVATE).edit();
+                    int score = getSharedPreferences(LEVEL,MODE_PRIVATE).getInt(SCORE,0);
+
+                    TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
                     if(c==1){
                         (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                        score = score+100;
+                        edit.putInt(MainActivity.SCORE,score);
+                        scoretxt.setText("100");
                     }else if(c==2){
                         (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
                         (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                        score = score+200;
+                        edit.putInt(MainActivity.SCORE,score);
+                        scoretxt.setText("200");
                     }else if(c==3){
                         (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
                         (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
                         (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                        score = score+300;
+                        edit.putInt(MainActivity.SCORE,score);
+                        scoretxt.setText("300");
                     }
+                    edit.apply();
+                    edit.commit();
                     dialog2.show();
                     dialog2.getWindow().setAttributes(lp2);
 

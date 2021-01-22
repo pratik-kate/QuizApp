@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     public static String CURRENT="CURRENT";
     public static int currency;
     public static int coins;
+    public static String SCORE ="SCORE";
     TextView setting,exit,game;
     CardView profile,settings,shop;
     @Override
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences preferences = getSharedPreferences(LEVEL,MODE_PRIVATE);
         int coin = preferences.getInt(String.valueOf(coins),1);
+        int score = preferences.getInt(SCORE,1);
 
         TextView coins = findViewById(R.id.coins);
         coins.setText(String.valueOf(coin));
