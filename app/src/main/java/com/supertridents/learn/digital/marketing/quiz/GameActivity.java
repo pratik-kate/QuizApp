@@ -1,9 +1,6 @@
 
 package com.supertridents.learn.digital.marketing.quiz;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
@@ -17,21 +14,19 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+
 import com.ankushgrover.hourglass.Hourglass;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
-
-import pl.droidsonroids.gif.GifImageView;
-
 import static com.supertridents.learn.digital.marketing.quiz.MainActivity.LEVEL;
 import static com.supertridents.learn.digital.marketing.quiz.MainActivity.SCORE;
 import static com.supertridents.learn.digital.marketing.quiz.MainActivity.coins;
@@ -342,7 +337,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             dialog2.getWindow().setAttributes(lp2);
         });
 
-        
     }
 
 
@@ -404,15 +398,19 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
                             int c = preferences.getInt(ANS,0);
 
+                             TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
                             if(c==1){
                                 (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                scoretxt.setText("100");
                             }else if(c==2){
                                 (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
                                 (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                scoretxt.setText("200");
                             }else if(c==3){
                                 (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
                                 (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
                                 (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                                scoretxt.setText("300");
                             }
                             dialog2.show();
                             dialog2.getWindow().setAttributes(lp2);
@@ -1262,10 +1260,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         editor.commit();
 
     }
+
     //set question
     private void  setQuestionScreen(int n){
         if(n<3) {
             hourglass.startTimer();
+//            TranslateAnimation anim = new TranslateAnimation(0,0,2,0);
+//            anim.setDuration(1000);
+//            question.startAnimation(anim);
             question.setText(questionItems.get(n).getQuestion());
             op1.setText(questionItems.get(n).getOp1());
             op2.setText(questionItems.get(n).getOp2());
