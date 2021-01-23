@@ -388,6 +388,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         TranslateAnimation animop4 = new TranslateAnimation(op1.getWidth()*2,0,0,0);
         animop4.setDuration(1000);
         op4.startAnimation(animop4);
+
+        TranslateAnimation btnanim = new TranslateAnimation(0,0,swap.getHeight()*2,0);
+        btnanim.setDuration(1000);
+        swap.setAnimation(btnanim);
+        doubleDip.setAnimation(btnanim);
+        fifty.setAnimation(btnanim);
+
         }
     }
 
