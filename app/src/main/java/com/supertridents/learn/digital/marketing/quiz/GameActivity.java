@@ -413,9 +413,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void run() {
                         // gif.setVisibility(View.INVISIBLE);
-
                             //Toast.makeText(GameActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
-                            final Dialog dialog2 = new Dialog(GameActivity.this);
+                            final Dialog dialog2 = new Dialog(GameActivity.this,R.style.PauseDialog);
                             dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                             dialog2.setContentView(R.layout.finish);
                             dialog2.setCancelable(true);
@@ -470,6 +469,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                 (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
                                 scoretxt.setText("300");
                             }
+                            TranslateAnimation anim = new TranslateAnimation(0,0,0,0);
+                            anim.setDuration(1000);
+
                             dialog2.show();
                             dialog2.getWindow().setAttributes(lp2);
 
@@ -507,7 +509,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                           reset();
                      }else {
                         //Toast.makeText(GameActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
-                        final Dialog dialog2 = new Dialog(GameActivity.this);
+                        final Dialog dialog2 = new Dialog(GameActivity.this,R.style.PauseDialog);
                         dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                         dialog2.setContentView(R.layout.finish);
                         dialog2.setCancelable(true);
@@ -611,7 +613,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         clickable(true);
                         reset();
                     }else {
-                        final Dialog dialog2 = new Dialog(GameActivity.this);
+                        final Dialog dialog2 = new Dialog(GameActivity.this,R.style.PauseDialog);
                         dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                         dialog2.setContentView(R.layout.finish);
                         dialog2.setCancelable(true);
@@ -720,7 +722,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                           reset();
                      }else {
                         //Toast.makeText(GameActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
-                        final Dialog dialog2 = new Dialog(GameActivity.this);
+                        final Dialog dialog2 = new Dialog(GameActivity.this,R.style.PauseDialog);
                         dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                         dialog2.setContentView(R.layout.finish);
                         dialog2.setCancelable(true);
@@ -821,7 +823,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             reset();
                         } else {
                             //Toast.makeText(GameActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
-                            final Dialog dialog2 = new Dialog(GameActivity.this);
+                            final Dialog dialog2 = new Dialog(GameActivity.this,R.style.PauseDialog);
                             dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                             dialog2.setContentView(R.layout.finish);
                             dialog2.setCancelable(true);
@@ -927,7 +929,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                           reset();
                      }else {
                         //Toast.makeText(GameActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
-                        final Dialog dialog2 = new Dialog(GameActivity.this);
+                        final Dialog dialog2 = new Dialog(GameActivity.this,R.style.PauseDialog);
                         dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                         dialog2.setContentView(R.layout.finish);
                         dialog2.setCancelable(true);
@@ -1028,7 +1030,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             reset();
                         } else {
                             //Toast.makeText(GameActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
-                            final Dialog dialog2 = new Dialog(GameActivity.this);
+                            final Dialog dialog2 = new Dialog(GameActivity.this,R.style.PauseDialog);
                             dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                             dialog2.setContentView(R.layout.finish);
                             dialog2.setCancelable(true);
@@ -1140,7 +1142,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
                      }else {
                         //Toast.makeText(GameActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
-                        final Dialog dialog2 = new Dialog(GameActivity.this);
+                        final Dialog dialog2 = new Dialog(GameActivity.this,R.style.PauseDialog);
                         dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                         dialog2.setContentView(R.layout.finish);
                         dialog2.setCancelable(true);
@@ -1228,7 +1230,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         clickable(true);
                         reset();
                     }else {
-                        final Dialog dialog2 = new Dialog(GameActivity.this);
+                        final Dialog dialog2 = new Dialog(GameActivity.this,R.style.PauseDialog);
                         dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                         dialog2.setContentView(R.layout.finish);
                         dialog2.setCancelable(true);
@@ -1424,7 +1426,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 hourglass.pauseTimer();
                 SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                 //Toast.makeText(GameActivity.this, "pause", Toast.LENGTH_SHORT).show();
-                final Dialog dialog = new Dialog(GameActivity.this);
+                final Dialog dialog = new Dialog(GameActivity.this,R.style.PauseDialog);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                 dialog.setContentView(R.layout.pause);
                 dialog.setCancelable(true);
