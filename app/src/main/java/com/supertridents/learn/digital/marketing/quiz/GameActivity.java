@@ -46,6 +46,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     CardView pause,fifty,swap,fifty2,doubleDip,doubleDip2;
     CountDownTimer cTimer = null;
     int isDoubledip = 0,isfifty=0,isswap=0;
+    Boolean dip= true;
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,7 +176,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         doubleDip.setOnClickListener(v -> {
-
+            final Boolean[] a = {true};
             final Dialog dialog2 = new Dialog(GameActivity.this);
             dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
             dialog2.setContentView(R.layout.doubledip);
@@ -192,10 +193,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
                 if(coin[0] >=100) {
 
-                    op1.setOnClickListener(v4 -> checkDoubledip(op1));
-                    op2.setOnClickListener(v4 -> checkDoubledip(op2));
-                    op3.setOnClickListener(v4 -> checkDoubledip(op3));
-                    op4.setOnClickListener(v4 -> checkDoubledip(op4));
+                    if(dip) {
+                        op1.setOnClickListener(v4 -> checkDoubledip(op1));
+                        op2.setOnClickListener(v4 -> checkDoubledip(op2));
+                        op3.setOnClickListener(v4 -> checkDoubledip(op3));
+                        op4.setOnClickListener(v4 -> checkDoubledip(op4));
+                        dip = false;
+                    }else{
+                        op1.setOnClickListener(v4 -> {checkAnswer(op1);});
+                        op2.setOnClickListener(v4 -> {checkAnswer(op2);});
+                        op3.setOnClickListener(v4 -> {checkAnswer(op3);});
+                        op4.setOnClickListener(v4 -> {checkAnswer(op4);});
+                    }
                     coin[0] = coin[0] -100;
                     SharedPreferences.Editor coinseditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
                     coinseditor.putInt(String.valueOf(coins), coin[0]);
@@ -1005,6 +1014,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             selected.setBackground(getResources().getDrawable(R.drawable.option_wrong));
             Toast.makeText(this, "Double Dip", Toast.LENGTH_SHORT).show();
            clickable(true);
+           dip=false;
+           op1.setOnClickListener(v -> {checkAnswer(op1);});
+           op2.setOnClickListener(v -> {checkAnswer(op2);});
+           op3.setOnClickListener(v -> {checkAnswer(op3);});
+           op4.setOnClickListener(v -> {checkAnswer(op4);});
 
             if(selectedAnswer.equals(questionItems.get(7).getCorrect())) {
                 selected.setBackground(getResources().getDrawable(R.drawable.option_right));
