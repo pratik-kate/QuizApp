@@ -94,5 +94,4 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.viewHo
             lock =itemView.findViewById(R.id.lockimage);
         }
     }
-
 }

@@ -40,7 +40,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     final String ANS="ANS";
     TextView question,op1,op2,op3,op4;
     List<QuestionItem> questionItems;
-    int currentQuestion = 0,level;
+    int currentQuestion = 0,level,clvl;
     int correct = 0,wrong = 0,i = 1;
     TextView current,total,time;
     CardView pause,fifty,swap,fifty2,doubleDip,doubleDip2;
@@ -97,6 +97,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 //        TranslateAnimation animop4 = new TranslateAnimation(op1.getWidth()*2,0,0,0);
 //        animop4.setDuration(1000);
 //        op4.startAnimation(animop4);
+
+        SharedPreferences levelpreferences = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE);
+        clvl = levelpreferences.getInt(MainActivity.CURRENT,1);
 
         loadQuestions();
         Collections.shuffle(questionItems);
@@ -259,63 +262,63 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     swap.setForeground(getResources().getDrawable(R.drawable.ic_close));
 
 
-                    if(!(isfifty==1)) {
-                        fifty.setVisibility(View.INVISIBLE);
-                        fifty2.setVisibility(View.VISIBLE);
-                        fifty2.setOnClickListener(v2 -> {
-
-                            final Dialog dialogf = new Dialog(GameActivity.this);
-                            dialogf.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-                            dialogf.setContentView(R.layout.fifty);
-                            dialogf.setCancelable(true);
-
-                            WindowManager.LayoutParams lpf = new WindowManager.LayoutParams();
-                            lpf.copyFrom(dialogf.getWindow().getAttributes());
-                            lpf.width = WindowManager.LayoutParams.MATCH_PARENT;
-                            lpf.height = WindowManager.LayoutParams.WRAP_CONTENT;
-
-                            (dialogf.findViewById(R.id.fyes)).setOnClickListener(v3 -> {
-                                String ans = questionItems.get(7).getCorrect();
-                                if (coin[0] >= 100) {
-                                    if (ans.equals(op1.getText())) {
-                                        op1.setBackground(getResources().getDrawable(R.drawable.box_unselected));
-                                        op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
-                                    } else if (ans.equals(op2.getText())) {
-                                        op2.setBackground(getResources().getDrawable(R.drawable.box_unselected));
-                                        op4.setBackground(getResources().getDrawable(R.drawable.box_unselected));
-                                    } else if (ans.equals(op3.getText())) {
-                                        op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
-                                        op2.setBackground(getResources().getDrawable(R.drawable.box_unselected));
-                                    } else if (ans.equals(op4.getText())) {
-                                        op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
-                                        op4.setBackground(getResources().getDrawable(R.drawable.box_unselected));
-                                    }
-                                    op1.setOnClickListener(v4 -> checkRandomAnswer(op1));
-                                    op2.setOnClickListener(v4 -> checkRandomAnswer(op2));
-                                    op3.setOnClickListener(v4 -> checkRandomAnswer(op3));
-                                    op4.setOnClickListener(v4 -> checkRandomAnswer(op4));
-                                    coin[0] = coin[0] - 100;
-                                    SharedPreferences.Editor coinsseditor = getSharedPreferences(MainActivity.LEVEL, MODE_PRIVATE).edit();
-                                    coinsseditor.putInt(String.valueOf(coins), coin[0]);
-                                    coinsseditor.apply();
-                                    coinsseditor.commit();
-                                    cointext.setText(String.valueOf(coin[0]));
-                                    fifty2.setClickable(false);
-                                    fifty2.setForeground(getResources().getDrawable(R.drawable.ic_close));
-                                } else {
-                                    Toast.makeText(this, "No Coins", Toast.LENGTH_SHORT).show();
-                                }
-
-                                dialogf.dismiss();
-                            });
-                            (dialogf.findViewById(R.id.fno)).setOnClickListener(v3 -> {
-                                dialogf.dismiss();
-                            });
-
-                            dialogf.show();
-                            dialogf.getWindow().setAttributes(lp2);
-                        });
-                    }
+//                    if((isfifty==1)) {
+//                        fifty.setVisibility(View.INVISIBLE);
+//                        fifty2.setVisibility(View.VISIBLE);
+//                        fifty2.setOnClickListener(v2 -> {
+//
+//                            final Dialog dialogf = new Dialog(GameActivity.this);
+//                            dialogf.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+//                            dialogf.setContentView(R.layout.fifty);
+//                            dialogf.setCancelable(true);
+//
+//                            WindowManager.LayoutParams lpf = new WindowManager.LayoutParams();
+//                            lpf.copyFrom(dialogf.getWindow().getAttributes());
+//                            lpf.width = WindowManager.LayoutParams.MATCH_PARENT;
+//                            lpf.height = WindowManager.LayoutParams.WRAP_CONTENT;
+//
+//                            (dialogf.findViewById(R.id.fyes)).setOnClickListener(v3 -> {
+//                                String ans = questionItems.get(7).getCorrect();
+//                                if (coin[0] >= 100) {
+//                                    if (ans.equals(op1.getText())) {
+//                                        op1.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+//                                        op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+//                                    } else if (ans.equals(op2.getText())) {
+//                                        op2.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+//                                        op4.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+//                                    } else if (ans.equals(op3.getText())) {
+//                                        op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+//                                        op2.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+//                                    } else if (ans.equals(op4.getText())) {
+//                                        op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+//                                        op4.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+//                                    }
+//                                    op1.setOnClickListener(v4 -> checkRandomAnswer(op1));
+//                                    op2.setOnClickListener(v4 -> checkRandomAnswer(op2));
+//                                    op3.setOnClickListener(v4 -> checkRandomAnswer(op3));
+//                                    op4.setOnClickListener(v4 -> checkRandomAnswer(op4));
+//                                    coin[0] = coin[0] - 100;
+//                                    SharedPreferences.Editor coinsseditor = getSharedPreferences(MainActivity.LEVEL, MODE_PRIVATE).edit();
+//                                    coinsseditor.putInt(String.valueOf(coins), coin[0]);
+//                                    coinsseditor.apply();
+//                                    coinsseditor.commit();
+//                                    cointext.setText(String.valueOf(coin[0]));
+//                                    fifty2.setClickable(false);
+//                                    fifty2.setForeground(getResources().getDrawable(R.drawable.ic_close));
+//                                } else {
+//                                    Toast.makeText(this, "No Coins", Toast.LENGTH_SHORT).show();
+//                                }
+//
+//                                dialogf.dismiss();
+//                            });
+//                            (dialogf.findViewById(R.id.fno)).setOnClickListener(v3 -> {
+//                                dialogf.dismiss();
+//                            });
+//
+//                            dialogf.show();
+//                            dialogf.getWindow().setAttributes(lp2);
+//                        });
+//                    }
 //                        doubleDip.setVisibility(View.INVISIBLE);
 //                        doubleDip2.setVisibility(View.VISIBLE);
 //                        doubleDip2.setOnClickListener(v2 -> {
@@ -375,8 +378,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             dialog2.getWindow().setAttributes(lp2);
         });
 
+        onBackPressed();
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -534,6 +542,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
                         (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
 
+                        SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
+                        clvleditor.putInt(MainActivity.CURRENT,clvl);
+                        clvleditor.apply();
+                        clvleditor.commit();
                         (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
                             SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                             editor.clear();
@@ -638,6 +650,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
                         (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
 
+                        SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
+                        clvleditor.putInt(MainActivity.CURRENT,clvl);
+                        clvleditor.apply();
+                        clvleditor.commit();
                         (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
                             SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                             editor.clear();
@@ -747,6 +763,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
                         (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
 
+                        SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
+                        clvleditor.putInt(MainActivity.CURRENT,clvl);
+                        clvleditor.apply();
+                        clvleditor.commit();
                         (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
                             SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                             editor.clear();
@@ -848,6 +868,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
                             (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
 
+                            SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
+                            clvleditor.putInt(MainActivity.CURRENT,clvl);
+                            clvleditor.apply();
+                            clvleditor.commit();
                             (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
                                 SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                                 editor.clear();
@@ -954,6 +978,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
                         (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
 
+                        SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
+                        clvleditor.putInt(MainActivity.CURRENT,clvl);
+                        clvleditor.apply();
+                        clvleditor.commit();
                         (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
                             SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                             editor.clear();
@@ -1060,6 +1088,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
                             (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
 
+                            SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
+                            clvleditor.putInt(MainActivity.CURRENT,clvl);
+                            clvleditor.apply();
+                            clvleditor.commit();
                             (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
                                 SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                                 editor.clear();
@@ -1172,6 +1204,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
                         (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
 
+                        SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
+                        clvleditor.putInt(MainActivity.CURRENT,clvl);
+                        clvleditor.apply();
+                        clvleditor.commit();
                         (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
                             SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                             editor.clear();
@@ -1260,6 +1296,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
                         (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
 
+                        SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
+                        clvleditor.putInt(MainActivity.CURRENT,clvl);
+                        clvleditor.apply();
+                        clvleditor.commit();
                         (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
                             SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                             editor.clear();
@@ -1454,6 +1494,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 (dialog.findViewById(R.id.pstar2)).setBackgroundResource(R.drawable.star_off);
                 (dialog.findViewById(R.id.pstar3)).setBackgroundResource(R.drawable.star_off);
 
+
                 (dialog.findViewById(R.id.resume)).setOnClickListener(v1 -> {
                     hourglass.resumeTimer();
                     dialog.dismiss();
@@ -1476,8 +1517,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     startActivity(new Intent(GameActivity.this, MainActivity.class));
 
                 });
-
-
                 if(c==1){
                     (dialog.findViewById(R.id.pstar1)).setBackgroundResource(R.drawable.star_on);
                 }else if(c==2){
@@ -1488,11 +1527,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     (dialog.findViewById(R.id.pstar2)).setBackgroundResource(R.drawable.star_on);
                     (dialog.findViewById(R.id.pstar3)).setBackgroundResource(R.drawable.star_on);
                 }
-
                 dialog.show();
                 dialog.getWindow().setAttributes(lp);
             }
         }
     }
-
 }
