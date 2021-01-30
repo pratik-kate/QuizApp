@@ -4,8 +4,8 @@
 
     <scale
         android:duration="500"
-        android:fromXScale="3"
-        android:fromYScale="3"
+        android:fromXScale="0"
+        android:fromYScale="0"
         android:pivotX="50%"
         android:pivotY="50%"
         android:toXScale="1"

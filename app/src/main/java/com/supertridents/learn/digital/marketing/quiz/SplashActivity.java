@@ -33,7 +33,7 @@ public class SplashActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = getSharedPreferences(MainActivity.LEVEL, MODE_PRIVATE).edit();
                     editor.putInt(MainActivity.CURRENT, 1);
                     editor.putInt(MainActivity.SCORE,0);
-                    editor.putInt(String.valueOf(MainActivity.coins), 50000);
+                    editor.putInt(String.valueOf(MainActivity.coins), 500);
                     editor.apply();
                     editor.commit();
 
@@ -49,5 +49,7 @@ public class SplashActivity extends AppCompatActivity {
                 finish();
             }
         },3000);
+
+        Constants.loadRewardedAd(this);
     }
 }

@@ -1,117 +1,569 @@
 {
   "questions":[
-  {
-    "q":"Which is first planet in our Solar system?",
-    "op1":"Mercury",
-    "op2":"Venus",
-    "op3":"Mars",
-    "op4":"Earth",
-    "ans":"Mercury"
-  },
-  {
-    "q":"What is the capital of Maharashtra?",
-    "op1":"Mumbai",
-    "op2":"Pune",
-    "op3":"Nagpur",
-    "op4":"aurangabad",
-    "ans":"Mumbai"
-  },
     {
-      "q":"What is the capital of India?",
-      "op1":"Goa",
-      "op2":"Mumbai",
-      "op3":"Kochi",
-      "op4":"Delhi",
-      "ans":"Delhi"
+      "q":"Magnesium ribbon is rubbed before burning because it has a coating of",
+      "op1":"basic magnesium carbonate",
+      "op2":"basic magnesium oxide",
+      "op3":"basic magnesium sulphide",
+      "op4":"basic magnesium chloride",
+      "ans":"basic magnesium carbonate"
     },
     {
-      "q":"Which one of the following river flows between Vindhyan and Satpura ranges?",
-      "op1":"Mahanadi",
-      "op2":"Narmada",
-      "op3":"Son",
-      "op4":"Netravati",
-      "ans":"Narmada"
+      "q":"Oxidation is a process which involves",
+      "op1":"addition of oxygen",
+      "op2":"removal of oxygen",
+      "op3":"addition of hydrogen",
+      "op4":"removal of hydrogen",
+      "ans":"addition of oxygen"
     },
     {
-      "q":"The Central Rice Research Station is situated in?",
-      "op1":"Chennai",
-      "op2":"Cuttack",
-      "op3":"Bangalore",
-      "op4":"Quilon",
-      "ans":"Cuttack"
+      "q":"The process of reduction involves",
+      "op1":"addition of oxygen",
+      "op2":"addition of hydrogen",
+      "op3":"removal of oxygen",
+      "op4":"removal of hydrogen",
+      "ans":"addition of hydrogen"
     },
     {
-      "q":"Who among the following wrote Sanskrit grammar?",
-      "op1":"Kalidasa",
-      "op2":"Charak",
-      "op3":"Panini",
-      "op4":"Aryabhatt",
-      "ans":"Aryabhatt"
-    },
-    {
-      "q":"Which among the following headstreams meets the Ganges in last?",
-      "op1":"Alaknanda",
-      "op2":"Pindar",
-      "op3":"Mandakini",
-      "op4":"Bhagirathi",
-      "ans":"Bhagirathi"
-    },
-    {
-      "q":"The metal whose salts are sensitive to light is?",
-      "op1":"Zinc",
-      "op2":"Silver",
-      "op3":"Copper",
-      "op4":"Aluminum",
-      "ans":"Silver"
-    },
-    {
-      "q":"Patanjali is well known for the compilation of –",
-      "op1":"Yoga Sutra",
-      "op2":"Panchatantra",
-      "op3":"Brahma Sutra",
-      "op4":"Ayurveda",
-      "ans":"Yoga Sutra"
-    },
-    {
-      "q":"River Luni originates near Pushkar and drains into which one of the following?",
-      "op1":"Rann of Kachchh",
-      "op2":"Arabian Sea",
-      "op3":"Gulf of Cambay",
-      "op4":"Lake Sambhar",
-      "ans":"Rann of Kachchh"
-    },
-    {
-      "q":"Which one of the following rivers originates in Brahmagiri range of Western Ghats?",
-      "op1":"Pennar",
-      "op2":"Cauvery",
-      "op3":"Krishna",
-      "op4":"Tapti",
-      "ans":"Cauvery"
-    },
-    {
-      "q":"The country that has the highest in Barley Production?",
-      "op1":"China",
-      "op2":"India",
-      "op3":"Russia",
-      "op4":"France",
-      "ans":"Russia"
-    },
-    {
-      "q":"Tsunamis are not caused by",
-      "op1":"Hurricanes",
-      "op2":"Earthquakes",
-      "op3":"Undersea landslides",
-      "op4":"Volcanic eruptions",
-      "ans":"Hurricanes"
+      "q":"Give the ratio in which hydrogen and oxygen are present in water by volume.",
+      "op1":"1:2",
+      "op2":"1:1",
+      "op3":"2:1",
+      "op4":"1:8",
+      "ans":"1:2"
+    },{
+      "q":" MnO2 + 4HCl → 2 + 2H2O + Cl2 Identify the substance oxidized in the above . equation.",
+      "op1":"MnCl2",
+      "op2":"HCl",
+      "op3":"H2O",
+      "op4":"MnO2",
+      "ans":"MnO2"
+    },{
+      "q":"When Ag is exposed to air it gets a black coating of",
+      "op1":"AgNO3",
+      "op2":"Ag2S",
+      "op3":"Ag2O",
+      "op4":"Ag2CO3",
+      "ans":"Ag2S"
+    },{
+      "q":"Which of the following is an endothermic process?",
+      "op1":"Dilution of sulphuric acid",
+      "op2":"Sublimation of dry ice",
+      "op3":"Condensation of water vapours",
+      "op4":"Respiration in human beings",
+      "ans":"Sublimation of dry ice"
+    },{
+      "q":"What type of chemical reactions take place when electricity is passed through water?",
+      "op1":"Displacement",
+      "op2":"Combination",
+      "op3":"Decomposition",
+      "op4":"Double displacement",
+      "ans":"Decomposition"
+    },{
+      "q":"Select the oxidising agent for the following reaction:H2S + I2 > 2HI + S",
+      "op1":"I2",
+      "op2":"H2S",
+      "op3":"HI",
+      "op4":"S",
+      "ans":"I2"
+    },{
+      "q":"A substance added to food containing fats and oils is called:",
+      "op1":"Oxidant",
+      "op2":"Rancid",
+      "op3":"Coolant",
+      "op4":"Antioxidant",
+      "ans":"Antioxidant"
     },
 
     {
-      "q":"Who is prime minister of India?",
-      "op1":"Rahul Gandhi",
-      "op2":"Arvind Kejrival",
-      "op3":"Narendra Modi",
-      "op4":"Vikas Bajpai",
-      "ans":"Narendra Modi"
+      "q":"The condition produced by aerial oxidation of fats and oils in foods marked by unpleasant smell and taste is called:",
+      "op1":"antioxidation",
+      "op2":"reduction",
+      "op3":"rancidity",
+      "op4":"corrosion",
+      "ans":"rancidity"
+    },
+
+
+    {
+      "q":"Electrolysis of water is a decomposition reaction. The mole ratio of hydrogen and oxygen gases liberated during electrolysis of water is:",
+      "op1":"1:1",
+      "op2":"2:1",
+      "op3":"4:1",
+      "op4":"1:2",
+      "ans":"2:1"
+    },
+
+    {
+      "q":"When S02 gas is passed through saturated solution of H2S, which of the following reaction occurs?",
+      "op1":"SO2 + 2H2S → 2H20 + 3S",
+      "op2":"SO2 + 2H2S → H20 + 3S",
+      "op3":"SO2 + H2S → H2O + S",
+      "op4":"SO2 + H2O → SO3 + H2",
+      "ans":"SO2 + 2H2S → 2H20 + 3S"
+    },
+    {
+      "q":"Name the products formed when iron filings are heated with dilute hydrochloric acid",
+      "op1":"Fe (III) chloride and water",
+      "op2":"Fe (II) chloride and water",
+      "op3":"Fe (II) chloride and hydrogen gas",
+      "op4":"Fe (III) chloride and hydrogen gas",
+      "ans":"Fe (III) chloride and hydrogen gas"
+    },
+
+    {
+      "q":"Pb + CuCl2 → PbCl2 + Cu",
+      "op1":"combination",
+      "op2":"double displacement",
+      "op3":"decomposition",
+      "op4":"displacement",
+      "ans":"displacement"
+    },
+    {
+      "q":"Which of the following gases can be used for storage (a) Carbon dioxide or Oxygen",
+      "op1":"Nitrogen or Oxygen",
+      "op2":"Carbon dioxide or Helium",
+      "op3":"Helium or Nitrogen",
+      "op4":"Carbon dioxide or Oxygen",
+      "ans":"Helium or Nitrogen"
+    },
+    {
+      "q":"In which of the following chemical equations, the abbreviations represent the correct states of the reactants and products involved at reaction temperature?",
+      "op1":"2H2 (l) + O2 (l) > 2H2O(g)",
+      "op2":"2H2 (g) + O2 (l) > 2H2O (l)",
+      "op3":"2H2 (g) + O2 (g) > 2H2O (l)",
+      "op4":"2H2 (g) +O2 (g) > 2H2O (g)",
+      "ans":"2H2 (g) +O2 (g) > 2H2O (g)"
+    },
+    {
+      "q":"When hydrogen chloride gas is prepared on a humid day, the gas is usually passed through the guard tube containing calcium chloride. The role of calcium chloride taken in the guard tube is to",
+      "op1":"absorb the evolved gas",
+      "op2":"moisten the gas",
+      "op3":"absorb moisture from the gas",
+      "op4":"absorb Cl– ions from the evolved gas",
+      "ans":"absorb moisture from the gas"
+    },
+    {
+      "q":"Which one of the following salts does not con-tain water of crystallisation?",
+      "op1":"Blue vitriol",
+      "op2":"Baking soda",
+      "op3":"Washing soda",
+      "op4":"Gypsum",
+      "ans":"Baking soda"
+    },
+    {
+      "q":"In terms of acidic strength, which one of the following is in the correct increasing order?",
+      "op1":"Water < Acetic acid < Hydrochloric acid",
+      "op2":"Water < Hydrochloric acid < Acetic acid",
+      "op3":"Acetic acid < Water < Hydrochloric acid",
+      "op4":"Hydrochloric acid < Water < Acetic acid",
+      "ans":"Water < Acetic acid < Hydrochloric acid"
+    },
+    {
+      "q":"What is formed when zinc reacts with sodium hydroxide?",
+      "op1":"Zinc hydroxide and sodium",
+      "op2":"Sodium zincate and hydrogen gas",
+      "op3":"Sodium zinc-oxide and hydrogen gas",
+      "op4":"Sodium zincate and water",
+      "ans":"Sodium zincate and hydrogen gas"
+    }, {
+      "q":"Tomato is a natural source of which acid?",
+      "op1":"Acetic acid",
+      "op2":"Citric acid",
+      "op3":"Tartaric acid",
+      "op4":"Oxalic acid",
+      "ans":"Oxalic acid"
+    }, {
+      "q":"Brine is an",
+      "op1":"aqueous solution of sodium hydroxide",
+      "op2":"aqueous solution of sodium carbonate",
+      "op3":"aqueous solution of sodium chloride",
+      "op4":"aqueous solution of sodium bicarbonate",
+      "ans":"aqueous solution of sodium chloride"
+    },
+    {
+      "q":"Na2CO3 . 10H2O is",
+      "op1":"washing soda",
+      "op2":"baking soda",
+      "op3":"bleaching powder",
+      "op4":"tartaric acid",
+      "ans":"washing soda"
+    },
+    {
+      "q":"At what temperature is gypsum heated to form Plaster of Paris?",
+      "op1":"90°C",
+      "op2":"100°C",
+      "op3":"110°C",
+      "op4":"120°C",
+      "ans":"100°C"
+    },
+    {
+      "q":"How many water molecules does hydrated cal-cium sulphate contain?",
+      "op1":"5",
+      "op2":"6",
+      "op3":"3",
+      "op4":"2",
+      "ans":"2"
+    },
+    {
+      "q":"Alkalis are",
+      "op1":"acids, which are soluble in water",
+      "op2":"acids, which are insoluble in water",
+      "op3":"bases, which are insoluble in water",
+      "op4":"bases, which are soluble in water",
+      "ans":"bases, which are soluble in water"
+    },
+    {
+      "q":"Lime water reacts with chlorine to give",
+      "op1":"bleaching powder",
+      "op2":"baking powder",
+      "op3":"baking soda",
+      "op4":"washing soda",
+      "ans":"baking soda"
+    },
+    {
+      "q":"Nettle sting is a natural source of which acid?",
+      "op1":"MetiWanoic acid",
+      "op2":"Lactic acid",
+      "op3":"Citric acid",
+      "op4":"Tartaric acid",
+      "ans":"MetiWanoic acid"
+    },
+    {
+      "q":"Tooth enamel is made up of",
+      "op1":"calcium phosphate",
+      "op2":"calcium carbonate",
+      "op3":"calcium oxide",
+      "op4":"potassium",
+      "ans":"calcium phosphate"
+    },
+    {
+      "q":"What is the pH range of our body?",
+      "op1":"7.0 – 7.8",
+      "op2":"7.0 – 8.4",
+      "op3":"7.2 – 8.0",
+      "op4":"7.2 – 8.4",
+      "ans":"7.0 – 7.8"
+    },
+    {
+      "q":"Rain is called acid rain when its:",
+      "op1":"pH falls below 7",
+      "op2":"pH falls below 6",
+      "op3":"pH falls below 5.6",
+      "op4":"pH is above 7",
+      "ans":"pH falls below 5.6"
+    },
+    {
+      "q":"Sodium hydroxide is a",
+      "op1":"weak base",
+      "op2":"weak acid",
+      "op3":"strong base",
+      "op4":"strong acid",
+      "ans":"strong base"
+    },
+    {
+      "q":"An aqueous solution turns red litmus solution blue. Excess addition of which of the following solution would reverse the change?",
+      "op1":"Baking powder",
+      "op2":"Lime",
+      "op3":"Ammonium hydroxide solution",
+      "op4":"Hydrochloric acid",
+      "ans":"Hydrochloric acid"
+    },
+    {
+      "q":"When copper oxide and dilute hydrochloric acid react, colour changes to",
+      "op1":"white",
+      "op2":"bluish-green",
+      "op3":"blue-black",
+      "op4":"black",
+      "ans":"bluish-green"
+    },
+    {
+      "q":"Sodium hydroxide is used",
+      "op1":"as an antacid",
+      "op2":"in manufacture of soap",
+      "op3":"as a cleansing agent",
+      "op4":"in alkaline batteries",
+      "ans":"in manufacture of soap"
+    },
+    {
+      "q":"Sodium hydroxide turns phenolphthalein solution",
+      "op1":"pink",
+      "op2":"yellow",
+      "op3":"colourless",
+      "op4":"orange",
+      "ans":"pink"
+    },
+    {
+      "q":"Chemical formula of washing soda is",
+      "op1":"Na2C03 . 7H2O",
+      "op2":"Na2C03 . 5H2O",
+      "op3":"Na2C03 . 2H2O",
+      "op4":"Na2C03 . 10H2O",
+      "ans":"Na2C03 . 10H2O"
+    },
+    {
+      "q":"The most abundant metal in the earth’s crust is",
+      "op1":"Iron",
+      "op2":"Aluminium",
+      "op3":"Calcium",
+      "op4":"Sodium",
+      "ans":"Aluminium"
+    },
+    {
+      "q":"The poorest conductor of heat among metals is",
+      "op1":"Lead",
+      "op2":"Mercury",
+      "op3":"Calcium",
+      "op4":"Sodium",
+      "ans":"Lead"
+    },
+    {
+      "q":"Which property of metals is used for making bells and strings of musical instruments like Sitar and Violin?",
+      "op1":"Sonorousness",
+      "op2":"Malleability",
+      "op3":"Ductility",
+      "op4":"Conductivity",
+      "ans":"Sonorousness"
+    },
+    {
+      "q":"Al2O3 + 2NaOH → …… + H2O",
+      "op1":"Al(OH)3",
+      "op2":"Na2O",
+      "op3":"NaAlO2",
+      "op4":"AlNaO2",
+      "ans":"NaAlO2"
+    },
+    {
+      "q":"Which of the following pairs will give dis-placement reactions?",
+      "op1":"FeSO4 solution and Copper metal",
+      "op2":"AgNO3 solution and Copper metal",
+      "op3":"CuSO4 solution and Silver metal",
+      "op4":"NaCl solution and Copper metal",
+      "ans":"AgNO3 solution and Copper metal"
+    },
+    {
+      "q":"Non-metals form covalent chlorides because",
+      "op1":"they can give electrons to chlorine",
+      "op2":"they can share electrons with chlorine",
+      "op3":"they can give electrons to chlorine atoms to form chloride ions",
+      "op4":"they cannot share electrons with chlorine atoms",
+      "ans":"they can share electrons with chlorine"
+    },
+    {
+      "q":"Which of the following oxide(s) of iron would be obtained on prolonged reaction of iron with steam?",
+      "op1":"FeO",
+      "op2":"Fe2O3",
+      "op3":"Fe3O4",
+      "op4":"Fe2O3 and Fe2O4",
+      "ans":"Fe3O4"
+    },
+    {
+      "q":"The highly reactive metals like Sodium, Potas-sium, Magnesium, etc. are extracted by the",
+      "op1":"electrolysis of their molten chloride",
+      "op2":"electrolysis of their molten oxides",
+      "op3":"reduction by aluminium",
+      "op4":"reduction by carbon",
+      "ans":"electrolysis of their molten chloride"
+    },
+    {
+      "q":"Which of the following non-metal is lustrous?",
+      "op1":"Sulphur",
+      "op2":"Oxygen",
+      "op3":"Nitrogen",
+      "op4":"Iodine",
+      "ans":"Iodine"
+    },
+    {
+      "q":"Example of an amphoteric oxide is:",
+      "op1":"Na2O",
+      "op2":"K2O",
+      "op3":"Al2O3",
+      "op4":"MgO",
+      "ans":"Al2O3"
+    },
+    {
+      "q":"Which one among the following is an acidic oxide?",
+      "op1":"Na2O",
+      "op2":"CO",
+      "op3":"CO2",
+      "op4":"Al2O3",
+      "ans":"CO2"
+    },
+    {
+      "q":"The atomic number of an element ‘X’ is 12. Which inert gas is nearest to X?",
+      "op1":"He",
+      "op2":"Ar",
+      "op3":"Ne",
+      "op4":"Kr",
+      "ans":"Ne"
+    },
+    {
+      "q":"The process in which a carbonate ore is heated strongly in the absence of air to convert it into metal oxide is called",
+      "op1":"Roasting",
+      "op2":"Reduction",
+      "op3":"Calcination",
+      "op4":"Smelting",
+      "ans":"Calcination"
+    },
+    {
+      "q":"Oxides of moderately reactive metals like Zinc, Iron, Nickel, Tin, Copper etc. are reduced by using",
+      "op1":"Aluminium as reducing agent",
+      "op2":"Sodium as reducing agent",
+      "op3":"Carbon as reducing agent",
+      "op4":"Calcium as reducing agent",
+      "ans":"Carbon as reducing agent"
+    },
+    {
+      "q":"Galvanisation is a method of protecting iron from rudftng by coating with a thin layer of",
+      "op1":"Galium",
+      "op2":"Aluminium",
+      "op3":"Zinc",
+      "op4":"Silver",
+      "ans":"Zinc"
+    },
+    {
+      "q":"An element X is soft and can be cut with a knife. This is very reactive to air and cannot be kept open in air. It reacts vigorously with water. Identify the element from the following",
+      "op1":"Mg",
+      "op2":"Na",
+      "op3":"P",
+      "op4":"Ca",
+      "ans":"Na"
+    },
+    {
+      "q":"Reaction between X and Y forms compound Z. X loses electron and Y gains electron. Which of the following properties is not shown by Z?",
+      "op1":"Has high melting point",
+      "op2":"Has low melting point",
+      "op3":"Conducts electricity in molten state",
+      "op4":"Occurs as solid",
+      "ans":"Conducts electricity in molten state"
+    },
+    {
+      "q":"The electronic configurations of three ele¬ments X, Y and Z are X — 2, 8; Y — 2, 8, 7 and Z — 2, 8, 2. Which’of the following is correct?",
+      "op1":"X is a metal",
+      "op2":"Y is a metal",
+      "op3":"Z is a non-metal",
+      "op4":"Y is a non-metal and Z is a metal",
+      "ans":"Z is a non-metal"
+    },
+    {
+      "q":"Amalgam is an alloy of",
+      "op1":"Copper and Tin",
+      "op2":"Mercury",
+      "op3":"Lead and Tin",
+      "op4":"Copper and Zinc",
+      "ans":"Mercury"
+    },
+    {
+      "q":"Copper objects lose their shine and form green coating of",
+      "op1":"Copper oxide",
+      "op2":"Copper hydroxide and Copper oxide",
+      "op3":"Basic Copper carbonate",
+      "op4":"Copper carbonate",
+      "ans":"Basic Copper carbonate"
+    },
+    {
+      "q":"C3H8 belongs to the homologous series of",
+      "op1":"Alkynes",
+      "op2":"Alkenes",
+      "op3":"Alkanes",
+      "op4":"Cyclo alkanes",
+      "ans":"Alkanes"
+    },
+    {
+      "q":"The number of isomers of pentane is",
+      "op1":"2",
+      "op2":"3",
+      "op3":"4",
+      "op4":"5",
+      "ans":"3"
+    },
+    {
+      "q":"Which of the following will undergo addition reactions?",
+      "op1":"CH4",
+      "op2":"C3H8",
+      "op3":"C2H6",
+      "op4":"C2H4",
+      "ans":"C2H4"
+    },
+    {
+      "q":"When ethanoic acid is treated with NaHCO^ the gas evolved is",
+      "op1":"H2",
+      "op2":"CO2",
+      "op3":"CH4",
+      "op4":"CO",
+      "ans":"CO2"
+    },
+    {
+      "q":"Ethanol on complete oxidation gives",
+      "op1":"acetic acid/ethanoic acid",
+      "op2":"CO2 and water",
+      "op3":"ethanal",
+      "op4":"acetone/ethanone",
+      "ans":"CO2 and water"
+    },
+    {
+      "q":"Which of the following will give a pleasant smell of ester when heated with ethanol and a small quantity of sulphuric acid?",
+      "op1":"CH3COOH",
+      "op2":"CH3CH2OH",
+      "op3":"CH3OH",
+      "op4":"CH3CHO",
+      "ans":"CH3COOH"
+    },
+    {
+      "q":"Name the functional group present in CH3COCH3.",
+      "op1":"Alcohol",
+      "op2":"Carboxylic acid",
+      "op3":"Ketone",
+      "op4":"Aldehyde",
+      "ans":"Ketone"
+    },
+    {
+      "q":"Why does carbon form compounds mainly by covalent bonding?",
+      "op1":"There are four electrons in the outermost shell of carbon.",
+      "op2":"It requires large amount of energy to form C4+ or C4sup>4-.",
+      "op3":"It shares its valence electrons to complete its octet.",
+      "op4":"All the above.",
+      "ans":"All the above."
+    },
+    {
+      "q":"A hydrocarbon has four carbon atoms. Give its molecular formula if it is an alkene.",
+      "op1":"C4H10",
+      "op2":"C4H8",
+      "op3":"C4H6",
+      "op4":"C4H4",
+      "ans":"C4H8"
+    },
+    {
+      "q":"Give the IUPAC name of CH3COOC2H5.",
+      "op1":"Ethyl ethanoic acid",
+      "op2":"Butanoate",
+      "op3":"Ethyl ethanoate",
+      "op4":"Etyl methyl carboxylic acid",
+      "ans":"Ethyl ethanoate"
+    },
+    {
+      "q":"The firSt member of the alkyne homologous series is",
+      "op1":"propyne",
+      "op2":"ethyne",
+      "op3":"methane",
+      "op4":"ethene",
+      "ans":"ethyne"
+    },
+    {
+      "q":"In diamond, each carbon atom is bonded to four other carbon atoms to form",
+      "op1":"a hexagonal array",
+      "op2":"a rigid three-dimensional structure",
+      "op3":"a structure in the shape of a football",
+      "op4":"a structure of a ring",
+      "ans":"a rigid three-dimensional structure"
+    },
+    {
+      "q":"A soap molecule has a",
+      "op1":"hydrophobic head and hydrophobic tail",
+      "op2":"hydrophobic head and hydrophilic tail",
+      "op3":"hydrophilic head and hydrophilic tail",
+      "op4":"hydrophilic head and hydrophobic tail",
+      "ans":"hydrophilic head and hydrophobic tail"
     }
-]
+  ]
 }

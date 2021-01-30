@@ -9,8 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.QuizzApp">
-        <activity android:name=".ShopActivity"></activity>
-        <activity android:name=".QuestionActivity" />
+        <activity android:name=".TimeModeActivity" />
+        <activity android:name=".HardActivity" />
+        <activity android:name=".MediumActivity" />
+        <activity android:name=".PlayActivity" />
+        <activity android:name=".ShopActivity" />
         <activity android:name=".GameActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".SplashActivity">
@@ -21,6 +24,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713"/>
     </application>
 
 </manifest>

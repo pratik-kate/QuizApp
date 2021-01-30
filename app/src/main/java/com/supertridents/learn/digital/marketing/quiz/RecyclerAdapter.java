@@ -32,6 +32,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.viewHo
         View view = LayoutInflater.from(context).inflate(R.layout.levels, parent, false);
         return new viewHolder(view);
     }
+
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
         //we sets the data here
