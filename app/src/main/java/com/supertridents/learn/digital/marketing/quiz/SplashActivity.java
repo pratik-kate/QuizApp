@@ -43,7 +43,7 @@ public class SplashActivity extends AppCompatActivity {
 //                    coinseditor.commit();
 
 
-                    Toast.makeText(SplashActivity.this, "First Start", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(SplashActivity.this, "First Start", Toast.LENGTH_SHORT).show();
                 }
                 startActivity(new Intent(SplashActivity.this,MainActivity.class));
                 finish();

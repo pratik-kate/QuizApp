@@ -37,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -60,12 +61,12 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
     int isDoubledip = 0,isfifty=0,isswap=0;
     Boolean dip= true,d=true,f=true;
     public static long START_TIME_IN_MILLIS = 30000;
+    private static final long TIME = 17000;
     public static long S = 3000;
     public static long tym = 0;
     public CountDownTimer mCountDownTimer;
     public boolean mTimerRunning;
     public long mTimeLeftInMillis = START_TIME_IN_MILLIS;
-    private InterstitialAd mInterstitialAd;
     Boolean doubledip=true,ffifty=true,sswap=true;
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -78,11 +79,6 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
         editor.clear();
         editor.apply();
         editor.commit();
-
-
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
         question = findViewById(R.id.question);
         op1 = findViewById(R.id.option_1);
@@ -563,42 +559,20 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
-            }
-
-            @Override
-            public void onAdFailedToLoad(LoadAdError adError) {
-                // Code to be executed when an ad request fails.
-                super.onAdFailedToLoad(adError);
-                mInterstitialAd.loadAd(new AdRequest.Builder().build());
-            }
-
-            @Override
-            public void onAdOpened() {
-                // Code to be executed when the ad is displayed.
-            }
-
-            @Override
-            public void onAdClicked() {
-                // Code to be executed when the user clicks on an ad.
-            }
-
-            @Override
-            public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
-            }
-
-            @Override
-            public void onAdClosed() {
-                // Code to be executed when the interstitial ad is closed.
-            }
-        });
-
     }
 
+    @Override
+    public void onBackPressed() {
+        pauseTimer();
+        AlertDialog alertbox = new AlertDialog.Builder(this)
+                .setMessage("Do you want to quit the game?")
+                .setPositiveButton("Yes", (arg0, arg1) -> {
+                    super.onBackPressed();
+                    finish();
+                })
+                .setNegativeButton("No", (arg0, arg1) -> {arg0.dismiss();startTimer(mTimeLeftInMillis);})
+                .show();
+    }
     @Override
     public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
         Toast.makeText(this, "Rewarded", Toast.LENGTH_SHORT).show();
@@ -606,6 +580,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
 
     private void showInterstitial() {
 
+        try{
         Constants.rewardedInterstitialAd.show(TimeModeActivity.this,rewardItem -> {
             SharedPreferences preferences = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE);
             final int[] credits = {preferences.getInt(String.valueOf(MainActivity.coins), 0)};
@@ -618,6 +593,9 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
             Toast.makeText(TimeModeActivity.this, "100 Coins Won", Toast.LENGTH_SHORT).show();
             Constants.loadAd(this);
         });
+        }catch (Exception e){
+            Toast.makeText(this, "Please Wait Ad is loading", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
@@ -640,70 +618,93 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                         // gif.setVisibility(View.INVISIBLE);
                         //Toast.makeText(TimeModeActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
 
-                            final Dialog dialog2 = new Dialog(TimeModeActivity.this, R.style.PauseDialog);
-                            dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-                            dialog2.setContentView(R.layout.finish);
-                            dialog2.setCancelable(true);
+                        AlertDialog alertbox = new AlertDialog.Builder(TimeModeActivity.this)
+                                .setMessage("Watch Ad to get extra time?")
+                                .setPositiveButton("Yes", (arg0, arg1) -> {
+                                    if(Constants.rewardedAd.isLoaded()){
+                                        Constants.rewardedAd.show(TimeModeActivity.this, new RewardedAdCallback() {
+                                            @Override
+                                            public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                                                startTimer(TIME);
+                                                //Toast.makeText(TimeModeActivity.this, "done", Toast.LENGTH_SHORT).show();
+                                                Constants.loadRewardedAd(TimeModeActivity.this);
+                                                arg0.dismiss();
 
-                            WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
-                            lp2.copyFrom(dialog2.getWindow().getAttributes());
-                            lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
-                            lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
+                                            }
+                                        });
+                                    }
+                                    else{
+                                        startTimer(mTimeLeftInMillis);
+                                        Toast.makeText(TimeModeActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
+                                    }
 
-                            TextView lvl = dialog2.findViewById(R.id.flevel);
-                            lvl.setText("Timer Down");
-                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
-                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
-                            (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
+                                })
+                                .setNegativeButton("No", (arg0, arg1) -> {
+                                    final Dialog dialog2 = new Dialog(TimeModeActivity.this, R.style.PauseDialog);
+                                    dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                                    dialog2.setContentView(R.layout.finish);
+                                    dialog2.setCancelable(true);
 
-                            (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
-                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                                editor.clear();
-                                editor.apply();
-                                editor.commit();
-                                startActivity(new Intent(TimeModeActivity.this, PlayActivity.class));
-                            });
+                                    WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+                                    lp2.copyFrom(dialog2.getWindow().getAttributes());
+                                    lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                    lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
 
-                            (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
-                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                                editor.clear();
-                                editor.apply();
-                                editor.commit();
-                                startActivity(new Intent(TimeModeActivity.this, MainActivity.class));
-                            });
-                            (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
-                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                                editor.clear();
-                                editor.apply();
-                                editor.commit();
-                                startActivity(getIntent());
-                            });
-                            SharedPreferences preferences = getSharedPreferences(CORRECT, MODE_PRIVATE);
-                            int c = preferences.getInt(ANS, 0);
+                                    TextView lvl = dialog2.findViewById(R.id.flevel);
+                                    lvl.setText("Timer Down");
+                                    (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
+                                    (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
+                                    (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
 
-                            //gamefinish
-                            TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
-                            if (c <= 3) {
-                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                                scoretxt.setText(String.valueOf(c * 100));
-                            } else if (c <= 10) {
-                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                                scoretxt.setText(String.valueOf(c * 100));
-                            } else if (c > 10) {
-                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                                (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
-                                scoretxt.setText(String.valueOf(c * 100));
-                            }
-                            TranslateAnimation anim = new TranslateAnimation(0, 0, 0, 0);
-                            anim.setDuration(1000);
+                                    (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
+                                        SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                        editor.clear();
+                                        editor.apply();
+                                        editor.commit();
+                                        startActivity(new Intent(TimeModeActivity.this, PlayActivity.class));
+                                    });
 
-                            dialog2.show();
-                            dialog2.getWindow().setAttributes(lp2);
+                                    (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
+                                        SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                        editor.clear();
+                                        editor.apply();
+                                        editor.commit();
+                                        startActivity(new Intent(TimeModeActivity.this, MainActivity.class));
+                                    });
+                                    (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
+                                        SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                        editor.clear();
+                                        editor.apply();
+                                        editor.commit();
+                                        startActivity(getIntent());
+                                    });
+                                    SharedPreferences preferences = getSharedPreferences(CORRECT, MODE_PRIVATE);
+                                    int c = preferences.getInt(ANS, 0);
 
-                            showInterstitial();
+                                    //gamefinish
+                                    TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
+                                    if (c <= 3) {
+                                        (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                        scoretxt.setText(String.valueOf(c * 100));
+                                    } else if (c <= 10) {
+                                        (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                        (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                        scoretxt.setText(String.valueOf(c * 100));
+                                    } else if (c > 10) {
+                                        (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                        (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                        (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                                        scoretxt.setText(String.valueOf(c * 100));
+                                    }
+                                    TranslateAnimation anim = new TranslateAnimation(0, 0, 0, 0);
+                                    anim.setDuration(1000);
 
+                                    dialog2.show();
+                                    dialog2.getWindow().setAttributes(lp2);
+                                    arg0.dismiss();
+                                    //showInterstitial();
+                                })
+                                .show();
 
                     }
                 },100);

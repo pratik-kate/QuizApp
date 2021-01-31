@@ -315,13 +315,17 @@
         app:layout_constraintGuide_end="58dp" />
 
     <ImageView
-        android:id="@+id/imageView23"
+        android:id="@+id/moreApps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="15dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView22"
+        android:clickable="true"
+        android:contextClickable="true"
+        android:focusable="true"
+        android:foreground="@drawable/ripple"
+        app:layout_constraintBottom_toBottomOf="@+id/PlayerView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView22"
+        app:layout_constraintTop_toTopOf="@+id/bgdesign"
         app:srcCompat="@drawable/ic_app_store" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

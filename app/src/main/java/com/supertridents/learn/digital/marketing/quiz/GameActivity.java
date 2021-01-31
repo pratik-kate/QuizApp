@@ -62,7 +62,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     Boolean doubledip=true,ffifty=true,sswap=true;
     ProgressBar bar;
     private static final long START_TIME_IN_MILLIS = 45000;
-    private static final long TIME = 15000;
+    private static final long TIME = 17000;
     private CountDownTimer mCountDownTimer;
     private boolean mTimerRunning;
     private long mTimeLeftInMillis = START_TIME_IN_MILLIS;
@@ -559,7 +559,19 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         });
 
 
+    }
 
+    @Override
+    public void onBackPressed() {
+        pauseTimer();
+        AlertDialog alertbox = new AlertDialog.Builder(this)
+                .setMessage("Do you want to quit the game?")
+                .setPositiveButton("Yes", (arg0, arg1) -> {
+                   super.onBackPressed();
+                    finish();
+                })
+                .setNegativeButton("No", (arg0, arg1) -> {arg0.dismiss();startTimer(mTimeLeftInMillis);})
+                .show();
     }
 
     @Override
@@ -569,18 +581,22 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private void showInterstitial() {
 
-            Constants.rewardedInterstitialAd.show(GameActivity.this,rewardItem -> {
-                SharedPreferences preferences = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE);
+        try {
+            Constants.rewardedInterstitialAd.show(GameActivity.this, rewardItem -> {
+                SharedPreferences preferences = getSharedPreferences(MainActivity.LEVEL, MODE_PRIVATE);
                 final int[] credits = {preferences.getInt(String.valueOf(MainActivity.coins), 0)};
                 //Toast.makeText(this, "Reward", Toast.LENGTH_SHORT).show();
                 credits[0] = credits[0] + 100;
-                SharedPreferences.Editor editor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
-                editor.putInt(String.valueOf(MainActivity.coins),credits[0]);
+                SharedPreferences.Editor editor = getSharedPreferences(MainActivity.LEVEL, MODE_PRIVATE).edit();
+                editor.putInt(String.valueOf(MainActivity.coins), credits[0]);
                 editor.apply();
                 editor.commit();
                 Toast.makeText(GameActivity.this, "100 Coins Won", Toast.LENGTH_SHORT).show();
                 Constants.loadAd(this);
             });
+        }catch (Exception e){
+            Toast.makeText(this, "Please Wait Ad is loading", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
@@ -601,81 +617,105 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     public void run() {
                         // gif.setVisibility(View.INVISIBLE);
                             //Toast.makeText(GameActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
-                        if(currentQuestion==14) {
-                            final Dialog dialog2 = new Dialog(GameActivity.this, R.style.PauseDialog);
-                            dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-                            dialog2.setContentView(R.layout.finish);
-                            dialog2.setCancelable(true);
+                        AlertDialog alertbox = new AlertDialog.Builder(GameActivity.this)
+                                .setMessage("Watch Ad to get extra time?")
+                                .setPositiveButton("Yes", (arg0, arg1) -> {
+                                    if(Constants.rewardedAd.isLoaded()){
+                                        Constants.rewardedAd.show(GameActivity.this, new RewardedAdCallback() {
+                                            @Override
+                                            public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                                                startTimer(TIME);
+                                                //Toast.makeText(GameActivity.this, "done", Toast.LENGTH_SHORT).show();
+                                                Constants.loadRewardedAd(GameActivity.this);
+                                                arg0.dismiss();
 
-                            WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
-                            lp2.copyFrom(dialog2.getWindow().getAttributes());
-                            lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
-                            lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
+                                            }
+                                        });
+                                    }
+                                    else{
+                                        startTimer(mTimeLeftInMillis);
+                                        Toast.makeText(GameActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .setNegativeButton("No", (arg0, arg1) -> {
+                                    if(currentQuestion==14) {
+                                        final Dialog dialog2 = new Dialog(GameActivity.this, R.style.PauseDialog);
+                                        dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                                        dialog2.setContentView(R.layout.finish);
+                                        dialog2.setCancelable(true);
 
-                            TextView lvl = dialog2.findViewById(R.id.flevel);
-                            lvl.setText("Easy");
-                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
-                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
-                            (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
+                                        WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+                                        lp2.copyFrom(dialog2.getWindow().getAttributes());
+                                        lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                        lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
 
-                            (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
-                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                                editor.clear();
-                                editor.apply();
-                                editor.commit();
+                                        TextView lvl = dialog2.findViewById(R.id.flevel);
+                                        lvl.setText("Easy");
+                                        (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
+                                        (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
+                                        (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
 
-                                startActivity(new Intent(GameActivity.this, PlayActivity.class));
-                            });
+                                        (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
+                                            SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                            editor.clear();
+                                            editor.apply();
+                                            editor.commit();
 
-                            (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
-                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                                editor.clear();
-                                editor.apply();
-                                editor.commit();
+                                            startActivity(new Intent(GameActivity.this, PlayActivity.class));
+                                        });
 
-                                startActivity(new Intent(GameActivity.this, MainActivity.class));
-                            });
-                            (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
-                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                                editor.clear();
-                                editor.apply();
-                                editor.commit();
-                                startActivity(getIntent());
-                            });
-                            SharedPreferences preferences = getSharedPreferences(CORRECT, MODE_PRIVATE);
-                            int c = preferences.getInt(ANS, 0);
+                                        (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
+                                            SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                            editor.clear();
+                                            editor.apply();
+                                            editor.commit();
 
-                            //gamefinish
-                            TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
-                            if (c < 6) {
-                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                                scoretxt.setText(String.valueOf(c * 100));
-                            } else if (c <= 14) {
-                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                                scoretxt.setText(String.valueOf(c * 100));
-                            } else if (c == 15) {
-                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                                (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
-                                scoretxt.setText(String.valueOf(c * 100));
-                            }
-                            TranslateAnimation anim = new TranslateAnimation(0, 0, 0, 0);
-                            anim.setDuration(1000);
+                                            startActivity(new Intent(GameActivity.this, MainActivity.class));
+                                        });
+                                        (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
+                                            SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                            editor.clear();
+                                            editor.apply();
+                                            editor.commit();
+                                            startActivity(getIntent());
+                                        });
+                                        SharedPreferences preferences = getSharedPreferences(CORRECT, MODE_PRIVATE);
+                                        int c = preferences.getInt(ANS, 0);
 
-                            dialog2.show();
-                            dialog2.getWindow().setAttributes(lp2);
-                            showInterstitial();
-                        }
-                        else{
-                            startTimer(mTimeLeftInMillis);
-                            currentQuestion++;
-                            i++;
-                            current.setText(i+"/");
-                            setQuestionScreen(currentQuestion);
-                            clickable(true);
-                            reset();
-                        }
+                                        //gamefinish
+                                        TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
+                                        if (c < 6) {
+                                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                            scoretxt.setText(String.valueOf(c * 100));
+                                        } else if (c <= 14) {
+                                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                            scoretxt.setText(String.valueOf(c * 100));
+                                        } else if (c == 15) {
+                                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                            (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                                            scoretxt.setText(String.valueOf(c * 100));
+                                        }
+                                        TranslateAnimation anim = new TranslateAnimation(0, 0, 0, 0);
+                                        anim.setDuration(1000);
+
+                                        dialog2.show();
+                                        dialog2.getWindow().setAttributes(lp2);
+                                        showInterstitial();
+                                    }
+                                    else{
+                                        startTimer(mTimeLeftInMillis);
+                                        currentQuestion++;
+                                        i++;
+                                        current.setText(i+"/");
+                                        setQuestionScreen(currentQuestion);
+                                        clickable(true);
+                                        reset();
+                                    }
+                                })
+                                .show();
+
 
                     }
                 },100);
