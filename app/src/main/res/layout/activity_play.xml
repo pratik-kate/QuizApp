@@ -79,16 +79,17 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="100dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="100dp"
                     android:background="@drawable/background_lifeline"
                     android:padding="10dp">
 
                     <ImageView
-                        android:id="@+id/imageView19"
+                        android:id="@+id/gff"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
+                        android:visibility="visible"
                         app:layout_constraintBottom_toTopOf="@+id/textView11"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -121,16 +122,27 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="100dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="100dp"
                     android:background="@drawable/background_lifeline"
                     android:padding="10dp">
 
                     <ImageView
-                        android:id="@+id/imageView20"
+                        android:id="@+id/elock"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_lock" />
+
+                    <ImageView
+                        android:id="@+id/easyimg"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toTopOf="@+id/textView12"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -163,16 +175,27 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="100dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="100dp"
                     android:background="@drawable/background_lifeline"
                     android:padding="10dp">
 
                     <ImageView
-                        android:id="@+id/imageView21"
+                        android:id="@+id/hlock"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_lock" />
+
+                    <ImageView
+                        android:id="@+id/himg"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toTopOf="@+id/textView13"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

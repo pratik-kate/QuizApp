@@ -314,8 +314,8 @@
                     android:foreground="@drawable/ripple"
                     app:cardCornerRadius="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/swap"
+                    app:layout_constraintStart_toEndOf="@+id/doubleDip"
                     app:layout_constraintTop_toBottomOf="@+id/option_4">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -348,8 +348,8 @@
                     android:visibility="gone"
                     app:cardCornerRadius="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/swap"
+                    app:layout_constraintStart_toEndOf="@+id/doubleDip"
                     app:layout_constraintTop_toBottomOf="@+id/option_4">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -381,7 +381,6 @@
                     android:foreground="@drawable/ripple"
                     app:cardCornerRadius="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/fifty"
                     app:layout_constraintStart_toStartOf="@+id/option_4"
                     app:layout_constraintTop_toBottomOf="@+id/option_4">
 
@@ -414,7 +413,6 @@
                     android:visibility="gone"
                     app:cardCornerRadius="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/fifty"
                     app:layout_constraintStart_toStartOf="@+id/option_4"
                     app:layout_constraintTop_toBottomOf="@+id/option_4">
 
@@ -447,7 +445,6 @@
                     app:cardCornerRadius="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/option_4"
-                    app:layout_constraintStart_toEndOf="@+id/fifty"
                     app:layout_constraintTop_toBottomOf="@+id/option_4">
 
                     <androidx.constraintlayout.widget.ConstraintLayout

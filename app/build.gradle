@@ -7,7 +7,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "com.supertridents.learn.digital.marketing.quiz"
+        applicationId "com.supertridents.ncert.class10.quiz.quiz"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
