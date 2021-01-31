@@ -51,5 +51,6 @@ public class SplashActivity extends AppCompatActivity {
         },3000);
 
         Constants.loadRewardedAd(this);
+        Constants.loadAd(this);
     }
 }

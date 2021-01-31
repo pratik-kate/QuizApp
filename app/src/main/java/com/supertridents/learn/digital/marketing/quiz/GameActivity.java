@@ -28,6 +28,7 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.OnUserEarnedRewardListener;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAdCallback;
 
@@ -45,7 +46,7 @@ import static com.supertridents.learn.digital.marketing.quiz.MainActivity.LEVEL;
 import static com.supertridents.learn.digital.marketing.quiz.MainActivity.SCORE;
 import static com.supertridents.learn.digital.marketing.quiz.MainActivity.coins;
 
-public class GameActivity extends AppCompatActivity implements View.OnClickListener {
+public class GameActivity extends AppCompatActivity implements View.OnClickListener, OnUserEarnedRewardListener {
 
     final String CORRECT="CORRECT";
     final String ANS="ANS";
@@ -61,11 +62,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     Boolean doubledip=true,ffifty=true,sswap=true;
     ProgressBar bar;
     private static final long START_TIME_IN_MILLIS = 45000;
+    private static final long TIME = 15000;
     private CountDownTimer mCountDownTimer;
     private boolean mTimerRunning;
     private long mTimeLeftInMillis = START_TIME_IN_MILLIS;
 
-    private InterstitialAd mInterstitialAd;
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,11 +77,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         editor.clear();
         editor.apply();
         editor.commit();
-
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
-
         question = findViewById(R.id.question);
         op1 = findViewById(R.id.option_1);
         op2 = findViewById(R.id.option_2);
@@ -175,7 +171,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             (dialog2.findViewById(R.id.fyes)).setOnClickListener(v1 -> {
                 ffifty=false;
                 isfifty = 1;
-                startTimer();
+                startTimer(mTimeLeftInMillis);
                 String ans = questionItems.get(currentQuestion).getCorrect();
                 if (coin[0] >= 100) {
 
@@ -208,7 +204,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 dialog2.dismiss();
             });
             (dialog2.findViewById(R.id.fno)).setOnClickListener(v1 -> {
-                startTimer();
+                startTimer(mTimeLeftInMillis);
                 dialog2.dismiss();
 
             });
@@ -223,7 +219,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                 Constants.rewardedAd.show(GameActivity.this, new RewardedAdCallback() {
                                     @Override
                                     public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                                        startTimer();
+                                        startTimer(mTimeLeftInMillis);
                                         String ans = questionItems.get(currentQuestion).getCorrect();
                                         if (ans.equals(op1.getText())) {
                                             op1.setBackground(getResources().getDrawable(R.drawable.box_unselected));
@@ -244,13 +240,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                 });
                             }
                             else{
-                                startTimer();
+                                startTimer(mTimeLeftInMillis);
                                 Toast.makeText(GameActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
                             }
 
                         })
                         .setNegativeButton("No", (arg0, arg1) -> {
-                            startTimer();
+                            startTimer(mTimeLeftInMillis);
                             arg0.dismiss();
                         })
                         .show();
@@ -276,7 +272,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     String ans = questionItems.get(currentQuestion).getCorrect();
                     isfifty = 2;
 
-                    startTimer();
+                    startTimer(mTimeLeftInMillis);
                     if (coin[0] >= 100) {
 
                         doubledip=false;
@@ -316,7 +312,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     dialog2.dismiss();
                 });
                 (dialog2.findViewById(R.id.dno)).setOnClickListener(v1 -> {
-                    startTimer();
+                    startTimer(mTimeLeftInMillis);
                     dialog2.dismiss();
                 });
 
@@ -330,7 +326,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                 Constants.rewardedAd.show(GameActivity.this, new RewardedAdCallback() {
                                     @Override
                                     public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                                        startTimer();
+                                        startTimer(mTimeLeftInMillis);
 
                                             op1.setOnClickListener(v4 -> checkDoubledip(op1));
                                             op2.setOnClickListener(v4 -> checkDoubledip(op2));
@@ -342,13 +338,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                 });
                             }
                             else{
-                                startTimer();
+                                startTimer(mTimeLeftInMillis);
                                 Toast.makeText(GameActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
                             }
 
                         })
                         .setNegativeButton("No", (arg0, arg1) -> {
-                            startTimer();
+                            startTimer(mTimeLeftInMillis);
                             arg0.dismiss();
                         })
                         .show();
@@ -372,7 +368,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 (dialog2.findViewById(R.id.syes)).setOnClickListener(v1 -> {
 
                     sswap=false;
-                    startTimer();
+                    startTimer(mTimeLeftInMillis);
                     if (coin[0] >= 100) {
 
                         setRandomQuestionScreen(7);
@@ -520,7 +516,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     dialog2.dismiss();
                 });
                 (dialog2.findViewById(R.id.sno)).setOnClickListener(v1 -> {
-                    startTimer();
+                    startTimer(mTimeLeftInMillis);
                     dialog2.dismiss();
                 });
 
@@ -535,7 +531,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                 Constants.rewardedAd.show(GameActivity.this, new RewardedAdCallback() {
                                     @Override
                                     public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                                        startTimer();
+                                        startTimer(mTimeLeftInMillis);
                                         setRandomQuestionScreen(7);
                                         op1.setOnClickListener(v4 -> checkRandomAnswer(op1));
                                         op2.setOnClickListener(v4 -> checkRandomAnswer(op2));
@@ -543,18 +539,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                         op4.setOnClickListener(v4 -> checkRandomAnswer(op4));
                                         //Toast.makeText(GameActivity.this, "done", Toast.LENGTH_SHORT).show();
                                         Constants.loadRewardedAd(GameActivity.this);
-                                        startTimer();
+                                        startTimer(mTimeLeftInMillis);
                                     }
                                 });
                             }
                             else{
-                                startTimer();
+                                startTimer(mTimeLeftInMillis);
                                 Toast.makeText(GameActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
                             }
 
                         })
                         .setNegativeButton("No", (arg0, arg1) -> {
-                            startTimer();
+                            startTimer(mTimeLeftInMillis);
                             arg0.dismiss();
                         })
                         .show();
@@ -562,54 +558,35 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
-            }
 
-            @Override
-            public void onAdFailedToLoad(LoadAdError adError) {
-                // Code to be executed when an ad request fails.
-                super.onAdFailedToLoad(adError);
-                mInterstitialAd.loadAd(new AdRequest.Builder().build());
-            }
 
-            @Override
-            public void onAdOpened() {
-                // Code to be executed when the ad is displayed.
-            }
+    }
 
-            @Override
-            public void onAdClicked() {
-                // Code to be executed when the user clicks on an ad.
-            }
-
-            @Override
-            public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
-            }
-
-            @Override
-            public void onAdClosed() {
-                // Code to be executed when the interstitial ad is closed.
-            }
-        });
-
+    @Override
+    public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+        Toast.makeText(this, "Rewarded", Toast.LENGTH_SHORT).show();
     }
 
     private void showInterstitial() {
-        // Show the ad if it's ready. Otherwise toast and restart the game.
-        if (mInterstitialAd.isLoaded()) {
-            mInterstitialAd.show();
-        } else {
-            Log.d("TAG", "The interstitial wasn't loaded yet.");
-        }
+
+            Constants.rewardedInterstitialAd.show(GameActivity.this,rewardItem -> {
+                SharedPreferences preferences = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE);
+                final int[] credits = {preferences.getInt(String.valueOf(MainActivity.coins), 0)};
+                //Toast.makeText(this, "Reward", Toast.LENGTH_SHORT).show();
+                credits[0] = credits[0] + 100;
+                SharedPreferences.Editor editor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
+                editor.putInt(String.valueOf(MainActivity.coins),credits[0]);
+                editor.apply();
+                editor.commit();
+                Toast.makeText(GameActivity.this, "100 Coins Won", Toast.LENGTH_SHORT).show();
+                Constants.loadAd(this);
+            });
+
     }
 
     //timer
-    private void startTimer() {
-        mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
+    private void startTimer(long ms) {
+        mCountDownTimer = new CountDownTimer(ms, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 mTimeLeftInMillis = millisUntilFinished;
@@ -691,7 +668,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             showInterstitial();
                         }
                         else{
-                            startTimer();
+                            startTimer(mTimeLeftInMillis);
                             currentQuestion++;
                             i++;
                             current.setText(i+"/");
@@ -1576,9 +1553,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             if (mTimerRunning) {
                 pauseTimer();
                 resetTimer();
-                startTimer();
+                startTimer(mTimeLeftInMillis);
             } else {
-                startTimer();
+                startTimer(mTimeLeftInMillis);
             }
             bar.setProgress(n+1);
 //            TranslateAnimation anim = new TranslateAnimation(0,0,2,0);
@@ -1717,7 +1694,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
 
                 (dialog.findViewById(R.id.resume)).setOnClickListener(v1 -> {
-                    startTimer();
+                    startTimer(mTimeLeftInMillis);
                     dialog.dismiss();
                 });
                 (dialog.findViewById(R.id.restart)).setOnClickListener(v2->{
@@ -1753,4 +1730,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
+
+
 }

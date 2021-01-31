@@ -29,6 +29,7 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.OnUserEarnedRewardListener;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAdCallback;
 
@@ -46,7 +47,7 @@ import static com.supertridents.learn.digital.marketing.quiz.MainActivity.LEVEL;
 import static com.supertridents.learn.digital.marketing.quiz.MainActivity.SCORE;
 import static com.supertridents.learn.digital.marketing.quiz.MainActivity.coins;
 
-public class HardActivity extends AppCompatActivity implements View.OnClickListener {
+public class HardActivity extends AppCompatActivity implements View.OnClickListener, OnUserEarnedRewardListener {
 
     final String CORRECT="CORRECT";
     final String ANS="ANS";
@@ -62,7 +63,7 @@ public class HardActivity extends AppCompatActivity implements View.OnClickListe
     ProgressBar bar;
     Boolean doubledip=true,ffifty=true,sswap=true;
 
-    private static final long START_TIME_IN_MILLIS = 45000;
+    private static final long START_TIME_IN_MILLIS = 30000;
     private CountDownTimer mCountDownTimer;
     private boolean mTimerRunning;
     private long mTimeLeftInMillis = START_TIME_IN_MILLIS;
@@ -599,13 +600,26 @@ public class HardActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    @Override
+    public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+        Toast.makeText(this, "Rewarded", Toast.LENGTH_SHORT).show();
+    }
+
     private void showInterstitial() {
-        // Show the ad if it's ready. Otherwise toast and restart the game.
-        if (mInterstitialAd.isLoaded()) {
-            mInterstitialAd.show();
-        } else {
-            Log.d("TAG", "The interstitial wasn't loaded yet.");
-        }
+
+        Constants.rewardedInterstitialAd.show(HardActivity.this,rewardItem -> {
+            SharedPreferences preferences = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE);
+            final int[] credits = {preferences.getInt(String.valueOf(MainActivity.coins), 0)};
+            //Toast.makeText(this, "Reward", Toast.LENGTH_SHORT).show();
+            credits[0] = credits[0] + 100;
+            SharedPreferences.Editor editor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
+            editor.putInt(String.valueOf(MainActivity.coins),credits[0]);
+            editor.apply();
+            editor.commit();
+            Toast.makeText(HardActivity.this, "100 Coins Won", Toast.LENGTH_SHORT).show();
+            Constants.loadAd(this);
+        });
+
     }
 
     //timer
