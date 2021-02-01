@@ -2,6 +2,7 @@
 package com.supertridents.ncert.class10.quiz.game.solutionns;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -22,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAdCallback;
@@ -674,7 +676,32 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                                     Constants.rewardedAd.show(TimeModeActivity.this, new RewardedAdCallback() {
                                         @Override
                                         public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                                            startTimer(TIME);
+
+                                            Activity activityContext = TimeModeActivity.this;
+                                            RewardedAdCallback adCallback = new RewardedAdCallback() {
+                                                @Override
+                                                public void onRewardedAdOpened() {
+                                                    // Ad opened.
+                                                }
+
+                                                @Override
+                                                public void onRewardedAdClosed() {
+                                                    startTimer(TIME);
+                                                    Toast.makeText(activityContext, "closed", Toast.LENGTH_SHORT).show();
+                                                    // Ad closed.
+                                                }
+
+                                                @Override
+                                                public void onUserEarnedReward(@NonNull RewardItem reward) {
+                                                    // User earned reward.
+                                                }
+
+                                                @Override
+                                                public void onRewardedAdFailedToShow(AdError adError) {
+                                                    // Ad failed to display.
+                                                }
+                                            };
+                                            Constants.rewardedAd.show(activityContext, adCallback);
                                             //Toast.makeText(TimeModeActivity.this, "done", Toast.LENGTH_SHORT).show();
                                             Constants.loadRewardedAd(TimeModeActivity.this);
                                         }

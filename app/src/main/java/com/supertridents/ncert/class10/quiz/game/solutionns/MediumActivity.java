@@ -2,6 +2,7 @@
 package com.supertridents.ncert.class10.quiz.game.solutionns;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -24,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -61,7 +63,7 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
     Boolean dip= true,d=true,f=true;
     ProgressBar mbar;
     private static final long START_TIME_IN_MILLIS = 30000;
-    private static final long TIME = 17000;
+    private static final long TIME = 16000;
     private static final long START_TIME_IN_MILLI = 5000;
     private CountDownTimer mCountDownTimer,countDownTimer;
     private long TimeLeftInMillis = START_TIME_IN_MILLI;
@@ -726,7 +728,32 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
                                     Constants.rewardedAd.show(MediumActivity.this, new RewardedAdCallback() {
                                         @Override
                                         public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                                            startTimer(TIME);
+
+                                            Activity activityContext = MediumActivity.this;
+                                            RewardedAdCallback adCallback = new RewardedAdCallback() {
+                                                @Override
+                                                public void onRewardedAdOpened() {
+                                                    // Ad opened.
+                                                }
+
+                                                @Override
+                                                public void onRewardedAdClosed() {
+                                                    startTimer(TIME);
+                                                    Toast.makeText(activityContext, "closed", Toast.LENGTH_SHORT).show();
+                                                    // Ad closed.
+                                                }
+
+                                                @Override
+                                                public void onUserEarnedReward(@NonNull RewardItem reward) {
+                                                    // User earned reward.
+                                                }
+
+                                                @Override
+                                                public void onRewardedAdFailedToShow(AdError adError) {
+                                                    // Ad failed to display.
+                                                }
+                                            };
+                                            Constants.rewardedAd.show(activityContext, adCallback);
                                             //Toast.makeText(MediumActivity.this, "done", Toast.LENGTH_SHORT).show();
                                             Constants.loadRewardedAd(MediumActivity.this);
                                         }

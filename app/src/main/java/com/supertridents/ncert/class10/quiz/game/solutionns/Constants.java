@@ -23,7 +23,9 @@ public class Constants {
             public void onRewardedAdFailedToLoad(LoadAdError loadAdError) {
                 super.onRewardedAdFailedToLoad(loadAdError);
                 loadRewardedAd(context);
+
             }
+
         });
     }
     public static void loadAd(Context context) {
@@ -51,6 +53,7 @@ public class Constants {
                             /** Called when full screen content is dismissed. */
                             @Override
                             public void onAdDismissedFullScreenContent() {
+
                                 Log.i(TAG, "onAdDismissedFullScreenContent");
                             }
                         });

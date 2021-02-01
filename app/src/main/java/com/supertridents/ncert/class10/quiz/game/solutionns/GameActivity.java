@@ -2,6 +2,7 @@
 package com.supertridents.ncert.class10.quiz.game.solutionns;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -23,8 +25,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.NavUtils;
 import androidx.lifecycle.Lifecycle;
 
+import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -67,7 +71,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     Boolean[] used ={true};
     Boolean[] timer ={true};
     private static final long START_TIME_IN_MILLIS = 45000;
-    private static final long TIME = 17000;
+    private static final long TIME = 16000;
     private static final long START_TIME_IN_MILLI = 5000;
     private CountDownTimer mCountDownTimer,countDownTimer;
     private long TimeLeftInMillis = START_TIME_IN_MILLI;
@@ -704,8 +708,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+
     //timer
-    private void startTimer(long ms) {
+    public void startTimer(long ms) {
         mCountDownTimer = new CountDownTimer(ms, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -736,7 +741,32 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                     Constants.rewardedAd.show(GameActivity.this, new RewardedAdCallback() {
                                         @Override
                                         public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                                            startTimer(TIME);
+
+                                            Activity activityContext = GameActivity.this;
+                                            RewardedAdCallback adCallback = new RewardedAdCallback() {
+                                                @Override
+                                                public void onRewardedAdOpened() {
+                                                    // Ad opened.
+                                                }
+
+                                                @Override
+                                                public void onRewardedAdClosed() {
+                                                    startTimer(TIME);
+                                                    Toast.makeText(activityContext, "closed", Toast.LENGTH_SHORT).show();
+                                                    // Ad closed.
+                                                }
+
+                                                @Override
+                                                public void onUserEarnedReward(@NonNull RewardItem reward) {
+                                                    // User earned reward.
+                                                }
+
+                                                @Override
+                                                public void onRewardedAdFailedToShow(AdError adError) {
+                                                    // Ad failed to display.
+                                                }
+                                            };
+                                            Constants.rewardedAd.show(activityContext, adCallback);
                                             //Toast.makeText(GameActivity.this, "done", Toast.LENGTH_SHORT).show();
                                             Constants.loadRewardedAd(GameActivity.this);
                                         }
@@ -745,6 +775,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                     //startTimer(mTimeLeftInMillis);
                                     //Toast.makeText(GameActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
                                 }
+
                                 dialog2.dismiss();
                             });
                             (dialog2.findViewById(R.id.no)).setOnClickListener(v1 -> {
