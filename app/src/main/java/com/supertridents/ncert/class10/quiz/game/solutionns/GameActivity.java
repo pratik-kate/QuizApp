@@ -646,14 +646,28 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onBackPressed() {
         pauseTimer();
-        AlertDialog alertbox = new AlertDialog.Builder(this)
-                .setMessage("Do you want to quit the game?")
-                .setPositiveButton("Yes", (arg0, arg1) -> {
-                   super.onBackPressed();
-                    finish();
-                })
-                .setNegativeButton("No", (arg0, arg1) -> {arg0.dismiss();startTimer(mTimeLeftInMillis);})
-                .show();
+
+        final Dialog dialog2 = new Dialog(GameActivity.this);
+        dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+        dialog2.setContentView(R.layout.alert);
+        dialog2.setCancelable(true);
+        WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+        lp2.copyFrom(dialog2.getWindow().getAttributes());
+        lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp2.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        TextView text = dialog2.findViewById(R.id.atext);
+        text.setText("Do you want to quit?");
+        (dialog2.findViewById(R.id.yes)).setOnClickListener(v1 -> {
+            super.onBackPressed();
+            finish();
+            dialog2.dismiss();
+        });
+        (dialog2.findViewById(R.id.no)).setOnClickListener(v1 -> {
+            dialog2.dismiss();
+            startTimer(mTimeLeftInMillis);
+        });
+        dialog2.show();
+        dialog2.getWindow().setAttributes(lp2);
     }
 
     @Override
@@ -728,7 +742,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                         }
                                     });
                                 } else {
-
                                     //startTimer(mTimeLeftInMillis);
                                     //Toast.makeText(GameActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
                                 }
@@ -798,7 +811,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                     dialog.getWindow().setAttributes(lp);
                                     showInterstitial();
                                 } else {
-                                    //startTimer(mTimeLeftInMillis);
+                                    startTimer(mTimeLeftInMillis);
                                     currentQuestion++;
                                     i++;
                                     current.setText(i + "/");
@@ -1072,11 +1085,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         countDownTimer = new CountDownTimer(TimeLeftInMillis, 5000) {
                             @Override
                             public void onTick(long millisUntilFinished) {
+                                (dialog.findViewById(R.id.cd)).setVisibility(View.VISIBLE);
                                 TimeLeftInMillis = millisUntilFinished;
                                 int seconds = (int) (TimeLeftInMillis / 1000) % 60;
                                 String timeLeftFormatted = String.format(Locale.getDefault(), "%02d", seconds);
                                 TextView a = dialog.findViewById(R.id.yes);
-                                a.setText("Ad will start in 5sec");
+                                a.setText("Ad will begin shortly");
 
 
                                 //updateCountDown();
@@ -1085,6 +1099,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void onFinish() {
                                 mTimerRunning = false;
+                                (dialog.findViewById(R.id.cd)).setVisibility(View.INVISIBLE);
 
                                 if (Constants.rewardedAd.isLoaded() && stateAlive[0]) {
                                     Constants.rewardedAd.show(GameActivity.this, new RewardedAdCallback() {
@@ -1439,22 +1454,22 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         text.setText("Watch This video and get chance");
                         TextView a = dialog.findViewById(R.id.yes);
 
-
-
                         countDownTimer = new CountDownTimer(TimeLeftInMillis, 5000) {
                             @Override
                             public void onTick(long millisUntilFinished) {
+                                (dialog.findViewById(R.id.cd)).setVisibility(View.VISIBLE);
                                 TimeLeftInMillis=millisUntilFinished;
                                 int seconds = (int) (TimeLeftInMillis / 1000) % 60;
                                 String timeLeftFormatted = String.format(Locale.getDefault(), "%02d", seconds);
                                 TextView a = dialog.findViewById(R.id.yes);
-                                a.setText("Ad will start in 5sec");
+                                a.setText("Ad will begin shortly");
 
 
                                 //updateCountDown();
                             }
                             @Override
                             public void onFinish() {
+                                (dialog.findViewById(R.id.cd)).setVisibility(View.INVISIBLE);
                                 mTimerRunning = false;
                                 if(Constants.rewardedAd.isLoaded()){
                                     Constants.rewardedAd.show(GameActivity.this, new RewardedAdCallback() {
@@ -2051,11 +2066,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         countDownTimer = new CountDownTimer(TimeLeftInMillis, 5000) {
                             @Override
                             public void onTick(long millisUntilFinished) {
+                                (dialog.findViewById(R.id.cd)).setVisibility(View.VISIBLE);
                                 TimeLeftInMillis = millisUntilFinished;
                                 int seconds = (int) (TimeLeftInMillis / 1000) % 60;
                                 String timeLeftFormatted = String.format(Locale.getDefault(), "%02d", seconds);
                                 TextView a = dialog.findViewById(R.id.yes);
-                                a.setText("Ad will start in 5sec");
+                                a.setText("Ad will begin shortly");
 
 
                                 //updateCountDown();
@@ -2065,6 +2081,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             public void onFinish() {
                                 mTimerRunning = false;
 
+                                (dialog.findViewById(R.id.cd)).setVisibility(View.INVISIBLE);
                                 if (Constants.rewardedAd.isLoaded() && stateAlive[0]) {
                                     Constants.rewardedAd.show(GameActivity.this, new RewardedAdCallback() {
                                         @Override

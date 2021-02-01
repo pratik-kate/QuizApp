@@ -588,15 +588,30 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onBackPressed() {
         pauseTimer();
-        AlertDialog alertbox = new AlertDialog.Builder(this)
-                .setMessage("Do you want to quit the game?")
-                .setPositiveButton("Yes", (arg0, arg1) -> {
-                    super.onBackPressed();
-                    finish();
-                })
-                .setNegativeButton("No", (arg0, arg1) -> {arg0.dismiss();startTimer(mTimeLeftInMillis);})
-                .show();
+
+        final Dialog dialog2 = new Dialog(TimeModeActivity.this);
+        dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+        dialog2.setContentView(R.layout.alert);
+        dialog2.setCancelable(true);
+        WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+        lp2.copyFrom(dialog2.getWindow().getAttributes());
+        lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp2.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        TextView text = dialog2.findViewById(R.id.atext);
+        text.setText("Do you want to quit?");
+        (dialog2.findViewById(R.id.yes)).setOnClickListener(v1 -> {
+            super.onBackPressed();
+            finish();
+            dialog2.dismiss();
+        });
+        (dialog2.findViewById(R.id.no)).setOnClickListener(v1 -> {
+            dialog2.dismiss();
+            startTimer(mTimeLeftInMillis);
+        });
+        dialog2.show();
+        dialog2.getWindow().setAttributes(lp2);
     }
+
     @Override
     public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
         Toast.makeText(this, "Rewarded", Toast.LENGTH_SHORT).show();

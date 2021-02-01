@@ -53,65 +53,55 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/swapview" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout8"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/atext">
-
-        <TextView
-            android:id="@+id/no"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/no"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="@drawable/ripple"
-            android:paddingStart="20dp"
-            android:paddingTop="10dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="10dp"
-            android:text="NO"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/yes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:background="@drawable/yes"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="@drawable/ripple"
-            android:paddingStart="20dp"
-            android:paddingTop="10dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="10dp"
-            android:text="YES"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
     <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/magicgif"
+        android:id="@+id/cd"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@drawable/countdown"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout8"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/linearLayout8"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout8" />
+        app:layout_constraintEnd_toEndOf="@+id/atext"
+        app:layout_constraintStart_toStartOf="@+id/atext"
+        app:layout_constraintTop_toBottomOf="@+id/atext" />
+
+    <TextView
+        android:id="@+id/yes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/yes"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="@drawable/ripple"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp"
+        android:text="YES"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/atext"
+        app:layout_constraintTop_toBottomOf="@+id/cd" />
+
+    <TextView
+        android:id="@+id/no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/no"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="@drawable/ripple"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp"
+        android:text="NO"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/atext"
+        app:layout_constraintTop_toBottomOf="@+id/cd" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -36,7 +36,7 @@
         android:fontFamily="@font/aladin"
         android:gravity="center"
         android:padding="5dp"
-        android:shadowColor="#000000"
+        android:shadowColor="#3544A1"
         android:shadowDx="10"
         android:shadowDy="15"
         android:shadowRadius="5"

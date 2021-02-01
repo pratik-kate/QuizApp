@@ -642,14 +642,28 @@ public class HardActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onBackPressed() {
         pauseTimer();
-        AlertDialog alertbox = new AlertDialog.Builder(this)
-                .setMessage("Do you want to quit the game?")
-                .setPositiveButton("Yes", (arg0, arg1) -> {
-                    super.onBackPressed();
-                    finish();
-                })
-                .setNegativeButton("No", (arg0, arg1) -> {arg0.dismiss();startTimer(mTimeLeftInMillis);})
-                .show();
+
+        final Dialog dialog2 = new Dialog(HardActivity.this);
+        dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+        dialog2.setContentView(R.layout.alert);
+        dialog2.setCancelable(true);
+        WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+        lp2.copyFrom(dialog2.getWindow().getAttributes());
+        lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp2.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        TextView text = dialog2.findViewById(R.id.atext);
+        text.setText("Do you want to quit?");
+        (dialog2.findViewById(R.id.yes)).setOnClickListener(v1 -> {
+            super.onBackPressed();
+            finish();
+            dialog2.dismiss();
+        });
+        (dialog2.findViewById(R.id.no)).setOnClickListener(v1 -> {
+            dialog2.dismiss();
+            startTimer(mTimeLeftInMillis);
+        });
+        dialog2.show();
+        dialog2.getWindow().setAttributes(lp2);
     }
 
     @Override
@@ -724,7 +738,7 @@ public class HardActivity extends AppCompatActivity implements View.OnClickListe
                                     });
                                 } else {
 
-                                    startTimer(mTimeLeftInMillis);
+                                    //startTimer(mTimeLeftInMillis);
                                     //Toast.makeText(HardActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
                                 }
                                 dialog2.dismiss();
@@ -1070,6 +1084,7 @@ public class HardActivity extends AppCompatActivity implements View.OnClickListe
                         countDownTimer = new CountDownTimer(TimeLeftInMillis, 5000) {
                             @Override
                             public void onTick(long millisUntilFinished) {
+                                (dialog.findViewById(R.id.cd)).setVisibility(View.VISIBLE);
                                 TimeLeftInMillis = millisUntilFinished;
                                 int seconds = (int) (TimeLeftInMillis / 1000) % 60;
                                 String timeLeftFormatted = String.format(Locale.getDefault(), "%02d", seconds);
@@ -1083,6 +1098,7 @@ public class HardActivity extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void onFinish() {
                                 mTimerRunning = false;
+                                (dialog.findViewById(R.id.cd)).setVisibility(View.INVISIBLE);
 
                                 if (Constants.rewardedAd.isLoaded() && stateAlive[0]) {
                                     Constants.rewardedAd.show(HardActivity.this, new RewardedAdCallback() {
@@ -1095,8 +1111,8 @@ public class HardActivity extends AppCompatActivity implements View.OnClickListe
                                         }
                                     });
                                 } else {
-                                    startTimer(mTimeLeftInMillis);
-                                    Toast.makeText(HardActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
+//                                    startTimer(mTimeLeftInMillis);
+//                                    Toast.makeText(HardActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }.start();
@@ -1988,6 +2004,7 @@ public class HardActivity extends AppCompatActivity implements View.OnClickListe
                         countDownTimer = new CountDownTimer(TimeLeftInMillis, 5000) {
                             @Override
                             public void onTick(long millisUntilFinished) {
+                                (dialog.findViewById(R.id.cd)).setVisibility(View.VISIBLE);
                                 TimeLeftInMillis = millisUntilFinished;
                                 int seconds = (int) (TimeLeftInMillis / 1000) % 60;
                                 String timeLeftFormatted = String.format(Locale.getDefault(), "%02d", seconds);
@@ -2001,6 +2018,7 @@ public class HardActivity extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void onFinish() {
                                 mTimerRunning = false;
+                                (dialog.findViewById(R.id.cd)).setVisibility(View.INVISIBLE);
 
                                 if (Constants.rewardedAd.isLoaded() && stateAlive[0]) {
                                     Constants.rewardedAd.show(HardActivity.this, new RewardedAdCallback() {
@@ -2013,8 +2031,8 @@ public class HardActivity extends AppCompatActivity implements View.OnClickListe
                                         }
                                     });
                                 } else {
-                                    startTimer(mTimeLeftInMillis);
-                                    Toast.makeText(HardActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
+//                                    startTimer(mTimeLeftInMillis);
+//                                    Toast.makeText(HardActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }.start();
