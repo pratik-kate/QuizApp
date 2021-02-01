@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -23,6 +24,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAdCallback;
@@ -63,6 +68,12 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
     private boolean mTimerRunning;
     private long mTimeLeftInMillis = START_TIME_IN_MILLIS;
     Boolean doubledip=true,ffifty=true,sswap=true;
+    Boolean[] stateAlive = {true};
+    Boolean[] used ={true};
+    Boolean[] timer ={true};
+
+    private InterstitialAd mInterstitialAd;
+    AdRequest adRequest;
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -70,6 +81,44 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medium);
         getSupportActionBar().hide();
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        adRequest = new AdRequest.Builder().build();
+        mInterstitialAd.loadAd(adRequest);
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                //Toast.makeText(EraserActivity.this, "full ad", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAdFailedToLoad(LoadAdError adError) {
+                // Code to be executed when an ad request fails.
+                super.onAdFailedToLoad(adError);
+                mInterstitialAd.loadAd(adRequest);
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when the ad is displayed.
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the interstitial ad is closed.
+            }
+        });
         SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
         editor.clear();
         editor.apply();
@@ -153,7 +202,6 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
 
             pauseTimer();
             if(ffifty){
-
                 final Dialog dialog2 = new Dialog(MediumActivity.this);
                 dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                 dialog2.setContentView(R.layout.fifty);
@@ -244,8 +292,8 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
                         });
                     }
                     else{
-                        startTimer(mTimeLeftInMillis);
-                        Toast.makeText(MediumActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
+//                        startTimer(mTimeLeftInMillis);
+//                        Toast.makeText(MediumActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
                     }
                     dialog2.dismiss();
                 });
@@ -352,8 +400,8 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
                         });
                     }
                     else{
-                        startTimer(mTimeLeftInMillis);
-                        Toast.makeText(MediumActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
+//                        startTimer(mTimeLeftInMillis);
+//                        Toast.makeText(MediumActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
                     }
                     dialog2.dismiss();
                 });
@@ -568,8 +616,8 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
                         });
                     }
                     else{
-                        startTimer(mTimeLeftInMillis);
-                        Toast.makeText(MediumActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
+//                        startTimer(mTimeLeftInMillis);
+//                        Toast.makeText(MediumActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
                     }
                     dialog2.dismiss();
                 });
@@ -584,8 +632,6 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
 
             }
         });
-
-
 
     }
 
@@ -606,6 +652,13 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
         Toast.makeText(this, "Rewarded", Toast.LENGTH_SHORT).show();
     }
 
+    private void showinterstitial(){
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        } else {
+            Log.d("TAG", "The interstitial wasn't loaded yet.");
+        }
+    }
     private void showInterstitial() {
 
         try{
@@ -613,16 +666,16 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
             SharedPreferences preferences = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE);
             final int[] credits = {preferences.getInt(String.valueOf(MainActivity.coins), 0)};
             //Toast.makeText(this, "Reward", Toast.LENGTH_SHORT).show();
-            credits[0] = credits[0] + 100;
+            credits[0] = credits[0] + 500;
             SharedPreferences.Editor editor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
             editor.putInt(String.valueOf(MainActivity.coins),credits[0]);
             editor.apply();
             editor.commit();
-            Toast.makeText(MediumActivity.this, "100 Coins Won", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MediumActivity.this, "500 Coins Won", Toast.LENGTH_SHORT).show();
             Constants.loadAd(this);
         });
         }catch (Exception e){
-            Toast.makeText(this, "Please Wait Ad is loading", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Please Wait Ad is loading", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -641,70 +694,140 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        // gif.setVisibility(View.INVISIBLE);
-                        //Toast.makeText(MediumActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
-                        final Dialog dialog2 = new Dialog(MediumActivity.this);
-                        dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-                        dialog2.setContentView(R.layout.alert);
-                        dialog2.setCancelable(true);
-                        WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
-                        lp2.copyFrom(dialog2.getWindow().getAttributes());
-                        lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
-                        lp2.height = WindowManager.LayoutParams.WRAP_CONTENT;
-                        TextView text = dialog2.findViewById(R.id.atext);
-                        text.setText("Watch Ad To Get 15s More");
-                        (dialog2.findViewById(R.id.yes)).setOnClickListener(v1 -> {
-                            mTimerRunning = true;
-                            if(Constants.rewardedAd.isLoaded()){
-                                Constants.rewardedAd.show(MediumActivity.this, new RewardedAdCallback() {
-                                    @Override
-                                    public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                                        startTimer(TIME);
-                                        //Toast.makeText(MediumActivity.this, "done", Toast.LENGTH_SHORT).show();
-                                        Constants.loadRewardedAd(MediumActivity.this);
+                        if(timer[0]) {
+                            final Dialog dialog2 = new Dialog(MediumActivity.this);
+                            dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                            dialog2.setContentView(R.layout.alert);
+                            dialog2.setCancelable(true);
+                            WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+                            lp2.copyFrom(dialog2.getWindow().getAttributes());
+                            lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+                            lp2.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                            TextView text = dialog2.findViewById(R.id.atext);
+                            text.setText("Watch Ad To Get 15s More");
+                            (dialog2.findViewById(R.id.yes)).setOnClickListener(v1 -> {
+                                timer[0]=false;
+                                if (Constants.rewardedAd.isLoaded()) {
+                                    Constants.rewardedAd.show(MediumActivity.this, new RewardedAdCallback() {
+                                        @Override
+                                        public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                                            startTimer(TIME);
+                                            //Toast.makeText(MediumActivity.this, "done", Toast.LENGTH_SHORT).show();
+                                            Constants.loadRewardedAd(MediumActivity.this);
+                                        }
+                                    });
+                                } else {
+
+                                    //startTimer(mTimeLeftInMillis);
+                                    //Toast.makeText(MediumActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
+                                }
+                                dialog2.dismiss();
+                            });
+                            (dialog2.findViewById(R.id.no)).setOnClickListener(v1 -> {
+                                //startTimer(mTimeLeftInMillis);
+                                if (currentQuestion == 14) {
+                                    final Dialog dialog = new Dialog(MediumActivity.this, R.style.PauseDialog);
+                                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                                    dialog.setContentView(R.layout.finish);
+                                    dialog.setCancelable(true);
+                                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                                    lp.copyFrom(dialog.getWindow().getAttributes());
+                                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                    lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                                    TextView lvl = dialog.findViewById(R.id.flevel);
+                                    lvl.setText("Easy");
+                                    (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
+                                    (dialog.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
+                                    (dialog.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
+                                    (dialog.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
+                                        SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                        editor.clear();
+                                        editor.apply();
+                                        editor.commit();
+                                        startActivity(new Intent(MediumActivity.this, PlayActivity.class));
+                                    });
+                                    (dialog.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
+                                        SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                        editor.clear();
+                                        editor.apply();
+                                        editor.commit();
+                                        startActivity(new Intent(MediumActivity.this, MainActivity.class));
+                                    });
+                                    (dialog.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
+                                        SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                        editor.clear();
+                                        editor.apply();
+                                        editor.commit();
+                                        startActivity(getIntent());
+                                    });
+                                    SharedPreferences preferences = getSharedPreferences(CORRECT, MODE_PRIVATE);
+                                    int c = preferences.getInt(ANS, 0);
+
+                                    //gamefinish
+                                    TextView scoretxt = (dialog.findViewById(R.id.scoretext));
+                                    if (c < 6) {
+                                        (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                        scoretxt.setText(String.valueOf(c * 100));
+                                    } else if (c <= 14) {
+                                        (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                        (dialog.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                        scoretxt.setText(String.valueOf(c * 100));
+                                        //edit.putInt(MainActivity.CURRENT,1);
+
+                                    } else if (c == 15) {
+                                        (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                        (dialog.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                        (dialog.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                                        scoretxt.setText(String.valueOf(c * 100));
                                     }
-                                });
-                            }
-                            else{
-                                startTimer(mTimeLeftInMillis);
-                                Toast.makeText(MediumActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
-                            }
-                            dialog2.dismiss();
-                        });
-                        (dialog2.findViewById(R.id.no)).setOnClickListener(v1 -> {
-                            //startTimer(mTimeLeftInMillis);
-                            if(currentQuestion==14) {
+                                    TranslateAnimation anim = new TranslateAnimation(0, 0, 0, 0);
+                                    anim.setDuration(1000);
+
+                                    dialog.show();
+                                    dialog.getWindow().setAttributes(lp);
+                                    showInterstitial();
+                                } else {
+                                    //startTimer(mTimeLeftInMillis);
+                                    currentQuestion++;
+                                    i++;
+                                    current.setText(i + "/");
+                                    setQuestionScreen(currentQuestion);
+                                    clickable(true);
+                                    reset();
+                                }
+                                dialog2.dismiss();
+
+                            });
+                            dialog2.show();
+                            dialog2.getWindow().setAttributes(lp2);
+                        }else{
+                            if (currentQuestion == 14) {
+
                                 final Dialog dialog = new Dialog(MediumActivity.this, R.style.PauseDialog);
                                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                                 dialog.setContentView(R.layout.finish);
                                 dialog.setCancelable(true);
-
                                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                                 lp.copyFrom(dialog.getWindow().getAttributes());
                                 lp.width = WindowManager.LayoutParams.MATCH_PARENT;
                                 lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-
                                 TextView lvl = dialog.findViewById(R.id.flevel);
                                 lvl.setText("Easy");
                                 (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
                                 (dialog.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
                                 (dialog.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
-
                                 (dialog.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
                                     SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                                     editor.clear();
                                     editor.apply();
                                     editor.commit();
-
                                     startActivity(new Intent(MediumActivity.this, PlayActivity.class));
                                 });
-
                                 (dialog.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
                                     SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                                     editor.clear();
                                     editor.apply();
                                     editor.commit();
-
                                     startActivity(new Intent(MediumActivity.this, MainActivity.class));
                                 });
                                 (dialog.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
@@ -718,7 +841,7 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
                                 int c = preferences.getInt(ANS, 0);
 
                                 //gamefinish
-                                TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
+                                TextView scoretxt = (dialog.findViewById(R.id.scoretext));
                                 if (c < 6) {
                                     (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
                                     scoretxt.setText(String.valueOf(c * 100));
@@ -740,23 +863,16 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
                                 dialog.show();
                                 dialog.getWindow().setAttributes(lp);
                                 showInterstitial();
-                            }
-                            else{
-                                mTimerRunning = true;
+                            } else {
                                 startTimer(mTimeLeftInMillis);
                                 currentQuestion++;
                                 i++;
-                                current.setText(i+"/");
+                                current.setText(i + "/");
                                 setQuestionScreen(currentQuestion);
                                 clickable(true);
                                 reset();
                             }
-                            dialog2.dismiss();
-
-                        });
-                        dialog2.show();
-                        dialog2.getWindow().setAttributes(lp2);
-
+                        }
                     }
                 },100);
             }
@@ -784,6 +900,7 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
     @SuppressLint("UseCompatLoadingForDrawables")
     private void checkAnswer(TextView selected) {
         String selectedAnswer = selected.getText().toString();
+
         if(selectedAnswer.equals(questionItems.get(currentQuestion).getCorrect())){
             selected.setBackground(getResources().getDrawable(R.drawable.option_right));
             correct++;
@@ -807,82 +924,117 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
                         clickable(true);
                         reset();
                     }else {
-                        //Toast.makeText(MediumActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
-                        final Dialog dialog2 = new Dialog(MediumActivity.this,R.style.PauseDialog);
-                        dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-                        dialog2.setContentView(R.layout.finish);
-                        dialog2.setCancelable(true);
 
-                        WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
-                        lp2.copyFrom(dialog2.getWindow().getAttributes());
-                        lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
-                        lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
+                        final Dialog dialog = new Dialog(MediumActivity.this);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                        dialog.setContentView(R.layout.alert);
+                        dialog.setCancelable(true);
+                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                        lp.copyFrom(dialog.getWindow().getAttributes());
+                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                        TextView text = dialog.findViewById(R.id.atext);
+                        text.setText("Congrats! You Completed The Level. watch this video to get 500 extra coins");
+                        TextView a = dialog.findViewById(R.id.yes);
+                        TextView b = dialog.findViewById(R.id.no);
 
-                        TextView lvl = dialog2.findViewById(R.id.flevel);
-                        lvl.setText("Normal");
-                        (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
-                        (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
-                        (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
+                        countDownTimer = new CountDownTimer(TimeLeftInMillis, 5000) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                                TimeLeftInMillis=millisUntilFinished;
+                                int seconds = (int) (TimeLeftInMillis / 1000) % 60;
+                                String timeLeftFormatted = String.format(Locale.getDefault(), "%02d", seconds);
+                                TextView a = dialog.findViewById(R.id.yes);
+                                a.setText("Ad will start in 5sec");
 
-                        SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
-                        clvleditor.putInt(MainActivity.CURRENT,clvl);
-                        clvleditor.apply();
-                        clvleditor.commit();
-                        (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
-                            SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                            editor.clear();
-                            editor.apply();
-                            editor.commit();
-                            startActivity(new Intent(MediumActivity.this,PlayActivity.class));
+                                //updateCountDown();
+                            }
+                            @Override
+                            public void onFinish() {
+                                mTimerRunning = false;
+                                if(stateAlive[0]){showInterstitial();}
+                                else{
+                                    Toast.makeText(MediumActivity.this, "You Won", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }.start();
+                        (dialog.findViewById(R.id.no)).setOnClickListener(v1 -> {
+                            stateAlive[0] =false;
+
+                            //finish();
+                            startTimer(mTimeLeftInMillis);
+                            final Dialog dialog2 = new Dialog(MediumActivity.this,R.style.PauseDialog);
+                            dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                            dialog2.setContentView(R.layout.finish);
+                            dialog2.setCancelable(true);
+                            WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+                            lp2.copyFrom(dialog2.getWindow().getAttributes());
+                            lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+                            lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
+                            TextView lvl = dialog2.findViewById(R.id.flevel);
+                            lvl.setText("Easy");
+                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
+                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
+                            (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
+                            SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
+                            clvleditor.putInt(MainActivity.CURRENT,clvl);
+                            clvleditor.apply();
+                            clvleditor.commit();
+                            (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
+                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                editor.clear();
+                                editor.apply();
+                                editor.commit();
+                                startActivity(new Intent(MediumActivity.this,PlayActivity.class));
+                            });
+                            (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
+                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                editor.clear();
+                                editor.apply();
+                                editor.commit();
+                                startActivity(new Intent(MediumActivity.this,MainActivity.class));
+                            });
+                            (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
+                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                editor.clear();
+                                editor.apply();
+                                editor.commit();
+                                startActivity(getIntent());
+                            });
+                            SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
+                            int c = preferences.getInt(ANS,0);
+                            SharedPreferences.Editor edit = getSharedPreferences(LEVEL,MODE_PRIVATE).edit();
+                            int score = getSharedPreferences(LEVEL,MODE_PRIVATE).getInt(SCORE,0);
+                            TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
+                            if(c<6){
+                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                score = score+(c*100);
+                                edit.putInt(MainActivity.SCORE,score);
+                                scoretxt.setText(String.valueOf(c*100));
+                            }else if(c<=14){
+                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                score = score+(c*100);
+                                edit.putInt(MainActivity.SCORE,score);
+                                scoretxt.setText(String.valueOf(c*100));
+                                edit.putInt(MainActivity.CURRENT,1);
+                            }else if(c==15){
+                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                                score = score+(c*100);
+                                edit.putInt(MainActivity.SCORE,score);
+                                scoretxt.setText(String.valueOf(c*100));
+                            }
+                            edit.apply();
+                            edit.commit();
+                            dialog2.show();
+                            dialog2.getWindow().setAttributes(lp2);
+                            showinterstitial();
+                            dialog.dismiss();
                         });
-
-                        (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
-                            SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                            editor.clear();
-                            editor.apply();
-                            editor.commit();
-                            startActivity(new Intent(MediumActivity.this,MainActivity.class));
-                        });
-                        (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
-                            SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                            editor.clear();
-                            editor.apply();
-                            editor.commit();
-                            startActivity(getIntent());
-                        });
-                        SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
-                        int c = preferences.getInt(ANS,0);
-
-                        SharedPreferences.Editor edit = getSharedPreferences(LEVEL,MODE_PRIVATE).edit();
-                        int score = getSharedPreferences(LEVEL,MODE_PRIVATE).getInt(SCORE,0);
-
-                        TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
-//gamefinish
-                        if(c<6){
-                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                            score = score+(c*100);
-                            edit.putInt(MainActivity.SCORE,score);
-                            scoretxt.setText(String.valueOf(c*100));
-                        }else if(c<=14){
-                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                            score = score+(c*100);
-                            edit.putInt(MainActivity.SCORE,score);
-                            scoretxt.setText(String.valueOf(c*100));
-                            edit.putInt(MainActivity.CURRENT,2);
-                        }else if(c==15){
-                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                            (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
-                            score = score+(c*100);
-                            edit.putInt(MainActivity.SCORE,score);
-                            scoretxt.setText(String.valueOf(c*100));
-                        }
-                        edit.apply();
-                        edit.commit();
-                        dialog2.show();
-                        dialog2.getWindow().setAttributes(lp2);
-                        showInterstitial();
+                        dialog.show();
+                        dialog.getWindow().setAttributes(lp);
                     }
                 }
             },800);
@@ -890,78 +1042,143 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
         } else {
             selected.setBackground(getResources().getDrawable(R.drawable.option_wrong));
             wrong++;
+            final boolean[] stateAlive = {true};
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     reset();
                     pauseTimer();
-                    final Dialog dialog = new Dialog(MediumActivity.this);
-                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-                    dialog.setContentView(R.layout.alert);
-                    dialog.setCancelable(true);
-                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                    lp.copyFrom(dialog.getWindow().getAttributes());
-                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-                    TextView text = dialog.findViewById(R.id.atext);
-                    text.setText("Watch This video and get chance");
-                    TextView a = dialog.findViewById(R.id.yes);
+                    if(used[0]) {
+                        used[0]=false;
+                        final Dialog dialog = new Dialog(MediumActivity.this);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                        dialog.setContentView(R.layout.alert);
+                        dialog.setCancelable(true);
+                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                        lp.copyFrom(dialog.getWindow().getAttributes());
+                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                        TextView text = dialog.findViewById(R.id.atext);
+                        text.setText("Watch This video and get chance");
+                        TextView a = dialog.findViewById(R.id.yes);
+                        countDownTimer = new CountDownTimer(TimeLeftInMillis, 5000) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                                TimeLeftInMillis = millisUntilFinished;
+                                int seconds = (int) (TimeLeftInMillis / 1000) % 60;
+                                String timeLeftFormatted = String.format(Locale.getDefault(), "%02d", seconds);
+                                TextView a = dialog.findViewById(R.id.yes);
+                                a.setText("Ad will start in 5sec");
 
 
-
-                    countDownTimer = new CountDownTimer(TimeLeftInMillis, 5000) {
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-                            TimeLeftInMillis=millisUntilFinished;
-                            int seconds = (int) (TimeLeftInMillis / 1000) % 60;
-                            String timeLeftFormatted = String.format(Locale.getDefault(), "%02d", seconds);
-                            TextView a = dialog.findViewById(R.id.yes);
-                            a.setText("Ad will start in 5sec");
-
-
-                            //updateCountDown();
-                        }
-                        @Override
-                        public void onFinish() {
-                            mTimerRunning = false;
-                            if(Constants.rewardedAd.isLoaded()){
-                                Constants.rewardedAd.show(MediumActivity.this, new RewardedAdCallback() {
-                                    @Override
-                                    public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                                        startTimer(mTimeLeftInMillis);
-                                        //Toast.makeText(MediumActivity.this, "done", Toast.LENGTH_SHORT).show();
-                                        Constants.loadRewardedAd(MediumActivity.this);
-                                        dialog.dismiss();
-                                    }
-                                });
+                                //updateCountDown();
                             }
-                            else{
-                                startTimer(mTimeLeftInMillis);
-                                Toast.makeText(MediumActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }.start();
-//                    (dialog.findViewById(R.id.yes)).setOnClickListener(v1 -> {
-//                        if(Constants.rewardedAd.isLoaded()){
-//                            Constants.rewardedAd.show(MediumActivity.this, new RewardedAdCallback() {
-//                                @Override
-//                                public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+
+                            @Override
+                            public void onFinish() {
+                                mTimerRunning = false;
+
+                                if (Constants.rewardedAd.isLoaded() && stateAlive[0]) {
+                                    Constants.rewardedAd.show(MediumActivity.this, new RewardedAdCallback() {
+                                        @Override
+                                        public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                                            startTimer(mTimeLeftInMillis);
+                                            //Toast.makeText(MediumActivity.this, "done", Toast.LENGTH_SHORT).show();
+                                            Constants.loadRewardedAd(MediumActivity.this);
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                } else {
 //                                    startTimer(mTimeLeftInMillis);
-//                                    //Toast.makeText(MediumActivity.this, "done", Toast.LENGTH_SHORT).show();
-//                                    Constants.loadRewardedAd(MediumActivity.this);
-//                                }
-//                            });
-//                        }
-//                        else{
-//                            startTimer(mTimeLeftInMillis);
-//                            Toast.makeText(MediumActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
-//                        }
-//                        dialog.dismiss();
-//                    });
-                    (dialog.findViewById(R.id.no)).setOnClickListener(v1 -> {
-                        startTimer(mTimeLeftInMillis);
-                        final Dialog dialog2 = new Dialog(MediumActivity.this,R.style.PauseDialog);
+//                                    Toast.makeText(MediumActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }.start();
+                        (dialog.findViewById(R.id.no)).setOnClickListener(v1 -> {
+                            stateAlive[0] = false;
+
+                            //finish();
+                            //startTimer(mTimeLeftInMillis);
+                            final Dialog dialog2 = new Dialog(MediumActivity.this, R.style.PauseDialog);
+                            dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                            dialog2.setContentView(R.layout.finish);
+                            dialog2.setCancelable(true);
+                            WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+                            lp2.copyFrom(dialog2.getWindow().getAttributes());
+                            lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+                            lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
+                            TextView lvl = dialog2.findViewById(R.id.flevel);
+                            lvl.setText("Easy");
+                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
+                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
+                            (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
+                            SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL, MODE_PRIVATE).edit();
+                            clvleditor.putInt(MainActivity.CURRENT, clvl);
+                            clvleditor.apply();
+                            clvleditor.commit();
+                            (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
+                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                editor.clear();
+                                editor.apply();
+                                editor.commit();
+                                startActivity(new Intent(MediumActivity.this, PlayActivity.class));
+                            });
+                            (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
+                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                editor.clear();
+                                editor.apply();
+                                editor.commit();
+                                startActivity(new Intent(MediumActivity.this, MainActivity.class));
+                            });
+                            (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
+                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                editor.clear();
+                                editor.apply();
+                                editor.commit();
+                                startActivity(getIntent());
+                            });
+                            SharedPreferences preferences = getSharedPreferences(CORRECT, MODE_PRIVATE);
+                            int c = preferences.getInt(ANS, 0);
+                            SharedPreferences.Editor edit = getSharedPreferences(LEVEL, MODE_PRIVATE).edit();
+                            int score = getSharedPreferences(LEVEL, MODE_PRIVATE).getInt(SCORE, 0);
+                            TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
+                            if (c < 6) {
+                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                score = score + (c * 100);
+                                edit.putInt(MainActivity.SCORE, score);
+                                scoretxt.setText(String.valueOf(c * 100));
+                            } else if (c <= 14) {
+                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                score = score + (c * 100);
+                                edit.putInt(MainActivity.SCORE, score);
+                                scoretxt.setText(String.valueOf(c * 100));
+                                edit.putInt(MainActivity.CURRENT, 1);
+                            } else if (c == 15) {
+                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                                score = score + (c * 100);
+                                edit.putInt(MainActivity.SCORE, score);
+                                scoretxt.setText(String.valueOf(c * 100));
+                            }
+                            edit.apply();
+                            edit.commit();
+                            dialog2.show();
+                            dialog2.getWindow().setAttributes(lp2);
+                            showinterstitial();
+                            dialog.dismiss();
+
+                        });
+                        dialog.show();
+                        dialog.getWindow().setAttributes(lp);
+                    }else{
+                        stateAlive[0] = false;
+
+                        //finish();
+                        //startTimer(mTimeLeftInMillis);
+                        final Dialog dialog2 = new Dialog(MediumActivity.this, R.style.PauseDialog);
                         dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                         dialog2.setContentView(R.layout.finish);
                         dialog2.setCancelable(true);
@@ -974,8 +1191,8 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
                         (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
                         (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
                         (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
-                        SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
-                        clvleditor.putInt(MainActivity.CURRENT,clvl);
+                        SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL, MODE_PRIVATE).edit();
+                        clvleditor.putInt(MainActivity.CURRENT, clvl);
                         clvleditor.apply();
                         clvleditor.commit();
                         (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
@@ -983,14 +1200,14 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
                             editor.clear();
                             editor.apply();
                             editor.commit();
-                            startActivity(new Intent(MediumActivity.this,PlayActivity.class));
+                            startActivity(new Intent(MediumActivity.this, PlayActivity.class));
                         });
                         (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
                             SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                             editor.clear();
                             editor.apply();
                             editor.commit();
-                            startActivity(new Intent(MediumActivity.this,MainActivity.class));
+                            startActivity(new Intent(MediumActivity.this, MainActivity.class));
                         });
                         (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
                             SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
@@ -999,41 +1216,38 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
                             editor.commit();
                             startActivity(getIntent());
                         });
-                        SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
-                        int c = preferences.getInt(ANS,0);
-                        SharedPreferences.Editor edit = getSharedPreferences(LEVEL,MODE_PRIVATE).edit();
-                        int score = getSharedPreferences(LEVEL,MODE_PRIVATE).getInt(SCORE,0);
+                        SharedPreferences preferences = getSharedPreferences(CORRECT, MODE_PRIVATE);
+                        int c = preferences.getInt(ANS, 0);
+                        SharedPreferences.Editor edit = getSharedPreferences(LEVEL, MODE_PRIVATE).edit();
+                        int score = getSharedPreferences(LEVEL, MODE_PRIVATE).getInt(SCORE, 0);
                         TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
-                        if(c<6){
+                        if (c < 6) {
                             (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                            score = score+(c*100);
-                            edit.putInt(MainActivity.SCORE,score);
-                            scoretxt.setText(String.valueOf(c*100));
-                        }else if(c<=14){
+                            score = score + (c * 100);
+                            edit.putInt(MainActivity.SCORE, score);
+                            scoretxt.setText(String.valueOf(c * 100));
+                        } else if (c <= 14) {
                             (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
                             (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                            score = score+(c*100);
-                            edit.putInt(MainActivity.SCORE,score);
-                            scoretxt.setText(String.valueOf(c*100));
-                            edit.putInt(MainActivity.CURRENT,1);
-                        }else if(c==15){
+                            score = score + (c * 100);
+                            edit.putInt(MainActivity.SCORE, score);
+                            scoretxt.setText(String.valueOf(c * 100));
+                            edit.putInt(MainActivity.CURRENT, 1);
+                        } else if (c == 15) {
                             (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
                             (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
                             (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
-                            score = score+(c*100);
-                            edit.putInt(MainActivity.SCORE,score);
-                            scoretxt.setText(String.valueOf(c*100));
+                            score = score + (c * 100);
+                            edit.putInt(MainActivity.SCORE, score);
+                            scoretxt.setText(String.valueOf(c * 100));
                         }
                         edit.apply();
                         edit.commit();
                         dialog2.show();
                         dialog2.getWindow().setAttributes(lp2);
-                        //showInterstitial();
-                        dialog.dismiss();
+                        showinterstitial();
 
-                    });
-                    dialog.show();
-                    dialog.getWindow().setAttributes(lp);
+                    }
                     /////
 
                 }
@@ -1075,81 +1289,117 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
                         clickable(true);
                         reset();
                     }else {
-                        //Toast.makeText(MediumActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
-                        final Dialog dialog2 = new Dialog(MediumActivity.this,R.style.PauseDialog);
-                        dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-                        dialog2.setContentView(R.layout.finish);
-                        dialog2.setCancelable(true);
 
-                        WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
-                        lp2.copyFrom(dialog2.getWindow().getAttributes());
-                        lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
-                        lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
+                        final Dialog dialog = new Dialog(MediumActivity.this);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                        dialog.setContentView(R.layout.alert);
+                        dialog.setCancelable(true);
+                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                        lp.copyFrom(dialog.getWindow().getAttributes());
+                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                        TextView text = dialog.findViewById(R.id.atext);
+                        text.setText("Congrats! You Completed The Level. watch this video to get 500 extra coins");
+                        TextView a = dialog.findViewById(R.id.yes);
+                        TextView b = dialog.findViewById(R.id.no);
 
-                        TextView lvl = dialog2.findViewById(R.id.flevel);
-                        lvl.setText("Level "+String.valueOf(level));
-                        (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
-                        (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
-                        (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
+                        countDownTimer = new CountDownTimer(TimeLeftInMillis, 5000) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                                TimeLeftInMillis=millisUntilFinished;
+                                int seconds = (int) (TimeLeftInMillis / 1000) % 60;
+                                String timeLeftFormatted = String.format(Locale.getDefault(), "%02d", seconds);
+                                TextView a = dialog.findViewById(R.id.yes);
+                                a.setText("Ad will start in 5sec");
 
-                        SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
-                        clvleditor.putInt(MainActivity.CURRENT,clvl);
-                        clvleditor.apply();
-                        clvleditor.commit();
-                        (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
-                            SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                            editor.clear();
-                            editor.apply();
-                            editor.commit();
-                            startActivity(new Intent(MediumActivity.this,PlayActivity.class));
+                                //updateCountDown();
+                            }
+                            @Override
+                            public void onFinish() {
+                                mTimerRunning = false;
+                                if(stateAlive[0]){showInterstitial();}
+                                else{
+                                    Toast.makeText(MediumActivity.this, "You Won", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }.start();
+                        (dialog.findViewById(R.id.no)).setOnClickListener(v1 -> {
+                            stateAlive[0] =false;
+
+                            //finish();
+                            startTimer(mTimeLeftInMillis);
+                            final Dialog dialog2 = new Dialog(MediumActivity.this,R.style.PauseDialog);
+                            dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                            dialog2.setContentView(R.layout.finish);
+                            dialog2.setCancelable(true);
+                            WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+                            lp2.copyFrom(dialog2.getWindow().getAttributes());
+                            lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+                            lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
+                            TextView lvl = dialog2.findViewById(R.id.flevel);
+                            lvl.setText("Easy");
+                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
+                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
+                            (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
+                            SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
+                            clvleditor.putInt(MainActivity.CURRENT,clvl);
+                            clvleditor.apply();
+                            clvleditor.commit();
+                            (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
+                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                editor.clear();
+                                editor.apply();
+                                editor.commit();
+                                startActivity(new Intent(MediumActivity.this,PlayActivity.class));
+                            });
+                            (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
+                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                editor.clear();
+                                editor.apply();
+                                editor.commit();
+                                startActivity(new Intent(MediumActivity.this,MainActivity.class));
+                            });
+                            (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
+                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                editor.clear();
+                                editor.apply();
+                                editor.commit();
+                                startActivity(getIntent());
+                            });
+                            SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
+                            int c = preferences.getInt(ANS,0);
+                            SharedPreferences.Editor edit = getSharedPreferences(LEVEL,MODE_PRIVATE).edit();
+                            int score = getSharedPreferences(LEVEL,MODE_PRIVATE).getInt(SCORE,0);
+                            TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
+                            if(c<6){
+                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                score = score+(c*100);
+                                edit.putInt(MainActivity.SCORE,score);
+                                scoretxt.setText(String.valueOf(c*100));
+                            }else if(c<=14){
+                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                score = score+(c*100);
+                                edit.putInt(MainActivity.SCORE,score);
+                                scoretxt.setText(String.valueOf(c*100));
+                                edit.putInt(MainActivity.CURRENT,1);
+                            }else if(c==15){
+                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                                score = score+(c*100);
+                                edit.putInt(MainActivity.SCORE,score);
+                                scoretxt.setText(String.valueOf(c*100));
+                            }
+                            edit.apply();
+                            edit.commit();
+                            dialog2.show();
+                            dialog2.getWindow().setAttributes(lp2);
+                            showinterstitial();
+                            dialog.dismiss();
                         });
-
-                        (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
-                            SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                            editor.clear();
-                            editor.apply();
-                            editor.commit();
-                            startActivity(new Intent(MediumActivity.this,MainActivity.class));
-                        });
-                        (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
-                            SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                            editor.clear();
-                            editor.apply();
-                            editor.commit();
-                            startActivity(getIntent());
-                        });
-                        SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
-                        int c = preferences.getInt(ANS,0);
-
-                        SharedPreferences.Editor edit = getSharedPreferences(LEVEL,MODE_PRIVATE).edit();
-                        int score = getSharedPreferences(LEVEL,MODE_PRIVATE).getInt(SCORE,0);
-
-                        TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
-                        if(c==1){
-                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                            score = score+100;
-                            edit.putInt(MainActivity.SCORE,score);
-                            scoretxt.setText("100");
-                        }else if(c==2){
-                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                            score = score+200;
-                            edit.putInt(MainActivity.SCORE,score);
-                            edit.putInt(MainActivity.CURRENT,2);
-                            scoretxt.setText("200");
-                        }else if(c==3){
-                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                            (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
-                            score = score+300;
-                            edit.putInt(MainActivity.SCORE,score);
-                            scoretxt.setText("300");
-                        }
-                        edit.apply();
-                        edit.commit();
-                        dialog2.show();
-                        dialog2.getWindow().setAttributes(lp2);
-                        showInterstitial();
+                        dialog.show();
+                        dialog.getWindow().setAttributes(lp);
                     }
                 }
             },800);
@@ -1294,81 +1544,117 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
                         clickable(true);
                         reset();
                     }else {
-                        //Toast.makeText(MediumActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
-                        final Dialog dialog2 = new Dialog(MediumActivity.this,R.style.PauseDialog);
-                        dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-                        dialog2.setContentView(R.layout.finish);
-                        dialog2.setCancelable(true);
 
-                        WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
-                        lp2.copyFrom(dialog2.getWindow().getAttributes());
-                        lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
-                        lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
+                        final Dialog dialog = new Dialog(MediumActivity.this);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                        dialog.setContentView(R.layout.alert);
+                        dialog.setCancelable(true);
+                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                        lp.copyFrom(dialog.getWindow().getAttributes());
+                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                        TextView text = dialog.findViewById(R.id.atext);
+                        text.setText("Congrats! You Completed The Level. watch this video to get 500 extra coins");
+                        TextView a = dialog.findViewById(R.id.yes);
+                        TextView b = dialog.findViewById(R.id.no);
 
-                        TextView lvl = dialog2.findViewById(R.id.flevel);
-                        lvl.setText("Normal");
-                        (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
-                        (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
-                        (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
+                        countDownTimer = new CountDownTimer(TimeLeftInMillis, 5000) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                                TimeLeftInMillis=millisUntilFinished;
+                                int seconds = (int) (TimeLeftInMillis / 1000) % 60;
+                                String timeLeftFormatted = String.format(Locale.getDefault(), "%02d", seconds);
+                                TextView a = dialog.findViewById(R.id.yes);
+                                a.setText("Ad will start in 5sec");
 
-                        SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
-                        clvleditor.putInt(MainActivity.CURRENT,clvl);
-                        clvleditor.apply();
-                        clvleditor.commit();
-                        (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
-                            SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                            editor.clear();
-                            editor.apply();
-                            editor.commit();
-                            startActivity(new Intent(MediumActivity.this,PlayActivity.class));
+                                //updateCountDown();
+                            }
+                            @Override
+                            public void onFinish() {
+                                mTimerRunning = false;
+                                if(stateAlive[0]){showInterstitial();}
+                                else{
+                                    Toast.makeText(MediumActivity.this, "You Won", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }.start();
+                        (dialog.findViewById(R.id.no)).setOnClickListener(v1 -> {
+                            stateAlive[0] =false;
+
+                            //finish();
+                            startTimer(mTimeLeftInMillis);
+                            final Dialog dialog2 = new Dialog(MediumActivity.this,R.style.PauseDialog);
+                            dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                            dialog2.setContentView(R.layout.finish);
+                            dialog2.setCancelable(true);
+                            WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+                            lp2.copyFrom(dialog2.getWindow().getAttributes());
+                            lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+                            lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
+                            TextView lvl = dialog2.findViewById(R.id.flevel);
+                            lvl.setText("Easy");
+                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
+                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
+                            (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
+                            SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
+                            clvleditor.putInt(MainActivity.CURRENT,clvl);
+                            clvleditor.apply();
+                            clvleditor.commit();
+                            (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
+                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                editor.clear();
+                                editor.apply();
+                                editor.commit();
+                                startActivity(new Intent(MediumActivity.this,PlayActivity.class));
+                            });
+                            (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
+                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                editor.clear();
+                                editor.apply();
+                                editor.commit();
+                                startActivity(new Intent(MediumActivity.this,MainActivity.class));
+                            });
+                            (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
+                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                editor.clear();
+                                editor.apply();
+                                editor.commit();
+                                startActivity(getIntent());
+                            });
+                            SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
+                            int c = preferences.getInt(ANS,0);
+                            SharedPreferences.Editor edit = getSharedPreferences(LEVEL,MODE_PRIVATE).edit();
+                            int score = getSharedPreferences(LEVEL,MODE_PRIVATE).getInt(SCORE,0);
+                            TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
+                            if(c<6){
+                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                score = score+(c*100);
+                                edit.putInt(MainActivity.SCORE,score);
+                                scoretxt.setText(String.valueOf(c*100));
+                            }else if(c<=14){
+                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                score = score+(c*100);
+                                edit.putInt(MainActivity.SCORE,score);
+                                scoretxt.setText(String.valueOf(c*100));
+                                edit.putInt(MainActivity.CURRENT,1);
+                            }else if(c==15){
+                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                                score = score+(c*100);
+                                edit.putInt(MainActivity.SCORE,score);
+                                scoretxt.setText(String.valueOf(c*100));
+                            }
+                            edit.apply();
+                            edit.commit();
+                            dialog2.show();
+                            dialog2.getWindow().setAttributes(lp2);
+                            showinterstitial();
+                            dialog.dismiss();
                         });
-
-                        (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
-                            SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                            editor.clear();
-                            editor.apply();
-                            editor.commit();
-                            startActivity(new Intent(MediumActivity.this,MainActivity.class));
-                        });
-                        (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
-                            SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                            editor.clear();
-                            editor.apply();
-                            editor.commit();
-                            startActivity(getIntent());
-                        });
-                        SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
-                        int c = preferences.getInt(ANS,0);
-
-                        SharedPreferences.Editor edit = getSharedPreferences(LEVEL,MODE_PRIVATE).edit();
-                        int score = getSharedPreferences(LEVEL,MODE_PRIVATE).getInt(SCORE,0);
-//gamefinish
-                        TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
-                        if(c<6){
-                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                            score = score+(c*100);
-                            edit.putInt(MainActivity.SCORE,score);
-                            scoretxt.setText(String.valueOf(c*100));
-                        }else if(c<=14){
-                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                            score = score+(c*100);
-                            edit.putInt(MainActivity.SCORE,score);
-                            scoretxt.setText(String.valueOf(c*100));
-                            edit.putInt(MainActivity.CURRENT,2);
-                        }else if(c==15){
-                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                            (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
-                            score = score+(c*100);
-                            edit.putInt(MainActivity.SCORE,score);
-                            scoretxt.setText(String.valueOf(c*100));
-                        }
-                        edit.apply();
-                        edit.commit();
-                        dialog2.show();
-                        dialog2.getWindow().setAttributes(lp2);
-                        showInterstitial();
+                        dialog.show();
+                        dialog.getWindow().setAttributes(lp);
                     }
                 }
             },800);
@@ -1406,81 +1692,117 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
                             clickable(true);
                             reset();
                         } else {
-                            //Toast.makeText(MediumActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
-                            final Dialog dialog2 = new Dialog(MediumActivity.this,R.style.PauseDialog);
-                            dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-                            dialog2.setContentView(R.layout.finish);
-                            dialog2.setCancelable(true);
 
-                            WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
-                            lp2.copyFrom(dialog2.getWindow().getAttributes());
-                            lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
-                            lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
+                            final Dialog dialog = new Dialog(MediumActivity.this);
+                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                            dialog.setContentView(R.layout.alert);
+                            dialog.setCancelable(true);
+                            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                            lp.copyFrom(dialog.getWindow().getAttributes());
+                            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                            TextView text = dialog.findViewById(R.id.atext);
+                            text.setText("Congrats! You Completed The Level. watch this video to get 500 extra coins");
+                            TextView a = dialog.findViewById(R.id.yes);
+                            TextView b = dialog.findViewById(R.id.no);
 
-                            TextView lvl = dialog2.findViewById(R.id.flevel);
-                            lvl.setText("Normal");
-                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
-                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
-                            (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
+                            countDownTimer = new CountDownTimer(TimeLeftInMillis, 5000) {
+                                @Override
+                                public void onTick(long millisUntilFinished) {
+                                    TimeLeftInMillis=millisUntilFinished;
+                                    int seconds = (int) (TimeLeftInMillis / 1000) % 60;
+                                    String timeLeftFormatted = String.format(Locale.getDefault(), "%02d", seconds);
+                                    TextView a = dialog.findViewById(R.id.yes);
+                                    a.setText("Ad will start in 5sec");
 
-                            SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
-                            clvleditor.putInt(MainActivity.CURRENT,clvl);
-                            clvleditor.apply();
-                            clvleditor.commit();
-                            (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
-                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                                editor.clear();
-                                editor.apply();
-                                editor.commit();
-                                startActivity(new Intent(MediumActivity.this, PlayActivity.class));
+                                    //updateCountDown();
+                                }
+                                @Override
+                                public void onFinish() {
+                                    mTimerRunning = false;
+                                    if(stateAlive[0]){showInterstitial();}
+                                    else{
+                                        Toast.makeText(MediumActivity.this, "You Won", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }.start();
+                            (dialog.findViewById(R.id.no)).setOnClickListener(v1 -> {
+                                stateAlive[0] =false;
+
+                                //finish();
+                                startTimer(mTimeLeftInMillis);
+                                final Dialog dialog2 = new Dialog(MediumActivity.this,R.style.PauseDialog);
+                                dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                                dialog2.setContentView(R.layout.finish);
+                                dialog2.setCancelable(true);
+                                WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+                                lp2.copyFrom(dialog2.getWindow().getAttributes());
+                                lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
+                                TextView lvl = dialog2.findViewById(R.id.flevel);
+                                lvl.setText("Easy");
+                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
+                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
+                                (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
+                                SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
+                                clvleditor.putInt(MainActivity.CURRENT,clvl);
+                                clvleditor.apply();
+                                clvleditor.commit();
+                                (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
+                                    SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                    editor.clear();
+                                    editor.apply();
+                                    editor.commit();
+                                    startActivity(new Intent(MediumActivity.this,PlayActivity.class));
+                                });
+                                (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
+                                    SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                    editor.clear();
+                                    editor.apply();
+                                    editor.commit();
+                                    startActivity(new Intent(MediumActivity.this,MainActivity.class));
+                                });
+                                (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
+                                    SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                    editor.clear();
+                                    editor.apply();
+                                    editor.commit();
+                                    startActivity(getIntent());
+                                });
+                                SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
+                                int c = preferences.getInt(ANS,0);
+                                SharedPreferences.Editor edit = getSharedPreferences(LEVEL,MODE_PRIVATE).edit();
+                                int score = getSharedPreferences(LEVEL,MODE_PRIVATE).getInt(SCORE,0);
+                                TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
+                                if(c<6){
+                                    (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                    score = score+(c*100);
+                                    edit.putInt(MainActivity.SCORE,score);
+                                    scoretxt.setText(String.valueOf(c*100));
+                                }else if(c<=14){
+                                    (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                    (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                    score = score+(c*100);
+                                    edit.putInt(MainActivity.SCORE,score);
+                                    scoretxt.setText(String.valueOf(c*100));
+                                    edit.putInt(MainActivity.CURRENT,1);
+                                }else if(c==15){
+                                    (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                    (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                    (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                                    score = score+(c*100);
+                                    edit.putInt(MainActivity.SCORE,score);
+                                    scoretxt.setText(String.valueOf(c*100));
+                                }
+                                edit.apply();
+                                edit.commit();
+                                dialog2.show();
+                                dialog2.getWindow().setAttributes(lp2);
+                                showinterstitial();
+                                dialog.dismiss();
                             });
-
-                            (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
-                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                                editor.clear();
-                                editor.apply();
-                                editor.commit();
-                                startActivity(new Intent(MediumActivity.this, MainActivity.class));
-                            });
-                            (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
-                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                                editor.clear();
-                                editor.apply();
-                                editor.commit();
-                                startActivity(getIntent());
-                            });
-                            SharedPreferences preferences = getSharedPreferences(CORRECT, MODE_PRIVATE);
-                            int c = preferences.getInt(ANS, 0);
-
-                            SharedPreferences.Editor edit = getSharedPreferences(LEVEL,MODE_PRIVATE).edit();
-                            int score = getSharedPreferences(LEVEL,MODE_PRIVATE).getInt(SCORE,0);
-//gamefinish
-                            TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
-                            if(c<6){
-                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                                score = score+(c*100);
-                                edit.putInt(MainActivity.SCORE,score);
-                                scoretxt.setText(String.valueOf(c*100));
-                            }else if(c<=14){
-                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                                score = score+(c*100);
-                                edit.putInt(MainActivity.SCORE,score);
-                                scoretxt.setText(String.valueOf(c*100));
-                                edit.putInt(MainActivity.CURRENT,2);
-                            }else if(c==15){
-                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                                (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
-                                score = score+(c*100);
-                                edit.putInt(MainActivity.SCORE,score);
-                                scoretxt.setText(String.valueOf(c*100));
-                            }
-                            edit.apply();
-                            edit.commit();
-                            dialog2.show();
-                            dialog2.getWindow().setAttributes(lp2);
-                            showInterstitial();
+                            dialog.show();
+                            dialog.getWindow().setAttributes(lp);
                         }
                     }
                 }, 800);
@@ -1528,81 +1850,117 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
 //                        fifty.setForeground(null);
 
                     }else {
-                        //Toast.makeText(MediumActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
-                        final Dialog dialog2 = new Dialog(MediumActivity.this,R.style.PauseDialog);
-                        dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-                        dialog2.setContentView(R.layout.finish);
-                        dialog2.setCancelable(true);
 
-                        WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
-                        lp2.copyFrom(dialog2.getWindow().getAttributes());
-                        lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
-                        lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
+                        final Dialog dialog = new Dialog(MediumActivity.this);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                        dialog.setContentView(R.layout.alert);
+                        dialog.setCancelable(true);
+                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                        lp.copyFrom(dialog.getWindow().getAttributes());
+                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                        TextView text = dialog.findViewById(R.id.atext);
+                        text.setText("Congrats! You Completed The Level. watch this video to get 500 extra coins");
+                        TextView a = dialog.findViewById(R.id.yes);
+                        TextView b = dialog.findViewById(R.id.no);
 
-                        TextView lvl = dialog2.findViewById(R.id.flevel);
-                        lvl.setText("Normal");
-                        (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
-                        (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
-                        (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
+                        countDownTimer = new CountDownTimer(TimeLeftInMillis, 5000) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                                TimeLeftInMillis=millisUntilFinished;
+                                int seconds = (int) (TimeLeftInMillis / 1000) % 60;
+                                String timeLeftFormatted = String.format(Locale.getDefault(), "%02d", seconds);
+                                TextView a = dialog.findViewById(R.id.yes);
+                                a.setText("Ad will start in 5sec");
 
-                        SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
-                        clvleditor.putInt(MainActivity.CURRENT,clvl);
-                        clvleditor.apply();
-                        clvleditor.commit();
-                        (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
-                            SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                            editor.clear();
-                            editor.apply();
-                            editor.commit();
-                            startActivity(new Intent(MediumActivity.this,PlayActivity.class));
+                                //updateCountDown();
+                            }
+                            @Override
+                            public void onFinish() {
+                                mTimerRunning = false;
+                                if(stateAlive[0]){showInterstitial();}
+                                else{
+                                    Toast.makeText(MediumActivity.this, "You Won", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }.start();
+                        (dialog.findViewById(R.id.no)).setOnClickListener(v1 -> {
+                            stateAlive[0] =false;
+
+                            //finish();
+                            startTimer(mTimeLeftInMillis);
+                            final Dialog dialog2 = new Dialog(MediumActivity.this,R.style.PauseDialog);
+                            dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                            dialog2.setContentView(R.layout.finish);
+                            dialog2.setCancelable(true);
+                            WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+                            lp2.copyFrom(dialog2.getWindow().getAttributes());
+                            lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+                            lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
+                            TextView lvl = dialog2.findViewById(R.id.flevel);
+                            lvl.setText("Easy");
+                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
+                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
+                            (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
+                            SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
+                            clvleditor.putInt(MainActivity.CURRENT,clvl);
+                            clvleditor.apply();
+                            clvleditor.commit();
+                            (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
+                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                editor.clear();
+                                editor.apply();
+                                editor.commit();
+                                startActivity(new Intent(MediumActivity.this,PlayActivity.class));
+                            });
+                            (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
+                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                editor.clear();
+                                editor.apply();
+                                editor.commit();
+                                startActivity(new Intent(MediumActivity.this,MainActivity.class));
+                            });
+                            (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
+                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                editor.clear();
+                                editor.apply();
+                                editor.commit();
+                                startActivity(getIntent());
+                            });
+                            SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
+                            int c = preferences.getInt(ANS,0);
+                            SharedPreferences.Editor edit = getSharedPreferences(LEVEL,MODE_PRIVATE).edit();
+                            int score = getSharedPreferences(LEVEL,MODE_PRIVATE).getInt(SCORE,0);
+                            TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
+                            if(c<6){
+                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                score = score+(c*100);
+                                edit.putInt(MainActivity.SCORE,score);
+                                scoretxt.setText(String.valueOf(c*100));
+                            }else if(c<=14){
+                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                score = score+(c*100);
+                                edit.putInt(MainActivity.SCORE,score);
+                                scoretxt.setText(String.valueOf(c*100));
+                                edit.putInt(MainActivity.CURRENT,1);
+                            }else if(c==15){
+                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                                score = score+(c*100);
+                                edit.putInt(MainActivity.SCORE,score);
+                                scoretxt.setText(String.valueOf(c*100));
+                            }
+                            edit.apply();
+                            edit.commit();
+                            dialog2.show();
+                            dialog2.getWindow().setAttributes(lp2);
+                            showinterstitial();
+                            dialog.dismiss();
                         });
-
-                        (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
-                            SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                            editor.clear();
-                            editor.apply();
-                            editor.commit();
-                            startActivity(new Intent(MediumActivity.this,MainActivity.class));
-                        });
-                        (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
-                            SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                            editor.clear();
-                            editor.apply();
-                            editor.commit();
-                            startActivity(getIntent());
-                        });
-                        SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
-                        int c = preferences.getInt(ANS,0);
-
-                        SharedPreferences.Editor edit = getSharedPreferences(LEVEL,MODE_PRIVATE).edit();
-                        int score = getSharedPreferences(LEVEL,MODE_PRIVATE).getInt(SCORE,0);
-//gamefinish
-                        TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
-                        if(c<6){
-                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                            score = score+(c*100);
-                            edit.putInt(MainActivity.SCORE,score);
-                            scoretxt.setText(String.valueOf(c*100));
-                        }else if(c<=14){
-                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                            score = score+(c*100);
-                            edit.putInt(MainActivity.SCORE,score);
-                            scoretxt.setText(String.valueOf(c*100));
-                            edit.putInt(MainActivity.CURRENT,2);
-                        }else if(c==15){
-                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                            (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
-                            score = score+(c*100);
-                            edit.putInt(MainActivity.SCORE,score);
-                            scoretxt.setText(String.valueOf(c*100));
-                        }
-                        edit.apply();
-                        edit.commit();
-                        dialog2.show();
-                        dialog2.getWindow().setAttributes(lp2);
-                        showInterstitial();
+                        dialog.show();
+                        dialog.getWindow().setAttributes(lp);
                     }
                 }
             },800);
@@ -1610,78 +1968,143 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
         } else {
             selected.setBackground(getResources().getDrawable(R.drawable.option_wrong));
             wrong++;
+            final boolean[] stateAlive = {true};
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     reset();
                     pauseTimer();
-                    final Dialog dialog = new Dialog(MediumActivity.this);
-                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-                    dialog.setContentView(R.layout.alert);
-                    dialog.setCancelable(true);
-                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                    lp.copyFrom(dialog.getWindow().getAttributes());
-                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-                    TextView text = dialog.findViewById(R.id.atext);
-                    text.setText("Watch This video and get chance");
-                    TextView a = dialog.findViewById(R.id.yes);
+                    if(used[0]) {
+                        used[0]=false;
+                        final Dialog dialog = new Dialog(MediumActivity.this);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                        dialog.setContentView(R.layout.alert);
+                        dialog.setCancelable(true);
+                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                        lp.copyFrom(dialog.getWindow().getAttributes());
+                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                        TextView text = dialog.findViewById(R.id.atext);
+                        text.setText("Watch This video and get chance");
+                        TextView a = dialog.findViewById(R.id.yes);
+                        countDownTimer = new CountDownTimer(TimeLeftInMillis, 5000) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                                TimeLeftInMillis = millisUntilFinished;
+                                int seconds = (int) (TimeLeftInMillis / 1000) % 60;
+                                String timeLeftFormatted = String.format(Locale.getDefault(), "%02d", seconds);
+                                TextView a = dialog.findViewById(R.id.yes);
+                                a.setText("Ad will start in 5sec");
 
 
-
-                    countDownTimer = new CountDownTimer(TimeLeftInMillis, 5000) {
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-                            TimeLeftInMillis=millisUntilFinished;
-                            int seconds = (int) (TimeLeftInMillis / 1000) % 60;
-                            String timeLeftFormatted = String.format(Locale.getDefault(), "%02d", seconds);
-                            TextView a = dialog.findViewById(R.id.yes);
-                            a.setText("Ad will start in 5sec");
-
-
-                            //updateCountDown();
-                        }
-                        @Override
-                        public void onFinish() {
-                            mTimerRunning = false;
-                            if(Constants.rewardedAd.isLoaded()){
-                                Constants.rewardedAd.show(MediumActivity.this, new RewardedAdCallback() {
-                                    @Override
-                                    public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                                        startTimer(mTimeLeftInMillis);
-                                        //Toast.makeText(MediumActivity.this, "done", Toast.LENGTH_SHORT).show();
-                                        Constants.loadRewardedAd(MediumActivity.this);
-                                        dialog.dismiss();
-                                    }
-                                });
+                                //updateCountDown();
                             }
-                            else{
-                                startTimer(mTimeLeftInMillis);
-                                Toast.makeText(MediumActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }.start();
-//                    (dialog.findViewById(R.id.yes)).setOnClickListener(v1 -> {
-//                        if(Constants.rewardedAd.isLoaded()){
-//                            Constants.rewardedAd.show(MediumActivity.this, new RewardedAdCallback() {
-//                                @Override
-//                                public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+
+                            @Override
+                            public void onFinish() {
+                                mTimerRunning = false;
+
+                                if (Constants.rewardedAd.isLoaded() && stateAlive[0]) {
+                                    Constants.rewardedAd.show(MediumActivity.this, new RewardedAdCallback() {
+                                        @Override
+                                        public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                                            startTimer(mTimeLeftInMillis);
+                                            //Toast.makeText(MediumActivity.this, "done", Toast.LENGTH_SHORT).show();
+                                            Constants.loadRewardedAd(MediumActivity.this);
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                } else {
 //                                    startTimer(mTimeLeftInMillis);
-//                                    //Toast.makeText(MediumActivity.this, "done", Toast.LENGTH_SHORT).show();
-//                                    Constants.loadRewardedAd(MediumActivity.this);
-//                                }
-//                            });
-//                        }
-//                        else{
-//                            startTimer(mTimeLeftInMillis);
-//                            Toast.makeText(MediumActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
-//                        }
-//                        dialog.dismiss();
-//                    });
-                    (dialog.findViewById(R.id.no)).setOnClickListener(v1 -> {
-                        startTimer(mTimeLeftInMillis);
-                        final Dialog dialog2 = new Dialog(MediumActivity.this,R.style.PauseDialog);
+//                                    Toast.makeText(MediumActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }.start();
+                        (dialog.findViewById(R.id.no)).setOnClickListener(v1 -> {
+                            stateAlive[0] = false;
+
+                            //finish();
+                            //startTimer(mTimeLeftInMillis);
+                            final Dialog dialog2 = new Dialog(MediumActivity.this, R.style.PauseDialog);
+                            dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                            dialog2.setContentView(R.layout.finish);
+                            dialog2.setCancelable(true);
+                            WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+                            lp2.copyFrom(dialog2.getWindow().getAttributes());
+                            lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+                            lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
+                            TextView lvl = dialog2.findViewById(R.id.flevel);
+                            lvl.setText("Easy");
+                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
+                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
+                            (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
+                            SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL, MODE_PRIVATE).edit();
+                            clvleditor.putInt(MainActivity.CURRENT, clvl);
+                            clvleditor.apply();
+                            clvleditor.commit();
+                            (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
+                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                editor.clear();
+                                editor.apply();
+                                editor.commit();
+                                startActivity(new Intent(MediumActivity.this, PlayActivity.class));
+                            });
+                            (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
+                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                editor.clear();
+                                editor.apply();
+                                editor.commit();
+                                startActivity(new Intent(MediumActivity.this, MainActivity.class));
+                            });
+                            (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
+                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                editor.clear();
+                                editor.apply();
+                                editor.commit();
+                                startActivity(getIntent());
+                            });
+                            SharedPreferences preferences = getSharedPreferences(CORRECT, MODE_PRIVATE);
+                            int c = preferences.getInt(ANS, 0);
+                            SharedPreferences.Editor edit = getSharedPreferences(LEVEL, MODE_PRIVATE).edit();
+                            int score = getSharedPreferences(LEVEL, MODE_PRIVATE).getInt(SCORE, 0);
+                            TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
+                            if (c < 6) {
+                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                score = score + (c * 100);
+                                edit.putInt(MainActivity.SCORE, score);
+                                scoretxt.setText(String.valueOf(c * 100));
+                            } else if (c <= 14) {
+                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                score = score + (c * 100);
+                                edit.putInt(MainActivity.SCORE, score);
+                                scoretxt.setText(String.valueOf(c * 100));
+                                edit.putInt(MainActivity.CURRENT, 1);
+                            } else if (c == 15) {
+                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                                score = score + (c * 100);
+                                edit.putInt(MainActivity.SCORE, score);
+                                scoretxt.setText(String.valueOf(c * 100));
+                            }
+                            edit.apply();
+                            edit.commit();
+                            dialog2.show();
+                            dialog2.getWindow().setAttributes(lp2);
+                            showinterstitial();
+                            dialog.dismiss();
+
+                        });
+                        dialog.show();
+                        dialog.getWindow().setAttributes(lp);
+                    }else{
+                        stateAlive[0] = false;
+
+                        //finish();
+                        //startTimer(mTimeLeftInMillis);
+                        final Dialog dialog2 = new Dialog(MediumActivity.this, R.style.PauseDialog);
                         dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                         dialog2.setContentView(R.layout.finish);
                         dialog2.setCancelable(true);
@@ -1694,8 +2117,8 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
                         (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
                         (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
                         (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
-                        SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
-                        clvleditor.putInt(MainActivity.CURRENT,clvl);
+                        SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL, MODE_PRIVATE).edit();
+                        clvleditor.putInt(MainActivity.CURRENT, clvl);
                         clvleditor.apply();
                         clvleditor.commit();
                         (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
@@ -1703,14 +2126,14 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
                             editor.clear();
                             editor.apply();
                             editor.commit();
-                            startActivity(new Intent(MediumActivity.this,PlayActivity.class));
+                            startActivity(new Intent(MediumActivity.this, PlayActivity.class));
                         });
                         (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
                             SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                             editor.clear();
                             editor.apply();
                             editor.commit();
-                            startActivity(new Intent(MediumActivity.this,MainActivity.class));
+                            startActivity(new Intent(MediumActivity.this, MainActivity.class));
                         });
                         (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
                             SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
@@ -1719,41 +2142,38 @@ public class MediumActivity extends AppCompatActivity implements View.OnClickLis
                             editor.commit();
                             startActivity(getIntent());
                         });
-                        SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
-                        int c = preferences.getInt(ANS,0);
-                        SharedPreferences.Editor edit = getSharedPreferences(LEVEL,MODE_PRIVATE).edit();
-                        int score = getSharedPreferences(LEVEL,MODE_PRIVATE).getInt(SCORE,0);
+                        SharedPreferences preferences = getSharedPreferences(CORRECT, MODE_PRIVATE);
+                        int c = preferences.getInt(ANS, 0);
+                        SharedPreferences.Editor edit = getSharedPreferences(LEVEL, MODE_PRIVATE).edit();
+                        int score = getSharedPreferences(LEVEL, MODE_PRIVATE).getInt(SCORE, 0);
                         TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
-                        if(c<6){
+                        if (c < 6) {
                             (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                            score = score+(c*100);
-                            edit.putInt(MainActivity.SCORE,score);
-                            scoretxt.setText(String.valueOf(c*100));
-                        }else if(c<=14){
+                            score = score + (c * 100);
+                            edit.putInt(MainActivity.SCORE, score);
+                            scoretxt.setText(String.valueOf(c * 100));
+                        } else if (c <= 14) {
                             (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
                             (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                            score = score+(c*100);
-                            edit.putInt(MainActivity.SCORE,score);
-                            scoretxt.setText(String.valueOf(c*100));
-                            edit.putInt(MainActivity.CURRENT,1);
-                        }else if(c==15){
+                            score = score + (c * 100);
+                            edit.putInt(MainActivity.SCORE, score);
+                            scoretxt.setText(String.valueOf(c * 100));
+                            edit.putInt(MainActivity.CURRENT, 1);
+                        } else if (c == 15) {
                             (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
                             (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
                             (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
-                            score = score+(c*100);
-                            edit.putInt(MainActivity.SCORE,score);
-                            scoretxt.setText(String.valueOf(c*100));
+                            score = score + (c * 100);
+                            edit.putInt(MainActivity.SCORE, score);
+                            scoretxt.setText(String.valueOf(c * 100));
                         }
                         edit.apply();
                         edit.commit();
                         dialog2.show();
                         dialog2.getWindow().setAttributes(lp2);
-                        //showInterstitial();
-                        dialog.dismiss();
+                        showinterstitial();
 
-                    });
-                    dialog.show();
-                    dialog.getWindow().setAttributes(lp);
+                    }
                     /////
 
                 }

@@ -100,6 +100,7 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
         help.setOnClickListener(v -> {
+            startActivity(new Intent(this,HelpActivity.class));
 
         });
     }

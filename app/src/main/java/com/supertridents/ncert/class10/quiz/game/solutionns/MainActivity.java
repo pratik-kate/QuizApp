@@ -132,6 +132,18 @@ public class MainActivity extends AppCompatActivity {
         coins.setText(String.valueOf(coin));
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(hasFocus){
+            SharedPreferences preferences = getSharedPreferences(LEVEL,MODE_PRIVATE);
+            int coin = preferences.getInt(String.valueOf(coins),1);
+            int score = preferences.getInt(SCORE,1);
+            TextView coins = findViewById(R.id.coins);
+            coins.setText(String.valueOf(coin));
+        }
+    }
+
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             exitByBackKey();

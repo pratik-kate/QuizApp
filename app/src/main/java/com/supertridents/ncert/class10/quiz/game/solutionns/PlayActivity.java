@@ -145,7 +145,7 @@ public class PlayActivity extends AppCompatActivity {
         });
 
         back.setOnClickListener(v -> {
-            super.onBackPressed();
+           startActivity(new Intent(this,MainActivity.class));
         });
 
         easy.setOnClickListener(v -> {

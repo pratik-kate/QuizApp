@@ -61,6 +61,8 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
     public boolean mTimerRunning;
     public long mTimeLeftInMillis = START_TIME_IN_MILLIS;
     Boolean doubledip=true,ffifty=true,sswap=true;
+    Boolean[] used ={true};
+    Boolean[] timer ={true};
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -640,118 +642,164 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                         // gif.setVisibility(View.INVISIBLE);
                         //Toast.makeText(TimeModeActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
 
-                        final Dialog dialog2 = new Dialog(TimeModeActivity.this);
-                        dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-                        dialog2.setContentView(R.layout.alert);
-                        dialog2.setCancelable(true);
-                        WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
-                        lp2.copyFrom(dialog2.getWindow().getAttributes());
-                        lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
-                        lp2.height = WindowManager.LayoutParams.WRAP_CONTENT;
-                        TextView text = dialog2.findViewById(R.id.atext);
-                        text.setText("Watch Ad To Get 15s More");
-                        (dialog2.findViewById(R.id.yes)).setOnClickListener(v1 -> {
-                            if(Constants.rewardedAd.isLoaded()){
-                                Constants.rewardedAd.show(TimeModeActivity.this, new RewardedAdCallback() {
-                                    @Override
-                                    public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                                        startTimer(TIME);
-                                        //Toast.makeText(TimeModeActivity.this, "done", Toast.LENGTH_SHORT).show();
-                                        Constants.loadRewardedAd(TimeModeActivity.this);
-                                    }
-                                });
-                            }
-                            else{
+                        if(timer[0]) {
+                            final Dialog dialog2 = new Dialog(TimeModeActivity.this);
+                            dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                            dialog2.setContentView(R.layout.alert);
+                            dialog2.setCancelable(true);
+                            WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+                            lp2.copyFrom(dialog2.getWindow().getAttributes());
+                            lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+                            lp2.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                            TextView text = dialog2.findViewById(R.id.atext);
+                            text.setText("Watch Ad To Get 15s More");
+                            (dialog2.findViewById(R.id.yes)).setOnClickListener(v1 -> {
+                                timer[0]=false;
+                                if (Constants.rewardedAd.isLoaded()) {
+                                    Constants.rewardedAd.show(TimeModeActivity.this, new RewardedAdCallback() {
+                                        @Override
+                                        public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                                            startTimer(TIME);
+                                            //Toast.makeText(TimeModeActivity.this, "done", Toast.LENGTH_SHORT).show();
+                                            Constants.loadRewardedAd(TimeModeActivity.this);
+                                        }
+                                    });
+                                } else {
 
-                                startTimer(mTimeLeftInMillis);
-                                Toast.makeText(TimeModeActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
-                            }
-                            dialog2.dismiss();
-                        });
-                        (dialog2.findViewById(R.id.no)).setOnClickListener(v1 -> {
-                            startTimer(mTimeLeftInMillis);
-                            if(currentQuestion==14) {
-                                final Dialog dialog = new Dialog(TimeModeActivity.this, R.style.PauseDialog);
-                                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-                                dialog.setContentView(R.layout.finish);
-                                dialog.setCancelable(true);
-
-                                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                                lp.copyFrom(dialog.getWindow().getAttributes());
-                                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-
-                                TextView lvl = dialog.findViewById(R.id.flevel);
-                                lvl.setText("Easy");
-                                (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
-                                (dialog.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
-                                (dialog.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
-
-                                (dialog.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
-                                    SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                                    editor.clear();
-                                    editor.apply();
-                                    editor.commit();
-
-                                    startActivity(new Intent(TimeModeActivity.this, PlayActivity.class));
-                                });
-
-                                (dialog.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
-                                    SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                                    editor.clear();
-                                    editor.apply();
-                                    editor.commit();
-
-                                    startActivity(new Intent(TimeModeActivity.this, MainActivity.class));
-                                });
-                                (dialog.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
-                                    SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                                    editor.clear();
-                                    editor.apply();
-                                    editor.commit();
-                                    startActivity(getIntent());
-                                });
-                                SharedPreferences preferences = getSharedPreferences(CORRECT, MODE_PRIVATE);
-                                int c = preferences.getInt(ANS, 0);
-
-                                //gamefinish
-                                TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
-                                if (c < 6) {
-                                    (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                                    scoretxt.setText(String.valueOf(c * 100));
-                                } else if (c <= 14) {
-                                    (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                                    (dialog.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                                    scoretxt.setText(String.valueOf(c * 100));
-                                    //edit.putInt(MainActivity.CURRENT,1);
-
-                                } else if (c == 15) {
-                                    (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                                    (dialog.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                                    (dialog.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
-                                    scoretxt.setText(String.valueOf(c * 100));
+                                    startTimer(mTimeLeftInMillis);
+                                    Toast.makeText(TimeModeActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
                                 }
-                                TranslateAnimation anim = new TranslateAnimation(0, 0, 0, 0);
-                                anim.setDuration(1000);
-
-                                dialog.show();
-                                dialog.getWindow().setAttributes(lp);
-                                showInterstitial();
-                            }
-                            else{
+                                dialog2.dismiss();
+                            });
+                            (dialog2.findViewById(R.id.no)).setOnClickListener(v1 -> {
                                 //startTimer(mTimeLeftInMillis);
-                                currentQuestion++;
-                                i++;
-                                current.setText(i+"/");
-                                setQuestionScreen(currentQuestion);
-                                clickable(true);
-                                reset();
-                            }
-                            dialog2.dismiss();
+                                //if (currentQuestion == 14) {
+                                    final Dialog dialog = new Dialog(TimeModeActivity.this, R.style.PauseDialog);
+                                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                                    dialog.setContentView(R.layout.finish);
+                                    dialog.setCancelable(true);
+                                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                                    lp.copyFrom(dialog.getWindow().getAttributes());
+                                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                    lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                                    TextView lvl = dialog.findViewById(R.id.flevel);
+                                    lvl.setText("Timer Mode");
+                                    (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
+                                    (dialog.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
+                                    (dialog.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
+                                    (dialog.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
+                                        SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                        editor.clear();
+                                        editor.apply();
+                                        editor.commit();
 
-                        });
-                        dialog2.show();
-                        dialog2.getWindow().setAttributes(lp2);
+                                        startActivity(new Intent(TimeModeActivity.this, PlayActivity.class));
+                                    });
+                                    (dialog.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
+                                        SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                        editor.clear();
+                                        editor.apply();
+                                        editor.commit();
+
+                                        startActivity(new Intent(TimeModeActivity.this, MainActivity.class));
+                                    });
+                                    (dialog.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
+                                        SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                        editor.clear();
+                                        editor.apply();
+                                        editor.commit();
+                                        startActivity(getIntent());
+                                    });
+                                    SharedPreferences preferences = getSharedPreferences(CORRECT, MODE_PRIVATE);
+                                    int c = preferences.getInt(ANS, 0);
+                                    //gamefinish
+                                    TextView scoretxt = (dialog.findViewById(R.id.scoretext));
+                                    if (c < 6) {
+                                        (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                        scoretxt.setText(String.valueOf(c * 100));
+                                    } else if (c <= 14) {
+                                        (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                        (dialog.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                        scoretxt.setText(String.valueOf(c * 100));
+                                        //edit.putInt(MainActivity.CURRENT,1);
+                                    } else if (c == 15) {
+                                        (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                        (dialog.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                        (dialog.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                                        scoretxt.setText(String.valueOf(c * 100));
+                                    }
+                                    TranslateAnimation anim = new TranslateAnimation(0, 0, 0, 0);
+                                    anim.setDuration(1000);
+                                    dialog.show();
+                                    dialog.getWindow().setAttributes(lp);
+                                    //showinterstitial();
+                                dialog2.dismiss();
+
+                            });
+                            dialog2.show();
+                            dialog2.getWindow().setAttributes(lp2);
+                        }else{
+                            final Dialog dialog = new Dialog(TimeModeActivity.this, R.style.PauseDialog);
+                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                            dialog.setContentView(R.layout.finish);
+                            dialog.setCancelable(true);
+                            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                            lp.copyFrom(dialog.getWindow().getAttributes());
+                            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                            lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                            TextView lvl = dialog.findViewById(R.id.flevel);
+                            lvl.setText("Timer Mode");
+
+                            (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
+                            (dialog.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
+                            (dialog.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
+                            (dialog.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
+                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                editor.clear();
+                                editor.apply();
+                                editor.commit();
+
+                                startActivity(new Intent(TimeModeActivity.this, PlayActivity.class));
+                            });
+                            (dialog.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
+                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                editor.clear();
+                                editor.apply();
+                                editor.commit();
+
+                                startActivity(new Intent(TimeModeActivity.this, MainActivity.class));
+                            });
+                            (dialog.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
+                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                editor.clear();
+                                editor.apply();
+                                editor.commit();
+                                startActivity(getIntent());
+                            });
+                            SharedPreferences preferences = getSharedPreferences(CORRECT, MODE_PRIVATE);
+                            int c = preferences.getInt(ANS, 0);
+                            //gamefinish
+                            TextView scoretxt = (dialog.findViewById(R.id.scoretext));
+                            if (c < 6) {
+                                (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                scoretxt.setText(String.valueOf(c * 100));
+                            } else if (c <= 14) {
+                                (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                (dialog.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                scoretxt.setText(String.valueOf(c * 100));
+                                //edit.putInt(MainActivity.CURRENT,1);
+                            } else if (c == 15) {
+                                (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                (dialog.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                (dialog.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                                scoretxt.setText(String.valueOf(c * 100));
+                            }
+                            TranslateAnimation anim = new TranslateAnimation(0, 0, 0, 0);
+                            anim.setDuration(1000);
+                            dialog.show();
+                            dialog.getWindow().setAttributes(lp);
+                            //showInterstitial();
+                        }
                     }
                 },100);
             }
