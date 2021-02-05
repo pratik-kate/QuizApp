@@ -17,7 +17,7 @@ public class Constants {
     private static String TAG = "MainActivity";
     public static RewardedInterstitialAd rewardedInterstitialAd;
     public static void loadRewardedAd(Context context){
-        rewardedAd = new RewardedAd(context,"ca-app-pub-3940256099942544/5224354917");
+        rewardedAd = new RewardedAd(context,"ca-app-pub-5324429581828078/1610031739");
         rewardedAd.loadAd(new AdRequest.Builder().build(), new RewardedAdLoadCallback(){
             @Override
             public void onRewardedAdFailedToLoad(LoadAdError loadAdError) {
@@ -30,7 +30,7 @@ public class Constants {
     }
     public static void loadAd(Context context) {
         // Use the test ad unit ID to load an ad.
-        RewardedInterstitialAd.load(context, "ca-app-pub-3940256099942544/5354046379",
+        RewardedInterstitialAd.load(context, "ca-app-pub-5324429581828078/7053930102",
                 new AdRequest.Builder().build(),  new RewardedInterstitialAdLoadCallback() {
                     @Override
                     public void onAdLoaded(RewardedInterstitialAd ad) {

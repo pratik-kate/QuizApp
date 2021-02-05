@@ -31,7 +31,7 @@ public class ShopActivity extends AppCompatActivity {
 
         adView.setAdSize(AdSize.BANNER);
 
-        adView.setAdUnitId("ca-app-pub-5324429581828078/6070672454");
+        adView.setAdUnitId("ca-app-pub-5324429581828078/9078647581");
 
         mAdView = findViewById(R.id.adShop);
         AdRequest adRequest = new AdRequest.Builder().build();

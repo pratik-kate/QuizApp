@@ -11,26 +11,31 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.QuizzApp">
-        <activity android:name="com.supertridents.ncert.class10.quiz.game.solutionns.HelpActivity"></activity>
-        <activity android:name="com.supertridents.ncert.class10.quiz.game.solutionns.TimeModeActivity" />
-        <activity android:name="com.supertridents.ncert.class10.quiz.game.solutionns.HardActivity" />
-        <activity android:name="com.supertridents.ncert.class10.quiz.game.solutionns.MediumActivity" />
-        <activity android:name="com.supertridents.ncert.class10.quiz.game.solutionns.PlayActivity" />
-        <activity android:name="com.supertridents.ncert.class10.quiz.game.solutionns.ShopActivity" />
-        <activity android:name="com.supertridents.ncert.class10.quiz.game.solutionns.GameActivity" />
-        <activity android:name="com.supertridents.ncert.class10.quiz.game.solutionns.SettingsActivity" />
-        <activity android:name="com.supertridents.ncert.class10.quiz.game.solutionns.SplashActivity">
+        <activity android:name=".maths.MathsTimeModeActivity"></activity>
+        <activity android:name=".maths.MathsHardActivity" />
+        <activity android:name=".maths.MathsMediumActivity" />
+        <activity android:name=".maths.MathsGameActivity" />
+        <activity android:name=".maths.MathsPlayActivity" />
+        <activity android:name=".HelpActivity" />
+        <activity android:name=".TimeModeActivity" />
+        <activity android:name=".HardActivity" />
+        <activity android:name=".MediumActivity" />
+        <activity android:name=".PlayActivity" />
+        <activity android:name=".ShopActivity" />
+        <activity android:name=".GameActivity" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.supertridents.ncert.class10.quiz.game.solutionns.MainActivity" />
+        <activity android:name=".MainActivity" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713" />
+            android:value="ca-app-pub-5324429581828078~8558583469" />
     </application>
 
 </manifest>

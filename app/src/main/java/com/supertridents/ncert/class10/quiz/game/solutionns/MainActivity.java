@@ -20,6 +20,7 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.supertridents.ncert.class10.quiz.game.solutionns.maths.MathsPlayActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     public static int coins;
     public static String SCORE ="SCORE";
     TextView setting,exit;
-    CardView profile,settings,shop,game;
+    CardView profile,settings,shop,game,maths;
     private AdView mAdView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         adView.setAdSize(AdSize.BANNER);
 
-        adView.setAdUnitId("ca-app-pub-5324429581828078/6070672454");
+        adView.setAdUnitId("ca-app-pub-5324429581828078/3762741721");
 
         mAdView = findViewById(R.id.adHome);
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -103,11 +104,17 @@ public class MainActivity extends AppCompatActivity {
         profile = findViewById(R.id.cardProfile);
         settings = findViewById(R.id.cardSettings);
         shop = findViewById(R.id.cardShop);
+        maths = findViewById(R.id.maths);
 
         game.setOnClickListener(v -> {
             Intent game = new Intent(MainActivity.this,PlayActivity.class);
             startActivity(game);
         });
+        maths.setOnClickListener(v -> {
+            Intent game = new Intent(MainActivity.this, MathsPlayActivity.class);
+            startActivity(game);
+        });
+
 //        setting.setOnClickListener(v -> {
 //            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
 //            startActivity(intent);

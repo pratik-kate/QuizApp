@@ -1,4 +1,4 @@
-package com.supertridents.ncert.class10.quiz.game.solutionns;
+package com.supertridents.ncert.class10.quiz.game.solutionns.maths;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,8 +22,12 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAdCallback;
+import com.supertridents.ncert.class10.quiz.game.solutionns.Constants;
+import com.supertridents.ncert.class10.quiz.game.solutionns.MainActivity;
+import com.supertridents.ncert.class10.quiz.game.solutionns.R;
+import com.supertridents.ncert.class10.quiz.game.solutionns.TimeModeActivity;
 
-public class PlayActivity extends AppCompatActivity {
+public class MathsPlayActivity extends AppCompatActivity {
 
     CardView easy,normal,hard,timeMode;
     ImageView back;
@@ -104,7 +108,7 @@ public class PlayActivity extends AppCompatActivity {
                 startActivity(new Intent(this, TimeModeActivity.class));
             }
             else {
-                final Dialog dialog2 = new Dialog(PlayActivity.this);
+                final Dialog dialog2 = new Dialog(MathsPlayActivity.this);
                 dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                 dialog2.setContentView(R.layout.alert);
                 dialog2.setCancelable(true);
@@ -117,18 +121,18 @@ public class PlayActivity extends AppCompatActivity {
                 (dialog2.findViewById(R.id.yes)).setOnClickListener(v1 -> {
 
                     if(Constants.rewardedAd.isLoaded()){
-                        Constants.rewardedAd.show(PlayActivity.this, new RewardedAdCallback() {
+                        Constants.rewardedAd.show(MathsPlayActivity.this, new RewardedAdCallback() {
                             @Override
                             public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                                startActivity(new Intent(PlayActivity.this, TimeModeActivity.class));
-                                Toast.makeText(PlayActivity.this, "Congrats! Time Trial Successfully Unlocked", Toast.LENGTH_SHORT).show();
-                                Constants.loadRewardedAd(PlayActivity.this);
+                                startActivity(new Intent(MathsPlayActivity.this, MathsTimeModeActivity.class));
+                                Toast.makeText(MathsPlayActivity.this, "Congrats! Time Trial Successfully Unlocked", Toast.LENGTH_SHORT).show();
+                                Constants.loadRewardedAd(MathsPlayActivity.this);
                             }
                         });
                     }
                     else
                     {
-                        Toast.makeText(PlayActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MathsPlayActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
                     }
 
                     dialog2.dismiss();
@@ -145,15 +149,15 @@ public class PlayActivity extends AppCompatActivity {
         });
 
         back.setOnClickListener(v -> {
-           startActivity(new Intent(this,MainActivity.class));
+            startActivity(new Intent(this,MainActivity.class));
         });
 
         easy.setOnClickListener(v -> {
-            startActivity(new Intent(this,GameActivity.class));
+            startActivity(new Intent(this,MathsGameActivity.class));
         });
         normal.setOnClickListener(v -> {
             if(completed>=1) {
-                startActivity(new Intent(this, MediumActivity.class));
+                startActivity(new Intent(this, MathsMediumActivity.class));
             }
             else{
                 Toast.makeText(this, "Complete Easy Mode To Unlock This Mode", Toast.LENGTH_SHORT).show();
@@ -161,7 +165,7 @@ public class PlayActivity extends AppCompatActivity {
         });
         hard.setOnClickListener(v -> {
             if(completed>2) {
-                startActivity(new Intent(this, HardActivity.class));
+                startActivity(new Intent(this, MathsHardActivity.class));
             }
             else{
                 Toast.makeText(this, "Complete Normal Mode To Unlock This Mode", Toast.LENGTH_SHORT).show();

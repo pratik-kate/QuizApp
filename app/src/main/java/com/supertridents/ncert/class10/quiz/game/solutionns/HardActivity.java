@@ -85,7 +85,7 @@ public class HardActivity extends AppCompatActivity implements View.OnClickListe
         getSupportActionBar().hide();
 
         mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.setAdUnitId("ca-app-pub-5324429581828078/7694070266");
         adRequest = new AdRequest.Builder().build();
         mInterstitialAd.loadAd(adRequest);
         mInterstitialAd.setAdListener(new AdListener() {
@@ -1116,7 +1116,7 @@ public class HardActivity extends AppCompatActivity implements View.OnClickListe
                                 int seconds = (int) (TimeLeftInMillis / 1000) % 60;
                                 String timeLeftFormatted = String.format(Locale.getDefault(), "%02d", seconds);
                                 TextView a = dialog.findViewById(R.id.yes);
-                                a.setText("Ad will start in 5sec");
+                                a.setText("Ad will begin");
 
 
                                 //updateCountDown();
@@ -1457,7 +1457,7 @@ public class HardActivity extends AppCompatActivity implements View.OnClickListe
                                     int seconds = (int) (TimeLeftInMillis / 1000) % 60;
                                     String timeLeftFormatted = String.format(Locale.getDefault(), "%02d", seconds);
                                     TextView a = dialog.findViewById(R.id.yes);
-                                    a.setText("Ad will start in 5sec");
+                                    a.setText("Ad will begin");
 
                                     //updateCountDown();
                                 }

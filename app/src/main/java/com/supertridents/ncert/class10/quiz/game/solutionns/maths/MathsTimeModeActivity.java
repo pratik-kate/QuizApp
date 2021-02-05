@@ -1,5 +1,5 @@
 
-package com.supertridents.ncert.class10.quiz.game.solutionns;
+package com.supertridents.ncert.class10.quiz.game.solutionns.maths;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -32,6 +32,10 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAdCallback;
+import com.supertridents.ncert.class10.quiz.game.solutionns.Constants;
+import com.supertridents.ncert.class10.quiz.game.solutionns.MainActivity;
+import com.supertridents.ncert.class10.quiz.game.solutionns.QuestionItem;
+import com.supertridents.ncert.class10.quiz.game.solutionns.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,7 +51,7 @@ import static com.supertridents.ncert.class10.quiz.game.solutionns.MainActivity.
 import static com.supertridents.ncert.class10.quiz.game.solutionns.MainActivity.SCORE;
 import static com.supertridents.ncert.class10.quiz.game.solutionns.MainActivity.coins;
 
-public class TimeModeActivity extends AppCompatActivity implements View.OnClickListener, OnUserEarnedRewardListener {
+public class MathsTimeModeActivity extends AppCompatActivity implements View.OnClickListener, OnUserEarnedRewardListener {
 
     final String CORRECT="CORRECT";
     final String ANS="ANS";
@@ -201,7 +205,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
             pauseTimer();
             if(ffifty){
 
-                final Dialog dialog2 = new Dialog(TimeModeActivity.this);
+                final Dialog dialog2 = new Dialog(MathsTimeModeActivity.this);
                 dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                 dialog2.setContentView(R.layout.fifty);
                 dialog2.setCancelable(true);
@@ -253,7 +257,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                 dialog2.show();
                 dialog2.getWindow().setAttributes(lp2);
             }else {
-                final Dialog dialog2 = new Dialog(TimeModeActivity.this);
+                final Dialog dialog2 = new Dialog(MathsTimeModeActivity.this);
                 dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                 dialog2.setContentView(R.layout.alert);
                 dialog2.setCancelable(true);
@@ -265,7 +269,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                 text.setText("Watch Ad to use extra lifeline?");
                 (dialog2.findViewById(R.id.yes)).setOnClickListener(v1 -> {
                     if(Constants.rewardedAd.isLoaded()){
-                        Constants.rewardedAd.show(TimeModeActivity.this, new RewardedAdCallback() {
+                        Constants.rewardedAd.show(MathsTimeModeActivity.this, new RewardedAdCallback() {
                             @Override
                             public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
                                 startTimer(mTimeLeftInMillis);
@@ -283,14 +287,14 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                                     op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
                                     op4.setBackground(getResources().getDrawable(R.drawable.box_unselected));
                                 }
-                                //Toast.makeText(TimeModeActivity.this, "done", Toast.LENGTH_SHORT).show();
-                                Constants.loadRewardedAd(TimeModeActivity.this);
+                                //Toast.makeText(MathsTimeModeActivity.this, "done", Toast.LENGTH_SHORT).show();
+                                Constants.loadRewardedAd(MathsTimeModeActivity.this);
                             }
                         });
                     }
                     else{
                         startTimer(mTimeLeftInMillis);
-                        Toast.makeText(TimeModeActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MathsTimeModeActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
                     }
                     dialog2.dismiss();
                 });
@@ -310,7 +314,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
             pauseTimer();
             if(doubledip) {
                 final Boolean[] a = {true};
-                final Dialog dialog2 = new Dialog(TimeModeActivity.this);
+                final Dialog dialog2 = new Dialog(MathsTimeModeActivity.this);
                 dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                 dialog2.setContentView(R.layout.doubledip);
                 dialog2.setCancelable(true);
@@ -371,7 +375,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                 dialog2.show();
                 dialog2.getWindow().setAttributes(lp2);
             }else {
-                final Dialog dialog2 = new Dialog(TimeModeActivity.this);
+                final Dialog dialog2 = new Dialog(MathsTimeModeActivity.this);
                 dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                 dialog2.setContentView(R.layout.alert);
                 dialog2.setCancelable(true);
@@ -383,7 +387,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                 text.setText("Watch Ad to use extra lifeline?");
                 (dialog2.findViewById(R.id.yes)).setOnClickListener(v1 -> {
                     if(Constants.rewardedAd.isLoaded()){
-                        Constants.rewardedAd.show(TimeModeActivity.this, new RewardedAdCallback() {
+                        Constants.rewardedAd.show(MathsTimeModeActivity.this, new RewardedAdCallback() {
                             @Override
                             public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
                                 startTimer(mTimeLeftInMillis);
@@ -392,14 +396,14 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                                 op2.setOnClickListener(v4 -> checkDoubledip(op2));
                                 op3.setOnClickListener(v4 -> checkDoubledip(op3));
                                 op4.setOnClickListener(v4 -> checkDoubledip(op4));
-                                //Toast.makeText(TimeModeActivity.this, "done", Toast.LENGTH_SHORT).show();
-                                Constants.loadRewardedAd(TimeModeActivity.this);
+                                //Toast.makeText(MathsTimeModeActivity.this, "done", Toast.LENGTH_SHORT).show();
+                                Constants.loadRewardedAd(MathsTimeModeActivity.this);
                             }
                         });
                     }
                     else{
                         startTimer(mTimeLeftInMillis);
-                        Toast.makeText(TimeModeActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MathsTimeModeActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
                     }
                     dialog2.dismiss();
                 });
@@ -417,7 +421,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
         swap.setOnClickListener(v -> {
             pauseTimer();
             if(sswap) {
-                final Dialog dialog2 = new Dialog(TimeModeActivity.this);
+                final Dialog dialog2 = new Dialog(MathsTimeModeActivity.this);
                 dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                 dialog2.setContentView(R.layout.swap);
                 dialog2.setCancelable(true);
@@ -452,7 +456,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                             fifty2.setVisibility(View.VISIBLE);
                             fifty2.setOnClickListener(v2 -> {
 
-                                final Dialog dialogf = new Dialog(TimeModeActivity.this);
+                                final Dialog dialogf = new Dialog(MathsTimeModeActivity.this);
                                 dialogf.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                                 dialogf.setContentView(R.layout.fifty);
                                 dialogf.setCancelable(true);
@@ -515,7 +519,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                             doubleDip2.setVisibility(View.VISIBLE);
                             doubleDip2.setOnClickListener(v2 -> {
 
-                                final Dialog ddialog2 = new Dialog(TimeModeActivity.this);
+                                final Dialog ddialog2 = new Dialog(MathsTimeModeActivity.this);
                                 ddialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                                 ddialog2.setContentView(R.layout.doubledip);
                                 ddialog2.setCancelable(true);
@@ -587,7 +591,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                 dialog2.getWindow().setAttributes(lp2);
             }
             else {
-                final Dialog dialog2 = new Dialog(TimeModeActivity.this);
+                final Dialog dialog2 = new Dialog(MathsTimeModeActivity.this);
                 dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                 dialog2.setContentView(R.layout.alert);
                 dialog2.setCancelable(true);
@@ -599,7 +603,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                 text.setText("Watch Ad to use extra lifeline?");
                 (dialog2.findViewById(R.id.yes)).setOnClickListener(v1 -> {
                     if(Constants.rewardedAd.isLoaded()){
-                        Constants.rewardedAd.show(TimeModeActivity.this, new RewardedAdCallback() {
+                        Constants.rewardedAd.show(MathsTimeModeActivity.this, new RewardedAdCallback() {
                             @Override
                             public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
                                 startTimer(mTimeLeftInMillis);
@@ -608,15 +612,15 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                                 op2.setOnClickListener(v4 -> checkRandomAnswer(op2));
                                 op3.setOnClickListener(v4 -> checkRandomAnswer(op3));
                                 op4.setOnClickListener(v4 -> checkRandomAnswer(op4));
-                                //Toast.makeText(TimeModeActivity.this, "done", Toast.LENGTH_SHORT).show();
-                                Constants.loadRewardedAd(TimeModeActivity.this);
+                                //Toast.makeText(MathsTimeModeActivity.this, "done", Toast.LENGTH_SHORT).show();
+                                Constants.loadRewardedAd(MathsTimeModeActivity.this);
                                 startTimer(mTimeLeftInMillis);
                             }
                         });
                     }
                     else{
                         startTimer(mTimeLeftInMillis);
-                        Toast.makeText(TimeModeActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MathsTimeModeActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
                     }
                     dialog2.dismiss();
                 });
@@ -637,7 +641,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
     public void onBackPressed() {
         pauseTimer();
 
-        final Dialog dialog2 = new Dialog(TimeModeActivity.this);
+        final Dialog dialog2 = new Dialog(MathsTimeModeActivity.this);
         dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
         dialog2.setContentView(R.layout.alert);
         dialog2.setCancelable(true);
@@ -675,18 +679,18 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
     private void showInterstitial() {
 
         try{
-        Constants.rewardedInterstitialAd.show(TimeModeActivity.this,rewardItem -> {
-            SharedPreferences preferences = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE);
-            final int[] credits = {preferences.getInt(String.valueOf(MainActivity.coins), 0)};
-            //Toast.makeText(this, "Reward", Toast.LENGTH_SHORT).show();
-            credits[0] = credits[0] + 100;
-            SharedPreferences.Editor editor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
-            editor.putInt(String.valueOf(MainActivity.coins),credits[0]);
-            editor.apply();
-            editor.commit();
-            Toast.makeText(TimeModeActivity.this, "100 Coins Won", Toast.LENGTH_SHORT).show();
-            Constants.loadAd(this);
-        });
+            Constants.rewardedInterstitialAd.show(MathsTimeModeActivity.this,rewardItem -> {
+                SharedPreferences preferences = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE);
+                final int[] credits = {preferences.getInt(String.valueOf(MainActivity.coins), 0)};
+                //Toast.makeText(this, "Reward", Toast.LENGTH_SHORT).show();
+                credits[0] = credits[0] + 100;
+                SharedPreferences.Editor editor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
+                editor.putInt(String.valueOf(MainActivity.coins),credits[0]);
+                editor.apply();
+                editor.commit();
+                Toast.makeText(MathsTimeModeActivity.this, "100 Coins Won", Toast.LENGTH_SHORT).show();
+                Constants.loadAd(this);
+            });
         }catch (Exception e){
             Toast.makeText(this, "Please Wait Ad is loading", Toast.LENGTH_SHORT).show();
         }
@@ -710,10 +714,10 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void run() {
                         // gif.setVisibility(View.INVISIBLE);
-                        //Toast.makeText(TimeModeActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MathsTimeModeActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
 
                         if(timer[0]) {
-                            final Dialog dialog2 = new Dialog(TimeModeActivity.this);
+                            final Dialog dialog2 = new Dialog(MathsTimeModeActivity.this);
                             dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                             dialog2.setContentView(R.layout.alert);
                             dialog2.setCancelable(true);
@@ -726,11 +730,11 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                             (dialog2.findViewById(R.id.yes)).setOnClickListener(v1 -> {
                                 timer[0]=false;
                                 if (Constants.rewardedAd.isLoaded()) {
-                                    Constants.rewardedAd.show(TimeModeActivity.this, new RewardedAdCallback() {
+                                    Constants.rewardedAd.show(MathsTimeModeActivity.this, new RewardedAdCallback() {
                                         @Override
                                         public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
 
-                                            Activity activityContext = TimeModeActivity.this;
+                                            Activity activityContext = MathsTimeModeActivity.this;
                                             RewardedAdCallback adCallback = new RewardedAdCallback() {
                                                 @Override
                                                 public void onRewardedAdOpened() {
@@ -755,86 +759,86 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                                                 }
                                             };
                                             Constants.rewardedAd.show(activityContext, adCallback);
-                                            //Toast.makeText(TimeModeActivity.this, "done", Toast.LENGTH_SHORT).show();
-                                            Constants.loadRewardedAd(TimeModeActivity.this);
+                                            //Toast.makeText(MathsTimeModeActivity.this, "done", Toast.LENGTH_SHORT).show();
+                                            Constants.loadRewardedAd(MathsTimeModeActivity.this);
                                         }
                                     });
                                 } else {
 
                                     startTimer(mTimeLeftInMillis);
-                                    Toast.makeText(TimeModeActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MathsTimeModeActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
                                 }
                                 dialog2.dismiss();
                             });
                             (dialog2.findViewById(R.id.no)).setOnClickListener(v1 -> {
                                 //startTimer(mTimeLeftInMillis);
                                 //if (currentQuestion == 14) {
-                                    final Dialog dialog = new Dialog(TimeModeActivity.this, R.style.PauseDialog);
-                                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-                                    dialog.setContentView(R.layout.finish);
-                                    dialog.setCancelable(true);
-                                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                                    lp.copyFrom(dialog.getWindow().getAttributes());
-                                    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                                    lp.height = WindowManager.LayoutParams.MATCH_PARENT;
-                                    TextView lvl = dialog.findViewById(R.id.flevel);
-                                    lvl.setText("Timer Mode");
-                                    (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
-                                    (dialog.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
-                                    (dialog.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
-                                    (dialog.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
-                                        SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                                        editor.clear();
-                                        editor.apply();
-                                        editor.commit();
+                                final Dialog dialog = new Dialog(MathsTimeModeActivity.this, R.style.PauseDialog);
+                                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                                dialog.setContentView(R.layout.finish);
+                                dialog.setCancelable(true);
+                                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                                lp.copyFrom(dialog.getWindow().getAttributes());
+                                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                                TextView lvl = dialog.findViewById(R.id.flevel);
+                                lvl.setText("Timer Mode");
+                                (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
+                                (dialog.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
+                                (dialog.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
+                                (dialog.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
+                                    SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                    editor.clear();
+                                    editor.apply();
+                                    editor.commit();
 
-                                        startActivity(new Intent(TimeModeActivity.this, PlayActivity.class));
-                                    });
-                                    (dialog.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
-                                        SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                                        editor.clear();
-                                        editor.apply();
-                                        editor.commit();
+                                    startActivity(new Intent(MathsTimeModeActivity.this, MathsPlayActivity.class));
+                                });
+                                (dialog.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
+                                    SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                    editor.clear();
+                                    editor.apply();
+                                    editor.commit();
 
-                                        startActivity(new Intent(TimeModeActivity.this, MainActivity.class));
-                                    });
-                                    (dialog.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
-                                        SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                                        editor.clear();
-                                        editor.apply();
-                                        editor.commit();
-                                        startActivity(getIntent());
-                                    });
-                                    SharedPreferences preferences = getSharedPreferences(CORRECT, MODE_PRIVATE);
-                                    int c = preferences.getInt(ANS, 0);
-                                    //gamefinish
-                                    TextView scoretxt = (dialog.findViewById(R.id.scoretext));
-                                    if (c < 6) {
-                                        (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                                        scoretxt.setText(String.valueOf(c * 100));
-                                    } else if (c <= 14) {
-                                        (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                                        (dialog.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                                        scoretxt.setText(String.valueOf(c * 100));
-                                        //edit.putInt(MainActivity.CURRENT,1);
-                                    } else if (c == 15) {
-                                        (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                                        (dialog.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                                        (dialog.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
-                                        scoretxt.setText(String.valueOf(c * 100));
-                                    }
-                                    TranslateAnimation anim = new TranslateAnimation(0, 0, 0, 0);
-                                    anim.setDuration(1000);
-                                    dialog.show();
-                                    dialog.getWindow().setAttributes(lp);
-                                    showinterstitial();
+                                    startActivity(new Intent(MathsTimeModeActivity.this, MainActivity.class));
+                                });
+                                (dialog.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
+                                    SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                    editor.clear();
+                                    editor.apply();
+                                    editor.commit();
+                                    startActivity(getIntent());
+                                });
+                                SharedPreferences preferences = getSharedPreferences(CORRECT, MODE_PRIVATE);
+                                int c = preferences.getInt(ANS, 0);
+                                //gamefinish
+                                TextView scoretxt = (dialog.findViewById(R.id.scoretext));
+                                if (c < 6) {
+                                    (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                    scoretxt.setText(String.valueOf(c * 100));
+                                } else if (c <= 14) {
+                                    (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                    (dialog.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                    scoretxt.setText(String.valueOf(c * 100));
+                                    //edit.putInt(MainActivity.CURRENT,1);
+                                } else if (c == 15) {
+                                    (dialog.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                    (dialog.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                    (dialog.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                                    scoretxt.setText(String.valueOf(c * 100));
+                                }
+                                TranslateAnimation anim = new TranslateAnimation(0, 0, 0, 0);
+                                anim.setDuration(1000);
+                                dialog.show();
+                                dialog.getWindow().setAttributes(lp);
+                                showinterstitial();
                                 dialog2.dismiss();
 
                             });
                             dialog2.show();
                             dialog2.getWindow().setAttributes(lp2);
                         }else{
-                            final Dialog dialog = new Dialog(TimeModeActivity.this, R.style.PauseDialog);
+                            final Dialog dialog = new Dialog(MathsTimeModeActivity.this, R.style.PauseDialog);
                             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                             dialog.setContentView(R.layout.finish);
                             dialog.setCancelable(true);
@@ -854,7 +858,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                                 editor.apply();
                                 editor.commit();
 
-                                startActivity(new Intent(TimeModeActivity.this, PlayActivity.class));
+                                startActivity(new Intent(MathsTimeModeActivity.this, MathsPlayActivity.class));
                             });
                             (dialog.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
                                 SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
@@ -862,7 +866,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                                 editor.apply();
                                 editor.commit();
 
-                                startActivity(new Intent(TimeModeActivity.this, MainActivity.class));
+                                startActivity(new Intent(MathsTimeModeActivity.this, MainActivity.class));
                             });
                             (dialog.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
                                 SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
@@ -905,7 +909,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
         mCountDownTimer.cancel();
         mTimerRunning = false;
     }
-     private void addTimer() {
+    private void addTimer() {
 
     }
 
@@ -949,8 +953,8 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                         clickable(true);
                         reset();
                     }else {
-                        //Toast.makeText(TimeModeActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
-                        final Dialog dialog2 = new Dialog(TimeModeActivity.this,R.style.PauseDialog);
+                        //Toast.makeText(MathsTimeModeActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
+                        final Dialog dialog2 = new Dialog(MathsTimeModeActivity.this,R.style.PauseDialog);
                         dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                         dialog2.setContentView(R.layout.finish);
                         dialog2.setCancelable(true);
@@ -975,7 +979,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                             editor.clear();
                             editor.apply();
                             editor.commit();
-                            startActivity(new Intent(TimeModeActivity.this,PlayActivity.class));
+                            startActivity(new Intent(MathsTimeModeActivity.this,MathsPlayActivity.class));
                         });
 
                         (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
@@ -983,7 +987,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                             editor.clear();
                             editor.apply();
                             editor.commit();
-                            startActivity(new Intent(TimeModeActivity.this,MainActivity.class));
+                            startActivity(new Intent(MathsTimeModeActivity.this,MainActivity.class));
                         });
                         (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
                             SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
@@ -1056,8 +1060,8 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                             clickable(true);
                             reset();
                         } else {
-                            //Toast.makeText(TimeModeActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
-                            final Dialog dialog2 = new Dialog(TimeModeActivity.this,R.style.PauseDialog);
+                            //Toast.makeText(MathsTimeModeActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
+                            final Dialog dialog2 = new Dialog(MathsTimeModeActivity.this,R.style.PauseDialog);
                             dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                             dialog2.setContentView(R.layout.finish);
                             dialog2.setCancelable(true);
@@ -1082,7 +1086,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                                 editor.clear();
                                 editor.apply();
                                 editor.commit();
-                                startActivity(new Intent(TimeModeActivity.this, PlayActivity.class));
+                                startActivity(new Intent(MathsTimeModeActivity.this, MathsPlayActivity.class));
                             });
 
                             (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
@@ -1090,7 +1094,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                                 editor.clear();
                                 editor.apply();
                                 editor.commit();
-                                startActivity(new Intent(TimeModeActivity.this, MainActivity.class));
+                                startActivity(new Intent(MathsTimeModeActivity.this, MainActivity.class));
                             });
                             (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
                                 SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
@@ -1172,8 +1176,8 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                         clickable(true);
                         reset();
                     }else {
-                        //Toast.makeText(TimeModeActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
-                        final Dialog dialog2 = new Dialog(TimeModeActivity.this,R.style.PauseDialog);
+                        //Toast.makeText(MathsTimeModeActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
+                        final Dialog dialog2 = new Dialog(MathsTimeModeActivity.this,R.style.PauseDialog);
                         dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                         dialog2.setContentView(R.layout.finish);
                         dialog2.setCancelable(true);
@@ -1198,7 +1202,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                             editor.clear();
                             editor.apply();
                             editor.commit();
-                            startActivity(new Intent(TimeModeActivity.this,PlayActivity.class));
+                            startActivity(new Intent(MathsTimeModeActivity.this,MathsPlayActivity.class));
                         });
 
                         (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
@@ -1206,7 +1210,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                             editor.clear();
                             editor.apply();
                             editor.commit();
-                            startActivity(new Intent(TimeModeActivity.this,MainActivity.class));
+                            startActivity(new Intent(MathsTimeModeActivity.this,MainActivity.class));
                         });
                         (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
                             SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
@@ -1268,7 +1272,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                         clickable(true);
                         reset();
                     }else {
-                        final Dialog dialog2 = new Dialog(TimeModeActivity.this,R.style.PauseDialog);
+                        final Dialog dialog2 = new Dialog(MathsTimeModeActivity.this,R.style.PauseDialog);
                         dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                         dialog2.setContentView(R.layout.finish);
                         dialog2.setCancelable(true);
@@ -1293,7 +1297,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                             editor.clear();
                             editor.apply();
                             editor.commit();
-                            startActivity(new Intent(TimeModeActivity.this,PlayActivity.class));
+                            startActivity(new Intent(MathsTimeModeActivity.this,MathsPlayActivity.class));
                         });
 
                         (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
@@ -1301,7 +1305,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                             editor.clear();
                             editor.apply();
                             editor.commit();
-                            startActivity(new Intent(TimeModeActivity.this,MainActivity.class));
+                            startActivity(new Intent(MathsTimeModeActivity.this,MainActivity.class));
                         });
                         (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
                             SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
@@ -1386,8 +1390,8 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                         clickable(true);
                         reset();
                     }else {
-                        //Toast.makeText(TimeModeActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
-                        final Dialog dialog2 = new Dialog(TimeModeActivity.this,R.style.PauseDialog);
+                        //Toast.makeText(MathsTimeModeActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
+                        final Dialog dialog2 = new Dialog(MathsTimeModeActivity.this,R.style.PauseDialog);
                         dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                         dialog2.setContentView(R.layout.finish);
                         dialog2.setCancelable(true);
@@ -1412,7 +1416,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                             editor.clear();
                             editor.apply();
                             editor.commit();
-                            startActivity(new Intent(TimeModeActivity.this,PlayActivity.class));
+                            startActivity(new Intent(MathsTimeModeActivity.this,MathsPlayActivity.class));
                         });
 
                         (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
@@ -1420,7 +1424,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                             editor.clear();
                             editor.apply();
                             editor.commit();
-                            startActivity(new Intent(TimeModeActivity.this,MainActivity.class));
+                            startActivity(new Intent(MathsTimeModeActivity.this,MainActivity.class));
                         });
                         (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
                             SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
@@ -1498,8 +1502,8 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                             clickable(true);
                             reset();
                         } else {
-                            //Toast.makeText(TimeModeActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
-                            final Dialog dialog2 = new Dialog(TimeModeActivity.this,R.style.PauseDialog);
+                            //Toast.makeText(MathsTimeModeActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
+                            final Dialog dialog2 = new Dialog(MathsTimeModeActivity.this,R.style.PauseDialog);
                             dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                             dialog2.setContentView(R.layout.finish);
                             dialog2.setCancelable(true);
@@ -1524,7 +1528,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                                 editor.clear();
                                 editor.apply();
                                 editor.commit();
-                                startActivity(new Intent(TimeModeActivity.this, PlayActivity.class));
+                                startActivity(new Intent(MathsTimeModeActivity.this, MathsPlayActivity.class));
                             });
 
                             (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
@@ -1532,7 +1536,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                                 editor.clear();
                                 editor.apply();
                                 editor.commit();
-                                startActivity(new Intent(TimeModeActivity.this, MainActivity.class));
+                                startActivity(new Intent(MathsTimeModeActivity.this, MainActivity.class));
                             });
                             (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
                                 SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
@@ -1624,8 +1628,8 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
 //                        fifty.setForeground(null);
 
                     }else {
-                        //Toast.makeText(TimeModeActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
-                        final Dialog dialog2 = new Dialog(TimeModeActivity.this,R.style.PauseDialog);
+                        //Toast.makeText(MathsTimeModeActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
+                        final Dialog dialog2 = new Dialog(MathsTimeModeActivity.this,R.style.PauseDialog);
                         dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                         dialog2.setContentView(R.layout.finish);
                         dialog2.setCancelable(true);
@@ -1650,7 +1654,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                             editor.clear();
                             editor.apply();
                             editor.commit();
-                            startActivity(new Intent(TimeModeActivity.this,PlayActivity.class));
+                            startActivity(new Intent(MathsTimeModeActivity.this,MathsPlayActivity.class));
                         });
 
                         (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
@@ -1658,7 +1662,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                             editor.clear();
                             editor.apply();
                             editor.commit();
-                            startActivity(new Intent(TimeModeActivity.this,MainActivity.class));
+                            startActivity(new Intent(MathsTimeModeActivity.this,MainActivity.class));
                         });
                         (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
                             SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
@@ -1727,7 +1731,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
 //                        fifty.setClickable(true);
 //                        fifty.setForeground(null);
                     }else {
-                        final Dialog dialog2 = new Dialog(TimeModeActivity.this,R.style.PauseDialog);
+                        final Dialog dialog2 = new Dialog(MathsTimeModeActivity.this,R.style.PauseDialog);
                         dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                         dialog2.setContentView(R.layout.finish);
                         dialog2.setCancelable(true);
@@ -1752,7 +1756,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                             editor.clear();
                             editor.apply();
                             editor.commit();
-                            startActivity(new Intent(TimeModeActivity.this,PlayActivity.class));
+                            startActivity(new Intent(MathsTimeModeActivity.this,MathsPlayActivity.class));
                         });
 
                         (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
@@ -1760,7 +1764,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                             editor.clear();
                             editor.apply();
                             editor.commit();
-                            startActivity(new Intent(TimeModeActivity.this,MainActivity.class));
+                            startActivity(new Intent(MathsTimeModeActivity.this,MainActivity.class));
                         });
                         (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
                             SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
@@ -1923,8 +1927,8 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
             {
                 pauseTimer();
                 SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                //Toast.makeText(TimeModeActivity.this, "pause", Toast.LENGTH_SHORT).show();
-                final Dialog dialog = new Dialog(TimeModeActivity.this,R.style.PauseDialog);
+                //Toast.makeText(MathsTimeModeActivity.this, "pause", Toast.LENGTH_SHORT).show();
+                final Dialog dialog = new Dialog(MathsTimeModeActivity.this,R.style.PauseDialog);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                 dialog.setContentView(R.layout.pause);
                 dialog.setCancelable(true);
@@ -1940,7 +1944,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
 
                 (dialog.findViewById(R.id.resume)).setOnClickListener(v1 -> {
                     startTimer(mTimeLeftInMillis);
-                 dialog.dismiss();
+                    dialog.dismiss();
                 });
                 (dialog.findViewById(R.id.restart)).setOnClickListener(v2->{
                     //SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
@@ -1957,7 +1961,7 @@ public class TimeModeActivity extends AppCompatActivity implements View.OnClickL
                     editor.clear();
                     editor.apply();
                     editor.commit();
-                    startActivity(new Intent(TimeModeActivity.this, MainActivity.class));
+                    startActivity(new Intent(MathsTimeModeActivity.this, MainActivity.class));
 
                 });
                 if(c<3){

@@ -1,5 +1,5 @@
 
-package com.supertridents.ncert.class10.quiz.game.solutionns;
+package com.supertridents.ncert.class10.quiz.game.solutionns.maths;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -25,8 +24,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.core.app.NavUtils;
-import androidx.lifecycle.Lifecycle;
 
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdListener;
@@ -36,11 +33,14 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAdCallback;
+import com.supertridents.ncert.class10.quiz.game.solutionns.Constants;
+import com.supertridents.ncert.class10.quiz.game.solutionns.MainActivity;
+import com.supertridents.ncert.class10.quiz.game.solutionns.QuestionItem;
+import com.supertridents.ncert.class10.quiz.game.solutionns.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ import static com.supertridents.ncert.class10.quiz.game.solutionns.MainActivity.
 import static com.supertridents.ncert.class10.quiz.game.solutionns.MainActivity.SCORE;
 import static com.supertridents.ncert.class10.quiz.game.solutionns.MainActivity.coins;
 
-public class GameActivity extends AppCompatActivity implements View.OnClickListener, OnUserEarnedRewardListener {
+public class MathsHardActivity extends AppCompatActivity implements View.OnClickListener, OnUserEarnedRewardListener {
 
     final String CORRECT="CORRECT";
     final String ANS="ANS";
@@ -65,12 +65,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     CountDownTimer cTimer = null;
     int isDoubledip = 0,isfifty=0,isswap=0;
     Boolean dip= true,d=true,f=true;
-    Boolean doubledip=true,ffifty=true,sswap=true;
     ProgressBar bar;
-    Boolean[] stateAlive ={true};
+    Boolean doubledip=true,ffifty=true,sswap=true;
+    Boolean[] stateAlive = {true};
     Boolean[] used ={true};
     Boolean[] timer ={true};
-    private static final long START_TIME_IN_MILLIS = 45000;
+    private InterstitialAd mInterstitialAd;
+    AdRequest adRequest;
+
+    private static final long START_TIME_IN_MILLIS = 30000;
     private static final long TIME = 16000;
     private static final long START_TIME_IN_MILLI = 5000;
     private CountDownTimer mCountDownTimer,countDownTimer;
@@ -78,15 +81,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private boolean mTimerRunning;
     private long mTimeLeftInMillis = START_TIME_IN_MILLIS;
 
-
-    private InterstitialAd mInterstitialAd;
-    AdRequest adRequest;
-
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game);
+        setContentView(R.layout.activity_hard);
         getSupportActionBar().hide();
 
         mInterstitialAd = new InterstitialAd(this);
@@ -126,12 +125,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 // Code to be executed when the interstitial ad is closed.
             }
         });
-
-
         SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
         editor.clear();
         editor.apply();
         editor.commit();
+
         question = findViewById(R.id.question);
         op1 = findViewById(R.id.option_1);
         op2 = findViewById(R.id.option_2);
@@ -144,14 +142,44 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         time = findViewById(R.id.timer);
         doubleDip = findViewById(R.id.doubleDip);
         doubleDip2 = findViewById(R.id.doubleDip2);
-        bar  = findViewById(R.id.progressBar);
+
+        bar = findViewById(R.id.progressBar2);
         bar.setMax(15);
         bar.setProgress(1);
+
         AlphaAnimation alphaAnimation = new AlphaAnimation(0.0f, 1.0f);
         alphaAnimation.setDuration(2000);
         //alphaAnimation.setRepeatCount(1);
         alphaAnimation.setRepeatMode(Animation.REVERSE);
         question.startAnimation(alphaAnimation);
+
+        SharedPreferences levelpreferences = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE);
+        clvl = levelpreferences.getInt(MainActivity.CURRENT,1);
+
+        loadQuestions();
+        Collections.shuffle(questionItems);
+        setQuestionScreen(currentQuestion);
+        total = findViewById(R.id.total);
+        current =findViewById(R.id.current);
+        total.setText(String.valueOf(questionItems.size()));
+        current.setText(i+"/");
+
+
+
+        op1.setOnClickListener(this);
+        op2.setOnClickListener(this);
+        op3.setOnClickListener(this);
+        op4.setOnClickListener(this);
+        pause.setOnClickListener(this);
+//        Intent intent = getIntent();
+//        level = intent.getIntExtra("level",0);
+        TextView lvl = findViewById(R.id.lvltxt);
+        lvl.setText("Hard");
+
+        SharedPreferences preferences = getSharedPreferences(LEVEL,MODE_PRIVATE);
+        final int[] coin = {preferences.getInt(String.valueOf(coins), 1)};
+        TextView cointext = findViewById(R.id.coins);
+        cointext.setText(String.valueOf(coin[0]));
 
         TranslateAnimation animop1 = new TranslateAnimation(-1000,0,0,0);
         animop1.setDuration(1000);
@@ -176,98 +204,67 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         doubleDip2.setAnimation(btnanim);
         fifty.setAnimation(btnanim);
         fifty2.setAnimation(btnanim);
-
-
-        SharedPreferences levelpreferences = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE);
-        clvl = levelpreferences.getInt(MainActivity.CURRENT,1);
-
-        loadQuestions();
-        Collections.shuffle(questionItems);
-        setQuestionScreen(currentQuestion);
-        total = findViewById(R.id.total);
-        current =findViewById(R.id.current);
-        total.setText(String.valueOf(questionItems.size()));
-        current.setText(i+"/");
-
-
-
-        op1.setOnClickListener(this);
-        op2.setOnClickListener(this);
-        op3.setOnClickListener(this);
-        op4.setOnClickListener(this);
-        pause.setOnClickListener(this);
-//        Intent intent = getIntent();
-//        level = intent.getIntExtra("level",0);
-        TextView lvl = findViewById(R.id.lvltxt);
-        lvl.setText("Easy");
-
-        SharedPreferences preferences = getSharedPreferences(LEVEL,MODE_PRIVATE);
-        final int[] coin = {preferences.getInt(String.valueOf(coins), 1)};
-        TextView cointext = findViewById(R.id.coins);
-        cointext.setText(String.valueOf(coin[0]));
-
         //Lifelines
         fifty.setOnClickListener(v -> {
 
             pauseTimer();
             if(ffifty){
 
-            final Dialog dialog2 = new Dialog(GameActivity.this);
-            dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-            dialog2.setContentView(R.layout.fifty);
-            dialog2.setCancelable(true);
+                final Dialog dialog2 = new Dialog(MathsHardActivity.this);
+                dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                dialog2.setContentView(R.layout.fifty);
+                dialog2.setCancelable(true);
 
-            WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
-            lp2.copyFrom(dialog2.getWindow().getAttributes());
-            lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
-            lp2.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+                lp2.copyFrom(dialog2.getWindow().getAttributes());
+                lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+                lp2.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
-            (dialog2.findViewById(R.id.fyes)).setOnClickListener(v1 -> {
-                ffifty=false;
-                isfifty = 1;
-                startTimer(mTimeLeftInMillis);
-                String ans = questionItems.get(currentQuestion).getCorrect();
-                if (coin[0] >= 100) {
+                (dialog2.findViewById(R.id.fyes)).setOnClickListener(v1 -> {
+                    ffifty=false;
+                    isfifty = 1;
+                    startTimer(mTimeLeftInMillis);
+                    String ans = questionItems.get(currentQuestion).getCorrect();
+                    if (coin[0] >= 100) {
 
-                    f = false;
-                    if (ans.equals(op1.getText())) {
-                        op1.setBackground(getResources().getDrawable(R.drawable.box_unselected));
-                        op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
-                    } else if (ans.equals(op2.getText())) {
-                        op2.setBackground(getResources().getDrawable(R.drawable.box_unselected));
-                        op4.setBackground(getResources().getDrawable(R.drawable.box_unselected));
-                    } else if (ans.equals(op3.getText())) {
-                        op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
-                        op2.setBackground(getResources().getDrawable(R.drawable.box_unselected));
-                    } else if (ans.equals(op4.getText())) {
-                        op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
-                        op4.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                        f = false;
+                        if (ans.equals(op1.getText())) {
+                            op1.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                            op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                        } else if (ans.equals(op2.getText())) {
+                            op2.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                            op4.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                        } else if (ans.equals(op3.getText())) {
+                            op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                            op2.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                        } else if (ans.equals(op4.getText())) {
+                            op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                            op4.setBackground(getResources().getDrawable(R.drawable.box_unselected));
+                        }
+                        coin[0] = coin[0] - 100;
+                        SharedPreferences.Editor coinseditor = getSharedPreferences(MainActivity.LEVEL, MODE_PRIVATE).edit();
+                        coinseditor.putInt(String.valueOf(coins), coin[0]);
+                        coinseditor.apply();
+                        coinseditor.commit();
+                        cointext.setText(String.valueOf(coin[0]));
+                        // fifty.setClickable(false);
+                        fifty.setForeground(getResources().getDrawable(R.drawable.ic_close));
+                    } else {
+                        Toast.makeText(this, "No Coins", Toast.LENGTH_SHORT).show();
                     }
-                    coin[0] = coin[0] - 100;
-                    SharedPreferences.Editor coinseditor = getSharedPreferences(MainActivity.LEVEL, MODE_PRIVATE).edit();
-                    coinseditor.putInt(String.valueOf(coins), coin[0]);
-                    coinseditor.apply();
-                    coinseditor.commit();
-                    cointext.setText(String.valueOf(coin[0]));
-                   // fifty.setClickable(false);
-                    fifty.setForeground(getResources().getDrawable(R.drawable.ic_close));
-                } else {
-                    Toast.makeText(this, "No Coins", Toast.LENGTH_SHORT).show();
-                }
 
-                dialog2.dismiss();
-            });
-            (dialog2.findViewById(R.id.fno)).setOnClickListener(v1 -> {
-                startTimer(mTimeLeftInMillis);
-                dialog2.dismiss();
+                    dialog2.dismiss();
+                });
+                (dialog2.findViewById(R.id.fno)).setOnClickListener(v1 -> {
+                    startTimer(mTimeLeftInMillis);
+                    dialog2.dismiss();
 
-            });
+                });
 
-            dialog2.show();
-            dialog2.getWindow().setAttributes(lp2);
-        }else {
-
-                final Dialog dialog2 = new Dialog(GameActivity.this);
+                dialog2.show();
+                dialog2.getWindow().setAttributes(lp2);
+            }else {
+                final Dialog dialog2 = new Dialog(MathsHardActivity.this);
                 dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                 dialog2.setContentView(R.layout.alert);
                 dialog2.setCancelable(true);
@@ -279,7 +276,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 text.setText("Watch Ad to use extra lifeline?");
                 (dialog2.findViewById(R.id.yes)).setOnClickListener(v1 -> {
                     if(Constants.rewardedAd.isLoaded()){
-                        Constants.rewardedAd.show(GameActivity.this, new RewardedAdCallback() {
+                        Constants.rewardedAd.show(MathsHardActivity.this, new RewardedAdCallback() {
                             @Override
                             public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
                                 startTimer(mTimeLeftInMillis);
@@ -297,14 +294,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                     op3.setBackground(getResources().getDrawable(R.drawable.box_unselected));
                                     op4.setBackground(getResources().getDrawable(R.drawable.box_unselected));
                                 }
-                                //Toast.makeText(GameActivity.this, "done", Toast.LENGTH_SHORT).show();
-                                Constants.loadRewardedAd(GameActivity.this);
+                                //Toast.makeText(MathsHardActivity.this, "done", Toast.LENGTH_SHORT).show();
+                                Constants.loadRewardedAd(MathsHardActivity.this);
                             }
                         });
                     }
                     else{
-                        startTimer(mTimeLeftInMillis);
-                        //Toast.makeText(GameActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
+//                        startTimer(mTimeLeftInMillis);
+//                        Toast.makeText(MathsHardActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
                     }
                     dialog2.dismiss();
                 });
@@ -323,7 +320,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             pauseTimer();
             if(doubledip) {
                 final Boolean[] a = {true};
-                final Dialog dialog2 = new Dialog(GameActivity.this);
+                final Dialog dialog2 = new Dialog(MathsHardActivity.this);
                 dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                 dialog2.setContentView(R.layout.doubledip);
                 dialog2.setCancelable(true);
@@ -384,7 +381,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 dialog2.show();
                 dialog2.getWindow().setAttributes(lp2);
             }else {
-                final Dialog dialog2 = new Dialog(GameActivity.this);
+                final Dialog dialog2 = new Dialog(MathsHardActivity.this);
                 dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                 dialog2.setContentView(R.layout.alert);
                 dialog2.setCancelable(true);
@@ -396,7 +393,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 text.setText("Watch Ad to use extra lifeline?");
                 (dialog2.findViewById(R.id.yes)).setOnClickListener(v1 -> {
                     if(Constants.rewardedAd.isLoaded()){
-                        Constants.rewardedAd.show(GameActivity.this, new RewardedAdCallback() {
+                        Constants.rewardedAd.show(MathsHardActivity.this, new RewardedAdCallback() {
                             @Override
                             public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
                                 startTimer(mTimeLeftInMillis);
@@ -405,14 +402,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                 op2.setOnClickListener(v4 -> checkDoubledip(op2));
                                 op3.setOnClickListener(v4 -> checkDoubledip(op3));
                                 op4.setOnClickListener(v4 -> checkDoubledip(op4));
-                                //Toast.makeText(GameActivity.this, "done", Toast.LENGTH_SHORT).show();
-                                Constants.loadRewardedAd(GameActivity.this);
+                                //Toast.makeText(MathsHardActivity.this, "done", Toast.LENGTH_SHORT).show();
+                                Constants.loadRewardedAd(MathsHardActivity.this);
                             }
                         });
                     }
                     else{
-                        startTimer(mTimeLeftInMillis);
-                       // Toast.makeText(GameActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
+//                        startTimer(mTimeLeftInMillis);
+//                        Toast.makeText(MathsHardActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
                     }
                     dialog2.dismiss();
                 });
@@ -424,13 +421,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 dialog2.show();
                 dialog2.getWindow().setAttributes(lp2);
 
+
             }
         });
 
         swap.setOnClickListener(v -> {
             pauseTimer();
             if(sswap) {
-                final Dialog dialog2 = new Dialog(GameActivity.this);
+                final Dialog dialog2 = new Dialog(MathsHardActivity.this);
                 dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                 dialog2.setContentView(R.layout.swap);
                 dialog2.setCancelable(true);
@@ -464,7 +462,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             fifty2.setVisibility(View.VISIBLE);
                             fifty2.setOnClickListener(v2 -> {
 
-                                final Dialog dialogf = new Dialog(GameActivity.this);
+                                final Dialog dialogf = new Dialog(MathsHardActivity.this);
                                 dialogf.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                                 dialogf.setContentView(R.layout.fifty);
                                 dialogf.setCancelable(true);
@@ -527,7 +525,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             doubleDip2.setVisibility(View.VISIBLE);
                             doubleDip2.setOnClickListener(v2 -> {
 
-                                final Dialog ddialog2 = new Dialog(GameActivity.this);
+                                final Dialog ddialog2 = new Dialog(MathsHardActivity.this);
                                 ddialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                                 ddialog2.setContentView(R.layout.doubledip);
                                 ddialog2.setCancelable(true);
@@ -599,8 +597,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 dialog2.getWindow().setAttributes(lp2);
             }
             else {
-
-                final Dialog dialog2 = new Dialog(GameActivity.this);
+                final Dialog dialog2 = new Dialog(MathsHardActivity.this);
                 dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                 dialog2.setContentView(R.layout.alert);
                 dialog2.setCancelable(true);
@@ -612,7 +609,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 text.setText("Watch Ad to use extra lifeline?");
                 (dialog2.findViewById(R.id.yes)).setOnClickListener(v1 -> {
                     if(Constants.rewardedAd.isLoaded()){
-                        Constants.rewardedAd.show(GameActivity.this, new RewardedAdCallback() {
+                        Constants.rewardedAd.show(MathsHardActivity.this, new RewardedAdCallback() {
                             @Override
                             public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
                                 startTimer(mTimeLeftInMillis);
@@ -621,15 +618,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                 op2.setOnClickListener(v4 -> checkRandomAnswer(op2));
                                 op3.setOnClickListener(v4 -> checkRandomAnswer(op3));
                                 op4.setOnClickListener(v4 -> checkRandomAnswer(op4));
-                                //Toast.makeText(GameActivity.this, "done", Toast.LENGTH_SHORT).show();
-                                Constants.loadRewardedAd(GameActivity.this);
+                                //Toast.makeText(MathsHardActivity.this, "done", Toast.LENGTH_SHORT).show();
+                                Constants.loadRewardedAd(MathsHardActivity.this);
                                 startTimer(mTimeLeftInMillis);
                             }
                         });
                     }
                     else{
-                        startTimer(mTimeLeftInMillis);
-                        //Toast.makeText(GameActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
+//                        startTimer(mTimeLeftInMillis);
+//                        Toast.makeText(MathsHardActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
                     }
                     dialog2.dismiss();
                 });
@@ -645,13 +642,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-    }
 
+
+    }
     @Override
     public void onBackPressed() {
         pauseTimer();
 
-        final Dialog dialog2 = new Dialog(GameActivity.this);
+        final Dialog dialog2 = new Dialog(MathsHardActivity.this);
         dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
         dialog2.setContentView(R.layout.alert);
         dialog2.setCancelable(true);
@@ -679,38 +677,36 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         Toast.makeText(this, "Rewarded", Toast.LENGTH_SHORT).show();
     }
 
-    private void showInterstitial() {
-
-        try {
-            Constants.rewardedInterstitialAd.show(GameActivity.this, rewardItem -> {
-                SharedPreferences preferences = getSharedPreferences(MainActivity.LEVEL, MODE_PRIVATE);
-                final int[] credits = {preferences.getInt(String.valueOf(MainActivity.coins), 0)};
-                //Toast.makeText(this, "Reward", Toast.LENGTH_SHORT).show();
-                credits[0] = credits[0] + 500;
-                SharedPreferences.Editor editor = getSharedPreferences(MainActivity.LEVEL, MODE_PRIVATE).edit();
-                editor.putInt(String.valueOf(MainActivity.coins), credits[0]);
-                editor.apply();
-                editor.commit();
-                Toast.makeText(GameActivity.this, "500 Coins Won", Toast.LENGTH_SHORT).show();
-                Constants.loadAd(this);
-            });
-        }catch (Exception e){
-            //Toast.makeText(this, "Please Wait Ad is loading", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-    public void showinterstitial(){
+    private void showinterstitial(){
         if (mInterstitialAd.isLoaded()) {
             mInterstitialAd.show();
         } else {
             Log.d("TAG", "The interstitial wasn't loaded yet.");
         }
     }
+    private void showInterstitial() {
 
+        try {
+            Constants.rewardedInterstitialAd.show(MathsHardActivity.this, rewardItem -> {
+                SharedPreferences preferences = getSharedPreferences(MainActivity.LEVEL, MODE_PRIVATE);
+                final int[] credits = {preferences.getInt(String.valueOf(MainActivity.coins), 0)};
+                //Toast.makeText(this, "Reward", Toast.LENGTH_SHORT).show();
+                credits[0] = credits[0] + 100;
+                SharedPreferences.Editor editor = getSharedPreferences(MainActivity.LEVEL, MODE_PRIVATE).edit();
+                editor.putInt(String.valueOf(MainActivity.coins), credits[0]);
+                editor.apply();
+                editor.commit();
+                Toast.makeText(MathsHardActivity.this, "100 Coins Won", Toast.LENGTH_SHORT).show();
+                Constants.loadAd(this);
+            });
+        }catch (Exception e){
+            // Toast.makeText(this, "Please Wait Ad is loading", Toast.LENGTH_SHORT).show();
+        }
+
+    }
 
     //timer
-    public void startTimer(long ms) {
+    private void startTimer(long ms) {
         mCountDownTimer = new CountDownTimer(ms, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -725,7 +721,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void run() {
                         if(timer[0]) {
-                            final Dialog dialog2 = new Dialog(GameActivity.this);
+                            final Dialog dialog2 = new Dialog(MathsHardActivity.this);
                             dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                             dialog2.setContentView(R.layout.alert);
                             dialog2.setCancelable(true);
@@ -738,11 +734,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             (dialog2.findViewById(R.id.yes)).setOnClickListener(v1 -> {
                                 timer[0]=false;
                                 if (Constants.rewardedAd.isLoaded()) {
-                                    Constants.rewardedAd.show(GameActivity.this, new RewardedAdCallback() {
+                                    Constants.rewardedAd.show(MathsHardActivity.this, new RewardedAdCallback() {
                                         @Override
                                         public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
 
-                                            Activity activityContext = GameActivity.this;
+                                            Activity activityContext = MathsHardActivity.this;
                                             RewardedAdCallback adCallback = new RewardedAdCallback() {
                                                 @Override
                                                 public void onRewardedAdOpened() {
@@ -767,21 +763,21 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                                 }
                                             };
                                             Constants.rewardedAd.show(activityContext, adCallback);
-                                            //Toast.makeText(GameActivity.this, "done", Toast.LENGTH_SHORT).show();
-                                            Constants.loadRewardedAd(GameActivity.this);
+                                            //Toast.makeText(MathsHardActivity.this, "done", Toast.LENGTH_SHORT).show();
+                                            Constants.loadRewardedAd(MathsHardActivity.this);
                                         }
                                     });
                                 } else {
-                                    //startTimer(mTimeLeftInMillis);
-                                    //Toast.makeText(GameActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
-                                }
 
+                                    //startTimer(mTimeLeftInMillis);
+                                    //Toast.makeText(MathsHardActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
+                                }
                                 dialog2.dismiss();
                             });
                             (dialog2.findViewById(R.id.no)).setOnClickListener(v1 -> {
                                 //startTimer(mTimeLeftInMillis);
                                 if (currentQuestion == 14) {
-                                    final Dialog dialog = new Dialog(GameActivity.this, R.style.PauseDialog);
+                                    final Dialog dialog = new Dialog(MathsHardActivity.this, R.style.PauseDialog);
                                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                                     dialog.setContentView(R.layout.finish);
                                     dialog.setCancelable(true);
@@ -799,14 +795,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                         editor.clear();
                                         editor.apply();
                                         editor.commit();
-                                        startActivity(new Intent(GameActivity.this, PlayActivity.class));
+                                        startActivity(new Intent(MathsHardActivity.this, MathsPlayActivity.class));
                                     });
                                     (dialog.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
                                         SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                                         editor.clear();
                                         editor.apply();
                                         editor.commit();
-                                        startActivity(new Intent(GameActivity.this, MainActivity.class));
+                                        startActivity(new Intent(MathsHardActivity.this, MainActivity.class));
                                     });
                                     (dialog.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
                                         SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
@@ -842,7 +838,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                     dialog.getWindow().setAttributes(lp);
                                     showInterstitial();
                                 } else {
-                                    startTimer(mTimeLeftInMillis);
+                                    //startTimer(mTimeLeftInMillis);
                                     currentQuestion++;
                                     i++;
                                     current.setText(i + "/");
@@ -858,7 +854,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         }else{
                             if (currentQuestion == 14) {
 
-                                final Dialog dialog = new Dialog(GameActivity.this, R.style.PauseDialog);
+                                final Dialog dialog = new Dialog(MathsHardActivity.this, R.style.PauseDialog);
                                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                                 dialog.setContentView(R.layout.finish);
                                 dialog.setCancelable(true);
@@ -876,14 +872,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                     editor.clear();
                                     editor.apply();
                                     editor.commit();
-                                    startActivity(new Intent(GameActivity.this, PlayActivity.class));
+                                    startActivity(new Intent(MathsHardActivity.this, MathsPlayActivity.class));
                                 });
                                 (dialog.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
                                     SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                                     editor.clear();
                                     editor.apply();
                                     editor.commit();
-                                    startActivity(new Intent(GameActivity.this, MainActivity.class));
+                                    startActivity(new Intent(MathsHardActivity.this, MainActivity.class));
                                 });
                                 (dialog.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
                                     SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
@@ -933,6 +929,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
         }.start();
         mTimerRunning = true;
+//        mButtonStartPause.setText("pause");
+//        mButtonReset.setVisibility(View.INVISIBLE);
     }
     private void pauseTimer() {
         mCountDownTimer.cancel();
@@ -949,10 +947,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+
     @SuppressLint("UseCompatLoadingForDrawables")
     private void checkAnswer(TextView selected) {
         String selectedAnswer = selected.getText().toString();
-        final boolean[] stateAlive = {true};
         if(selectedAnswer.equals(questionItems.get(currentQuestion).getCorrect())){
             selected.setBackground(getResources().getDrawable(R.drawable.option_right));
             correct++;
@@ -964,7 +962,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                   // gif.setVisibility(View.INVISIBLE);
+                    // gif.setVisibility(View.INVISIBLE);
                     reset();
                     clickable(true);
 
@@ -972,12 +970,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         currentQuestion++;
                         i++;
                         current.setText(i+"/");
-                         setQuestionScreen(currentQuestion);
-                         clickable(true);
-                          reset();
-                     }else {
+                        setQuestionScreen(currentQuestion);
+                        clickable(true);
+                        reset();
+                    }else {
 
-                        final Dialog dialog = new Dialog(GameActivity.this);
+                        final Dialog dialog = new Dialog(MathsHardActivity.this);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                         dialog.setContentView(R.layout.alert);
                         dialog.setCancelable(true);
@@ -1006,7 +1004,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                 mTimerRunning = false;
                                 if(stateAlive[0]){showInterstitial();}
                                 else{
-                                    Toast.makeText(GameActivity.this, "You Won", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MathsHardActivity.this, "You Won", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }.start();
@@ -1015,7 +1013,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
                             //finish();
                             startTimer(mTimeLeftInMillis);
-                            final Dialog dialog2 = new Dialog(GameActivity.this,R.style.PauseDialog);
+                            final Dialog dialog2 = new Dialog(MathsHardActivity.this,R.style.PauseDialog);
                             dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                             dialog2.setContentView(R.layout.finish);
                             dialog2.setCancelable(true);
@@ -1037,14 +1035,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                 editor.clear();
                                 editor.apply();
                                 editor.commit();
-                                startActivity(new Intent(GameActivity.this,PlayActivity.class));
+                                startActivity(new Intent(MathsHardActivity.this,MathsPlayActivity.class));
                             });
                             (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
                                 SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                                 editor.clear();
                                 editor.apply();
                                 editor.commit();
-                                startActivity(new Intent(GameActivity.this,MainActivity.class));
+                                startActivity(new Intent(MathsHardActivity.this,MainActivity.class));
                             });
                             (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
                                 SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
@@ -1087,13 +1085,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         });
                         dialog.show();
                         dialog.getWindow().setAttributes(lp);
-                     }
                     }
+                }
             },800);
 
         } else {
             selected.setBackground(getResources().getDrawable(R.drawable.option_wrong));
             wrong++;
+            final boolean[] stateAlive = {true};
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -1102,7 +1101,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     pauseTimer();
                     if(used[0]) {
                         used[0]=false;
-                        final Dialog dialog = new Dialog(GameActivity.this);
+                        final Dialog dialog = new Dialog(MathsHardActivity.this);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                         dialog.setContentView(R.layout.alert);
                         dialog.setCancelable(true);
@@ -1133,18 +1132,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                 (dialog.findViewById(R.id.cd)).setVisibility(View.INVISIBLE);
 
                                 if (Constants.rewardedAd.isLoaded() && stateAlive[0]) {
-                                    Constants.rewardedAd.show(GameActivity.this, new RewardedAdCallback() {
+                                    Constants.rewardedAd.show(MathsHardActivity.this, new RewardedAdCallback() {
                                         @Override
                                         public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
                                             startTimer(mTimeLeftInMillis);
-                                            //Toast.makeText(GameActivity.this, "done", Toast.LENGTH_SHORT).show();
-                                            Constants.loadRewardedAd(GameActivity.this);
+                                            //Toast.makeText(MathsHardActivity.this, "done", Toast.LENGTH_SHORT).show();
+                                            Constants.loadRewardedAd(MathsHardActivity.this);
                                             dialog.dismiss();
                                         }
                                     });
                                 } else {
-                                    //startTimer(mTimeLeftInMillis);
-                                    //Toast.makeText(GameActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
+//                                    startTimer(mTimeLeftInMillis);
+//                                    Toast.makeText(MathsHardActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }.start();
@@ -1153,7 +1152,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
                             //finish();
                             //startTimer(mTimeLeftInMillis);
-                            final Dialog dialog2 = new Dialog(GameActivity.this, R.style.PauseDialog);
+                            final Dialog dialog2 = new Dialog(MathsHardActivity.this, R.style.PauseDialog);
                             dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                             dialog2.setContentView(R.layout.finish);
                             dialog2.setCancelable(true);
@@ -1175,14 +1174,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                 editor.clear();
                                 editor.apply();
                                 editor.commit();
-                                startActivity(new Intent(GameActivity.this, PlayActivity.class));
+                                startActivity(new Intent(MathsHardActivity.this, MathsPlayActivity.class));
                             });
                             (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
                                 SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                                 editor.clear();
                                 editor.apply();
                                 editor.commit();
-                                startActivity(new Intent(GameActivity.this, MainActivity.class));
+                                startActivity(new Intent(MathsHardActivity.this, MainActivity.class));
                             });
                             (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
                                 SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
@@ -1231,7 +1230,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
                         //finish();
                         //startTimer(mTimeLeftInMillis);
-                        final Dialog dialog2 = new Dialog(GameActivity.this, R.style.PauseDialog);
+                        final Dialog dialog2 = new Dialog(MathsHardActivity.this, R.style.PauseDialog);
                         dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                         dialog2.setContentView(R.layout.finish);
                         dialog2.setCancelable(true);
@@ -1253,14 +1252,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             editor.clear();
                             editor.apply();
                             editor.commit();
-                            startActivity(new Intent(GameActivity.this, PlayActivity.class));
+                            startActivity(new Intent(MathsHardActivity.this, MathsPlayActivity.class));
                         });
                         (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
                             SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                             editor.clear();
                             editor.apply();
                             editor.commit();
-                            startActivity(new Intent(GameActivity.this, MainActivity.class));
+                            startActivity(new Intent(MathsHardActivity.this, MainActivity.class));
                         });
                         (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
                             SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
@@ -1306,6 +1305,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 }
             },800);
 
+//                dialog.dismiss();
+//            }
 
         }
         SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
@@ -1328,137 +1329,93 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                   // gif.setVisibility(View.INVISIBLE);
+                    // gif.setVisibility(View.INVISIBLE);
                     reset();
                     clickable(true);
 
-                    if(currentQuestion<2){
-                        currentQuestion++;
-                        i++;
-                        current.setText(i+"/");
-                         setQuestionScreen(currentQuestion);
-                         clickable(true);
-                          reset();
-                     }else {
+                    //Toast.makeText(MathsHardActivity.this, "Game Over", Toast.LENGTH_SHORT).show();
+                    final Dialog dialog2 = new Dialog(MathsHardActivity.this,R.style.PauseDialog);
+                    dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                    dialog2.setContentView(R.layout.finish);
+                    dialog2.setCancelable(true);
 
-                        final Dialog dialog = new Dialog(GameActivity.this);
-                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-                        dialog.setContentView(R.layout.alert);
-                        dialog.setCancelable(true);
-                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                        lp.copyFrom(dialog.getWindow().getAttributes());
-                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-                        TextView text = dialog.findViewById(R.id.atext);
-                        text.setText("Congrats! You Completed The Level. watch this video to get 500 extra coins");
-                        TextView a = dialog.findViewById(R.id.yes);
-                        TextView b = dialog.findViewById(R.id.no);
+                    WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+                    lp2.copyFrom(dialog2.getWindow().getAttributes());
+                    lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+                    lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
 
-                        countDownTimer = new CountDownTimer(TimeLeftInMillis, 5000) {
-                            @Override
-                            public void onTick(long millisUntilFinished) {
-                                TimeLeftInMillis=millisUntilFinished;
-                                int seconds = (int) (TimeLeftInMillis / 1000) % 60;
-                                String timeLeftFormatted = String.format(Locale.getDefault(), "%02d", seconds);
-                                TextView a = dialog.findViewById(R.id.yes);
-                                a.setText("Ad will start in 5sec");
+                    TextView lvl = dialog2.findViewById(R.id.flevel);
+                    lvl.setText("Level "+String.valueOf(level));
+                    (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
+                    (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
+                    (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
 
-                                //updateCountDown();
-                            }
-                            @Override
-                            public void onFinish() {
-                                mTimerRunning = false;
-                                if(stateAlive[0]){showInterstitial();}
-                                else{
-                                    Toast.makeText(GameActivity.this, "You Won", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        }.start();
-                        (dialog.findViewById(R.id.no)).setOnClickListener(v1 -> {
-                            stateAlive[0] =false;
+                    SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
+                    clvleditor.putInt(MainActivity.CURRENT,clvl);
+                    clvleditor.apply();
+                    clvleditor.commit();
+                    (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
+                        SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                        editor.clear();
+                        editor.apply();
+                        editor.commit();
+                        startActivity(new Intent(MathsHardActivity.this,MathsPlayActivity.class));
+                    });
 
-                            //finish();
-                            startTimer(mTimeLeftInMillis);
-                            final Dialog dialog2 = new Dialog(GameActivity.this,R.style.PauseDialog);
-                            dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-                            dialog2.setContentView(R.layout.finish);
-                            dialog2.setCancelable(true);
-                            WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
-                            lp2.copyFrom(dialog2.getWindow().getAttributes());
-                            lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
-                            lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
-                            TextView lvl = dialog2.findViewById(R.id.flevel);
-                            lvl.setText("Easy");
-                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
-                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
-                            (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
-                            SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
-                            clvleditor.putInt(MainActivity.CURRENT,clvl);
-                            clvleditor.apply();
-                            clvleditor.commit();
-                            (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
-                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                                editor.clear();
-                                editor.apply();
-                                editor.commit();
-                                startActivity(new Intent(GameActivity.this,PlayActivity.class));
-                            });
-                            (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
-                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                                editor.clear();
-                                editor.apply();
-                                editor.commit();
-                                startActivity(new Intent(GameActivity.this,MainActivity.class));
-                            });
-                            (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
-                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                                editor.clear();
-                                editor.apply();
-                                editor.commit();
-                                startActivity(getIntent());
-                            });
-                            SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
-                            int c = preferences.getInt(ANS,0);
-                            SharedPreferences.Editor edit = getSharedPreferences(LEVEL,MODE_PRIVATE).edit();
-                            int score = getSharedPreferences(LEVEL,MODE_PRIVATE).getInt(SCORE,0);
-                            TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
-                            if(c<6){
-                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                                score = score+(c*100);
-                                edit.putInt(MainActivity.SCORE,score);
-                                scoretxt.setText(String.valueOf(c*100));
-                            }else if(c<=14){
-                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                                score = score+(c*100);
-                                edit.putInt(MainActivity.SCORE,score);
-                                scoretxt.setText(String.valueOf(c*100));
-                                edit.putInt(MainActivity.CURRENT,1);
-                            }else if(c==15){
-                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                                (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
-                                score = score+(c*100);
-                                edit.putInt(MainActivity.SCORE,score);
-                                scoretxt.setText(String.valueOf(c*100));
-                            }
-                            edit.apply();
-                            edit.commit();
-                            dialog2.show();
-                            dialog2.getWindow().setAttributes(lp2);
-                            showinterstitial();
-                            dialog.dismiss();
-                        });
-                        dialog.show();
-                        dialog.getWindow().setAttributes(lp);
+                    (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
+                        SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                        editor.clear();
+                        editor.apply();
+                        editor.commit();
+                        startActivity(new Intent(MathsHardActivity.this,MainActivity.class));
+                    });
+                    (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
+                        SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                        editor.clear();
+                        editor.apply();
+                        editor.commit();
+                        startActivity(getIntent());
+                    });
+                    SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
+                    int c = preferences.getInt(ANS,0);
+
+                    SharedPreferences.Editor edit = getSharedPreferences(LEVEL,MODE_PRIVATE).edit();
+                    int score = getSharedPreferences(LEVEL,MODE_PRIVATE).getInt(SCORE,0);
+
+                    TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
+                    if(c<6){
+                        (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                        score = score+100;
+                        edit.putInt(MainActivity.SCORE,score);
+                        scoretxt.setText("100");
+                    }else if(c<=14){
+                        (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                        (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                        score = score+200;
+                        edit.putInt(MainActivity.SCORE,score);
+                        edit.putInt(MainActivity.CURRENT,4);
+                        scoretxt.setText("200");
+                    }else if(c==15){
+                        (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                        (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                        (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                        score = score+300;
+                        edit.putInt(MainActivity.SCORE,score);
+                        scoretxt.setText("300");
                     }
-                    }
+                    edit.apply();
+                    edit.commit();
+                    dialog2.show();
+                    dialog2.getWindow().setAttributes(lp2);
+                    showInterstitial();
+
+                }
             },800);
 
         } else {
             selected.setBackground(getResources().getDrawable(R.drawable.option_wrong));
             Toast.makeText(this, "Double Dip", Toast.LENGTH_SHORT).show();
-           clickable(true);
+            clickable(true);
 
             if(selectedAnswer.equals(questionItems.get(7).getCorrect())) {
                 selected.setBackground(getResources().getDrawable(R.drawable.option_right));
@@ -1471,148 +1428,130 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        // gif.setVisibility(View.INVISIBLE);
                         reset();
-                        pauseTimer();
-                        final Dialog dialog = new Dialog(GameActivity.this);
-                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-                        dialog.setContentView(R.layout.alert);
-                        dialog.setCancelable(true);
-                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                        lp.copyFrom(dialog.getWindow().getAttributes());
-                        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-                        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-                        TextView text = dialog.findViewById(R.id.atext);
-                        text.setText("Watch This video and get chance");
-                        TextView a = dialog.findViewById(R.id.yes);
+                        clickable(true);
 
-                        countDownTimer = new CountDownTimer(TimeLeftInMillis, 5000) {
-                            @Override
-                            public void onTick(long millisUntilFinished) {
-                                (dialog.findViewById(R.id.cd)).setVisibility(View.VISIBLE);
-                                TimeLeftInMillis=millisUntilFinished;
-                                int seconds = (int) (TimeLeftInMillis / 1000) % 60;
-                                String timeLeftFormatted = String.format(Locale.getDefault(), "%02d", seconds);
-                                TextView a = dialog.findViewById(R.id.yes);
-                                a.setText("Ad will begin");
+                        if (currentQuestion < 2) {
+                            currentQuestion++;
+                            i++;
+                            current.setText(i + "/");
+                            setQuestionScreen(currentQuestion);
+                            clickable(true);
+                            reset();
+                        } else {
 
+                            final Dialog dialog = new Dialog(MathsHardActivity.this);
+                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                            dialog.setContentView(R.layout.alert);
+                            dialog.setCancelable(true);
+                            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                            lp.copyFrom(dialog.getWindow().getAttributes());
+                            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                            TextView text = dialog.findViewById(R.id.atext);
+                            text.setText("Congrats! You Completed The Level. watch this video to get 500 extra coins");
+                            TextView a = dialog.findViewById(R.id.yes);
+                            TextView b = dialog.findViewById(R.id.no);
 
-                                //updateCountDown();
-                            }
-                            @Override
-                            public void onFinish() {
-                                (dialog.findViewById(R.id.cd)).setVisibility(View.INVISIBLE);
-                                mTimerRunning = false;
-                                if(Constants.rewardedAd.isLoaded()){
-                                    Constants.rewardedAd.show(GameActivity.this, new RewardedAdCallback() {
-                                        @Override
-                                        public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                                            startTimer(mTimeLeftInMillis);
-                                            //Toast.makeText(GameActivity.this, "done", Toast.LENGTH_SHORT).show();
-                                            Constants.loadRewardedAd(GameActivity.this);
-                                            dialog.dismiss();
-                                        }
-                                    });
+                            countDownTimer = new CountDownTimer(TimeLeftInMillis, 5000) {
+                                @Override
+                                public void onTick(long millisUntilFinished) {
+                                    TimeLeftInMillis=millisUntilFinished;
+                                    int seconds = (int) (TimeLeftInMillis / 1000) % 60;
+                                    String timeLeftFormatted = String.format(Locale.getDefault(), "%02d", seconds);
+                                    TextView a = dialog.findViewById(R.id.yes);
+                                    a.setText("Ad will begin");
+
+                                    //updateCountDown();
                                 }
-                                else{
-                                    //startTimer(mTimeLeftInMillis);
-                                    //Toast.makeText(GameActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
+                                @Override
+                                public void onFinish() {
+                                    mTimerRunning = false;
+                                    if(stateAlive[0]){showInterstitial();}
+                                    else{
+                                        Toast.makeText(MathsHardActivity.this, "You Won", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            }
-                        }.start();
-//                    (dialog.findViewById(R.id.yes)).setOnClickListener(v1 -> {
-//                        if(Constants.rewardedAd.isLoaded()){
-//                            Constants.rewardedAd.show(GameActivity.this, new RewardedAdCallback() {
-//                                @Override
-//                                public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-//                                    startTimer(mTimeLeftInMillis);
-//                                    //Toast.makeText(GameActivity.this, "done", Toast.LENGTH_SHORT).show();
-//                                    Constants.loadRewardedAd(GameActivity.this);
-//                                }
-//                            });
-//                        }
-//                        else{
-//                            startTimer(mTimeLeftInMillis);
-//                            Toast.makeText(GameActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
-//                        }
-//                        dialog.dismiss();
-//                    });
-                        (dialog.findViewById(R.id.no)).setOnClickListener(v1 -> {
-                            startTimer(mTimeLeftInMillis);
-                            final Dialog dialog2 = new Dialog(GameActivity.this,R.style.PauseDialog);
-                            dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-                            dialog2.setContentView(R.layout.finish);
-                            dialog2.setCancelable(true);
-                            WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
-                            lp2.copyFrom(dialog2.getWindow().getAttributes());
-                            lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
-                            lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
-                            TextView lvl = dialog2.findViewById(R.id.flevel);
-                            lvl.setText("Easy");
-                            (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
-                            (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
-                            (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
-                            SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
-                            clvleditor.putInt(MainActivity.CURRENT,clvl);
-                            clvleditor.apply();
-                            clvleditor.commit();
-                            (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
-                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                                editor.clear();
-                                editor.apply();
-                                editor.commit();
-                                startActivity(new Intent(GameActivity.this,PlayActivity.class));
-                            });
-                            (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
-                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                                editor.clear();
-                                editor.apply();
-                                editor.commit();
-                                startActivity(new Intent(GameActivity.this,MainActivity.class));
-                            });
-                            (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
-                                SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                                editor.clear();
-                                editor.apply();
-                                editor.commit();
-                                startActivity(getIntent());
-                            });
-                            SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
-                            int c = preferences.getInt(ANS,0);
-                            SharedPreferences.Editor edit = getSharedPreferences(LEVEL,MODE_PRIVATE).edit();
-                            int score = getSharedPreferences(LEVEL,MODE_PRIVATE).getInt(SCORE,0);
-                            TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
-                            if(c<6){
-                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                                score = score+(c*100);
-                                edit.putInt(MainActivity.SCORE,score);
-                                scoretxt.setText(String.valueOf(c*100));
-                            }else if(c<=14){
-                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                                score = score+(c*100);
-                                edit.putInt(MainActivity.SCORE,score);
-                                scoretxt.setText(String.valueOf(c*100));
-                                edit.putInt(MainActivity.CURRENT,1);
-                            }else if(c==15){
-                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
-                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
-                                (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
-                                score = score+(c*100);
-                                edit.putInt(MainActivity.SCORE,score);
-                                scoretxt.setText(String.valueOf(c*100));
-                            }
-                            edit.apply();
-                            edit.commit();
-                            dialog2.show();
-                            dialog2.getWindow().setAttributes(lp2);
-                            //showInterstitial();
-                            dialog.dismiss();
+                            }.start();
+                            (dialog.findViewById(R.id.no)).setOnClickListener(v1 -> {
+                                stateAlive[0] =false;
 
-                        });
-                        dialog.show();
-                        dialog.getWindow().setAttributes(lp);
-                        /////
-
+                                //finish();
+                                startTimer(mTimeLeftInMillis);
+                                final Dialog dialog2 = new Dialog(MathsHardActivity.this,R.style.PauseDialog);
+                                dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+                                dialog2.setContentView(R.layout.finish);
+                                dialog2.setCancelable(true);
+                                WindowManager.LayoutParams lp2 = new WindowManager.LayoutParams();
+                                lp2.copyFrom(dialog2.getWindow().getAttributes());
+                                lp2.width = WindowManager.LayoutParams.MATCH_PARENT;
+                                lp2.height = WindowManager.LayoutParams.MATCH_PARENT;
+                                TextView lvl = dialog2.findViewById(R.id.flevel);
+                                lvl.setText("Easy");
+                                (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_off);
+                                (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_off);
+                                (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_off);
+                                SharedPreferences.Editor clvleditor = getSharedPreferences(MainActivity.LEVEL,MODE_PRIVATE).edit();
+                                clvleditor.putInt(MainActivity.CURRENT,clvl);
+                                clvleditor.apply();
+                                clvleditor.commit();
+                                (dialog2.findViewById(R.id.fnext)).setOnClickListener(v2 -> {
+                                    SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                    editor.clear();
+                                    editor.apply();
+                                    editor.commit();
+                                    startActivity(new Intent(MathsHardActivity.this,MathsPlayActivity.class));
+                                });
+                                (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
+                                    SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                    editor.clear();
+                                    editor.apply();
+                                    editor.commit();
+                                    startActivity(new Intent(MathsHardActivity.this,MainActivity.class));
+                                });
+                                (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
+                                    SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
+                                    editor.clear();
+                                    editor.apply();
+                                    editor.commit();
+                                    startActivity(getIntent());
+                                });
+                                SharedPreferences preferences = getSharedPreferences(CORRECT,MODE_PRIVATE);
+                                int c = preferences.getInt(ANS,0);
+                                SharedPreferences.Editor edit = getSharedPreferences(LEVEL,MODE_PRIVATE).edit();
+                                int score = getSharedPreferences(LEVEL,MODE_PRIVATE).getInt(SCORE,0);
+                                TextView scoretxt = (dialog2.findViewById(R.id.scoretext));
+                                if(c<6){
+                                    (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                    score = score+(c*100);
+                                    edit.putInt(MainActivity.SCORE,score);
+                                    scoretxt.setText(String.valueOf(c*100));
+                                }else if(c<=14){
+                                    (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                    (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                    score = score+(c*100);
+                                    edit.putInt(MainActivity.SCORE,score);
+                                    scoretxt.setText(String.valueOf(c*100));
+                                    edit.putInt(MainActivity.CURRENT,1);
+                                }else if(c==15){
+                                    (dialog2.findViewById(R.id.fstar1)).setBackgroundResource(R.drawable.star_on);
+                                    (dialog2.findViewById(R.id.fstar2)).setBackgroundResource(R.drawable.star_on);
+                                    (dialog2.findViewById(R.id.fstar3)).setBackgroundResource(R.drawable.star_on);
+                                    score = score+(c*100);
+                                    edit.putInt(MainActivity.SCORE,score);
+                                    scoretxt.setText(String.valueOf(c*100));
+                                }
+                                edit.apply();
+                                edit.commit();
+                                dialog2.show();
+                                dialog2.getWindow().setAttributes(lp2);
+                                showinterstitial();
+                                dialog.dismiss();
+                            });
+                            dialog.show();
+                            dialog.getWindow().setAttributes(lp);
+                        }
                     }
                 }, 800);
             }
@@ -1624,7 +1563,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         editor.commit();
 
     }
-
     private void checkDoubledip(TextView selected) {
         String selectedAnswer = selected.getText().toString();
         if(selectedAnswer.equals(questionItems.get(currentQuestion).getCorrect())){
@@ -1638,7 +1576,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                   // gif.setVisibility(View.INVISIBLE);
+                    // gif.setVisibility(View.INVISIBLE);
                     reset();
                     clickable(true);
 
@@ -1646,12 +1584,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         currentQuestion++;
                         i++;
                         current.setText(i+"/");
-                         setQuestionScreen(currentQuestion);
-                         clickable(true);
-                          reset();
-                     }else {
+                        setQuestionScreen(currentQuestion);
+                        clickable(true);
+                        reset();
+                    }else {
 
-                        final Dialog dialog = new Dialog(GameActivity.this);
+                        final Dialog dialog = new Dialog(MathsHardActivity.this);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                         dialog.setContentView(R.layout.alert);
                         dialog.setCancelable(true);
@@ -1680,7 +1618,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                 mTimerRunning = false;
                                 if(stateAlive[0]){showInterstitial();}
                                 else{
-                                    Toast.makeText(GameActivity.this, "You Won", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MathsHardActivity.this, "You Won", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }.start();
@@ -1689,7 +1627,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
                             //finish();
                             startTimer(mTimeLeftInMillis);
-                            final Dialog dialog2 = new Dialog(GameActivity.this,R.style.PauseDialog);
+                            final Dialog dialog2 = new Dialog(MathsHardActivity.this,R.style.PauseDialog);
                             dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                             dialog2.setContentView(R.layout.finish);
                             dialog2.setCancelable(true);
@@ -1711,14 +1649,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                 editor.clear();
                                 editor.apply();
                                 editor.commit();
-                                startActivity(new Intent(GameActivity.this,PlayActivity.class));
+                                startActivity(new Intent(MathsHardActivity.this,MathsPlayActivity.class));
                             });
                             (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
                                 SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                                 editor.clear();
                                 editor.apply();
                                 editor.commit();
-                                startActivity(new Intent(GameActivity.this,MainActivity.class));
+                                startActivity(new Intent(MathsHardActivity.this,MainActivity.class));
                             });
                             (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
                                 SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
@@ -1762,18 +1700,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         dialog.show();
                         dialog.getWindow().setAttributes(lp);
                     }
-                    }
+                }
             },800);
 
         } else {
             selected.setBackground(getResources().getDrawable(R.drawable.option_wrong));
             Toast.makeText(this, "Double Dip", Toast.LENGTH_SHORT).show();
-           clickable(true);
-           dip=false;
-           op1.setOnClickListener(v -> {checkAnswer(op1);});
-           op2.setOnClickListener(v -> {checkAnswer(op2);});
-           op3.setOnClickListener(v -> {checkAnswer(op3);});
-           op4.setOnClickListener(v -> {checkAnswer(op4);});
+            clickable(true);
+            dip=false;
+            op1.setOnClickListener(v -> {checkAnswer(op1);});
+            op2.setOnClickListener(v -> {checkAnswer(op2);});
+            op3.setOnClickListener(v -> {checkAnswer(op3);});
+            op4.setOnClickListener(v -> {checkAnswer(op4);});
 
             if(selectedAnswer.equals(questionItems.get(7).getCorrect())) {
                 selected.setBackground(getResources().getDrawable(R.drawable.option_right));
@@ -1799,7 +1737,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             reset();
                         } else {
 
-                            final Dialog dialog = new Dialog(GameActivity.this);
+                            final Dialog dialog = new Dialog(MathsHardActivity.this);
                             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                             dialog.setContentView(R.layout.alert);
                             dialog.setCancelable(true);
@@ -1828,7 +1766,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                     mTimerRunning = false;
                                     if(stateAlive[0]){showInterstitial();}
                                     else{
-                                        Toast.makeText(GameActivity.this, "You Won", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(MathsHardActivity.this, "You Won", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             }.start();
@@ -1837,7 +1775,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
                                 //finish();
                                 startTimer(mTimeLeftInMillis);
-                                final Dialog dialog2 = new Dialog(GameActivity.this,R.style.PauseDialog);
+                                final Dialog dialog2 = new Dialog(MathsHardActivity.this,R.style.PauseDialog);
                                 dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                                 dialog2.setContentView(R.layout.finish);
                                 dialog2.setCancelable(true);
@@ -1859,14 +1797,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                     editor.clear();
                                     editor.apply();
                                     editor.commit();
-                                    startActivity(new Intent(GameActivity.this,PlayActivity.class));
+                                    startActivity(new Intent(MathsHardActivity.this,MathsPlayActivity.class));
                                 });
                                 (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
                                     SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                                     editor.clear();
                                     editor.apply();
                                     editor.commit();
-                                    startActivity(new Intent(GameActivity.this,MainActivity.class));
+                                    startActivity(new Intent(MathsHardActivity.this,MainActivity.class));
                                 });
                                 (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
                                     SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
@@ -1935,7 +1873,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                   // gif.setVisibility(View.INVISIBLE);
+                    // gif.setVisibility(View.INVISIBLE);
                     reset();
                     clickable(true);
 
@@ -1943,21 +1881,21 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         currentQuestion++;
                         i++;
                         current.setText(i+"/");
-                         setRandomQuestionScreen(currentQuestion);
+                        setRandomQuestionScreen(currentQuestion);
                         op1.setOnClickListener(v4 -> checkAnswer(op1));
                         op2.setOnClickListener(v4 -> checkAnswer(op2));
                         op3.setOnClickListener(v4 -> checkAnswer(op3));
                         op4.setOnClickListener(v4 -> checkAnswer(op4));
-                         clickable(true);
-                          reset();
+                        clickable(true);
+                        reset();
 //                        doubleDip.setClickable(true);
 //                        doubleDip.setForeground(null);
 //                        fifty.setClickable(true);
 //                        fifty.setForeground(null);
 
-                     }else {
+                    }else {
 
-                        final Dialog dialog = new Dialog(GameActivity.this);
+                        final Dialog dialog = new Dialog(MathsHardActivity.this);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                         dialog.setContentView(R.layout.alert);
                         dialog.setCancelable(true);
@@ -1986,7 +1924,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                 mTimerRunning = false;
                                 if(stateAlive[0]){showInterstitial();}
                                 else{
-                                    Toast.makeText(GameActivity.this, "You Won", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MathsHardActivity.this, "You Won", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }.start();
@@ -1995,7 +1933,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
                             //finish();
                             startTimer(mTimeLeftInMillis);
-                            final Dialog dialog2 = new Dialog(GameActivity.this,R.style.PauseDialog);
+                            final Dialog dialog2 = new Dialog(MathsHardActivity.this,R.style.PauseDialog);
                             dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                             dialog2.setContentView(R.layout.finish);
                             dialog2.setCancelable(true);
@@ -2017,14 +1955,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                 editor.clear();
                                 editor.apply();
                                 editor.commit();
-                                startActivity(new Intent(GameActivity.this,PlayActivity.class));
+                                startActivity(new Intent(MathsHardActivity.this,MathsPlayActivity.class));
                             });
                             (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
                                 SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                                 editor.clear();
                                 editor.apply();
                                 editor.commit();
-                                startActivity(new Intent(GameActivity.this,MainActivity.class));
+                                startActivity(new Intent(MathsHardActivity.this,MainActivity.class));
                             });
                             (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
                                 SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
@@ -2068,7 +2006,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                         dialog.show();
                         dialog.getWindow().setAttributes(lp);
                     }
-                    }
+                }
             },800);
 
         } else {
@@ -2083,7 +2021,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     pauseTimer();
                     if(used[0]) {
                         used[0]=false;
-                        final Dialog dialog = new Dialog(GameActivity.this);
+                        final Dialog dialog = new Dialog(MathsHardActivity.this);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                         dialog.setContentView(R.layout.alert);
                         dialog.setCancelable(true);
@@ -2102,7 +2040,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                 int seconds = (int) (TimeLeftInMillis / 1000) % 60;
                                 String timeLeftFormatted = String.format(Locale.getDefault(), "%02d", seconds);
                                 TextView a = dialog.findViewById(R.id.yes);
-                                a.setText("Ad will begin shortly");
+                                a.setText("Ad will start in 5sec");
 
 
                                 //updateCountDown();
@@ -2111,21 +2049,21 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void onFinish() {
                                 mTimerRunning = false;
-
                                 (dialog.findViewById(R.id.cd)).setVisibility(View.INVISIBLE);
+
                                 if (Constants.rewardedAd.isLoaded() && stateAlive[0]) {
-                                    Constants.rewardedAd.show(GameActivity.this, new RewardedAdCallback() {
+                                    Constants.rewardedAd.show(MathsHardActivity.this, new RewardedAdCallback() {
                                         @Override
                                         public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
                                             startTimer(mTimeLeftInMillis);
-                                            //Toast.makeText(GameActivity.this, "done", Toast.LENGTH_SHORT).show();
-                                            Constants.loadRewardedAd(GameActivity.this);
+                                            //Toast.makeText(MathsHardActivity.this, "done", Toast.LENGTH_SHORT).show();
+                                            Constants.loadRewardedAd(MathsHardActivity.this);
                                             dialog.dismiss();
                                         }
                                     });
                                 } else {
-                                    //startTimer(mTimeLeftInMillis);
-                                    //Toast.makeText(GameActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
+//                                    startTimer(mTimeLeftInMillis);
+//                                    Toast.makeText(MathsHardActivity.this, "Please Wait, Ad is loading", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }.start();
@@ -2134,7 +2072,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
                             //finish();
                             //startTimer(mTimeLeftInMillis);
-                            final Dialog dialog2 = new Dialog(GameActivity.this, R.style.PauseDialog);
+                            final Dialog dialog2 = new Dialog(MathsHardActivity.this, R.style.PauseDialog);
                             dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                             dialog2.setContentView(R.layout.finish);
                             dialog2.setCancelable(true);
@@ -2156,14 +2094,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                                 editor.clear();
                                 editor.apply();
                                 editor.commit();
-                                startActivity(new Intent(GameActivity.this, PlayActivity.class));
+                                startActivity(new Intent(MathsHardActivity.this, MathsPlayActivity.class));
                             });
                             (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
                                 SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                                 editor.clear();
                                 editor.apply();
                                 editor.commit();
-                                startActivity(new Intent(GameActivity.this, MainActivity.class));
+                                startActivity(new Intent(MathsHardActivity.this, MainActivity.class));
                             });
                             (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
                                 SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
@@ -2212,7 +2150,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
                         //finish();
                         //startTimer(mTimeLeftInMillis);
-                        final Dialog dialog2 = new Dialog(GameActivity.this, R.style.PauseDialog);
+                        final Dialog dialog2 = new Dialog(MathsHardActivity.this, R.style.PauseDialog);
                         dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                         dialog2.setContentView(R.layout.finish);
                         dialog2.setCancelable(true);
@@ -2234,14 +2172,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                             editor.clear();
                             editor.apply();
                             editor.commit();
-                            startActivity(new Intent(GameActivity.this, PlayActivity.class));
+                            startActivity(new Intent(MathsHardActivity.this, MathsPlayActivity.class));
                         });
                         (dialog2.findViewById(R.id.fhome)).setOnClickListener(v2 -> {
                             SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
                             editor.clear();
                             editor.apply();
                             editor.commit();
-                            startActivity(new Intent(GameActivity.this, MainActivity.class));
+                            startActivity(new Intent(MathsHardActivity.this, MainActivity.class));
                         });
                         (dialog2.findViewById(R.id.frestart)).setOnClickListener(v2 -> {
                             SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
@@ -2319,7 +2257,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             op4.setText(questionItems.get(n).getOp4());
         }
         else{
-            //Toast.makeText(this, "Game Over", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Game Over", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -2329,12 +2267,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         doubleDip2.setVisibility(View.INVISIBLE);
         fifty.setVisibility(View.VISIBLE);
         doubleDip.setVisibility(View.VISIBLE);
-            question.setText(questionItems.get(n).getQuestion());
-            op1.setText(questionItems.get(n).getOp1());
-            op2.setText(questionItems.get(n).getOp2());
-            op3.setText(questionItems.get(n).getOp3());
-            op4.setText(questionItems.get(n).getOp4());
-        }
+        question.setText(questionItems.get(n).getQuestion());
+        op1.setText(questionItems.get(n).getOp1());
+        op2.setText(questionItems.get(n).getOp2());
+        op3.setText(questionItems.get(n).getOp3());
+        op4.setText(questionItems.get(n).getOp4());
+    }
 
     //load questions
     private  void loadQuestions(){
@@ -2343,7 +2281,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         try{
             JSONObject jsonobject = new JSONObject(jsonstr);
             JSONArray questions = jsonobject.getJSONArray("questions");
-            for(int i = 0; i<15;i++){
+            for(int i = 56; i<questions.length();i++){
                 JSONObject question = questions.getJSONObject(i);
                 String questionString = question.getString("q");
                 String op1String = question.getString("op1");
@@ -2352,12 +2290,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 String op4String = question.getString("op4");
                 String answerString = question.getString("ans");
                 questionItems.add(new QuestionItem(
-                   questionString,
-                   op1String,
-                   op2String,
-                   op3String,
-                   op4String,
-                   answerString
+                        questionString,
+                        op1String,
+                        op2String,
+                        op3String,
+                        op4String,
+                        answerString
                 ));
 
             }
@@ -2406,7 +2344,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 checkAnswer(op1);
                 break;
             case R.id.option_2:
-               checkAnswer(op2);
+                checkAnswer(op2);
                 break;
             case R.id.option_3:
                 checkAnswer(op3);
@@ -2416,7 +2354,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             default:
-                
+
         }
 
         switch (v.getId()){
@@ -2424,8 +2362,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             {
                 pauseTimer();
                 SharedPreferences.Editor editor = getSharedPreferences(CORRECT, MODE_PRIVATE).edit();
-                //Toast.makeText(GameActivity.this, "pause", Toast.LENGTH_SHORT).show();
-                final Dialog dialog = new Dialog(GameActivity.this,R.style.PauseDialog);
+                //Toast.makeText(MathsHardActivity.this, "pause", Toast.LENGTH_SHORT).show();
+                final Dialog dialog = new Dialog(MathsHardActivity.this,R.style.PauseDialog);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
                 dialog.setContentView(R.layout.pause);
                 dialog.setCancelable(true);
@@ -2459,7 +2397,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     editor.clear();
                     editor.apply();
                     editor.commit();
-                    startActivity(new Intent(GameActivity.this, MainActivity.class));
+                    startActivity(new Intent(MathsHardActivity.this, MainActivity.class));
 
                 });
                 if(c<6){
@@ -2477,6 +2415,4 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
-
-
 }

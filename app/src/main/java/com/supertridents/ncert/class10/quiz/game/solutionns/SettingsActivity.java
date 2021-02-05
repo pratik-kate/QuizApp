@@ -29,7 +29,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         adView.setAdSize(AdSize.BANNER);
 
-        adView.setAdUnitId("ca-app-pub-5324429581828078/6070672454");
+        adView.setAdUnitId("ca-app-pub-5324429581828078/8771525825");
 
         mAdView = findViewById(R.id.adSettings);
         AdRequest adRequest = new AdRequest.Builder().build();
